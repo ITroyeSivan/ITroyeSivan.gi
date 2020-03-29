@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">client | Troye</title>
+  <title itemprop="name">BJDCTF2nd-web | Troye</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,65 +340,124 @@
   </div>
 </header>
 
-        <div class="pattern-center-blank"></div>
-  
-    <div class="pattern-center ">
-      <div class="pattern-attachment-img">
-        <img src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.4/img/banner/client.jpg" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
-      </div>
-      <header class="pattern-header ">
-        <h1 class="entry-title">
-        Android客户端</h1>
-      </header>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/timg (2).jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/timg (2).jpg">
     </div>
-  
-  <div id="content" class="site-content">
-    <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      <p>直接下载 or 扫码下载：</p>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      BJDCTF2nd-web</h1>
+      <p class="entry-census">
+        <span>
+          <a href="">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20160708223941_YQncj.jpeg">
+          </a>
+        </span>
+        <span>
+          <a href="">Troye</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2020-3-29<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
 
-<div style="text-align: center;">
-<img class="lazyload" data-src="https://view.moezx.cc/images/2018/06/08/app-download.png#in-center#width-50" style="width: 200px; height: 200px;" alt="">
-</div>
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>1、fake google<br>输入什么就会回显什么，在注释里看到给的提示：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200329111758.png" alt=""><br>百度可知是SSTI（模板注入），没接触过所以首先学习一下这方面的知识：和常见Web注入的成因一样，也是服务端接收了用户的输入，将其作为 Web 应用模板内容的一部分，在进行目标编译渲染的过程中，执行了用户插入的恶意内容。<br>输入NaN发现回显为ax，说明存在模板注入<br>输入：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200329114126.png" alt=""><br>来查看根目录，发现flag在根目录里：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/2321.png" alt=""><br>接下来把ls换成cat /flag就可得到flag：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/2333.png" alt=""><br>另一种比较方便的方法是用tplmap，傻瓜式工具还是比手工香：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/1.jpg" alt=""><br>2、old hack<br>没发现什么有价值的信息，除了告诉我们用了TP5<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/66.png" alt=""><br>想办法构造一个ThinkPHP的报错看一下详细版本：<br><a href="http://d701e9e5-05ba-44f3-9d85-a419b028ef7b.node3.buuoj.cn/?s=1">http://d701e9e5-05ba-44f3-9d85-a419b028ef7b.node3.buuoj.cn/?s=1</a><br>（“t框架有s参数可以加载模块”，不知道这句话什么意思，不过我试了下换成别的字母确实不会报错。）<br>报错后看到了thinkphp的详细版本：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200329113032.png" alt=""><br>然后就是百度搜一个这个版本的执行漏洞就行了<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200329113058.png" alt=""><br>3、duangshell<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200329113127.png" alt=""><br>swp显然是提示了，以前遇到过此类题目，是vim非正常关闭时会产生一个swp文件。这里先下载备份文件url/.index.php.swp，然后用vim恢复：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/555.png" alt=""><br>一开始看到这里还觉得蛮简单，后来看了wp才知道这里要用到反弹shell的操作。因为exec()不会回显，反弹shell能够解决而且又没有过滤curl。可能是靶机不能访问外网，我的虚拟机上一直没有回显。应该是要在内网开一台虚拟机再操作的，这里就直接放上模仿的师傅wp了。<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/8.png" alt=""></p>
 
-      <!-- .entry-content -->
-      
-      <div class="single-reward">
-        <div class="reward-open">赏
-          <div class="reward-main">
-            <ul class="reward-row">
-              <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/alipay.jpg"></li>
-              <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/wechat.jpg"></li>
-            </ul>
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/alipay.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/wechat.jpg"></li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-      <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-      <footer class="post-footer">
-        <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-        <div class="post-tags">
-        </div>
-        <div class="post-share">
-          <div class="social-share sharehidden share-component"></div>
-          <i class="iconfont show-share icon-forward"></i>
-        </div>
-      </footer><!-- .entry-footer -->
-    </article>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
       <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2020/03/15/sqlilabs-union%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2%E6%B3%A8%E5%85%A5/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/timg.jfif" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/timg.jfif">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                sqlilabs union联合查询注入</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="/about/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/timg.jpg" itemprop="image" alt="Troye" height="70" width="70"></a>
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20160708223941_YQncj.jpeg" itemprop="image" alt="Troye" height="70" width="70"></a>
           <div class="meta">
             <span class="title">Author</span>
             <h3 itemprop="name">
-            <a href="https://sakura.hojun.cn" itemprop="url" rel="author">Troye</a>
+            <a href="" itemprop="url" rel="author">Troye</a>
             </h3>
           </div>
         </div>
         <hr>
-        <p><i class="iconfont icon-write"></i>There for you</p>
+        <p><i class="iconfont icon-write"></i></p>
       </section>
+    </main><!-- #main -->
   </div><!-- #primary -->
 </div>
+
+
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>
