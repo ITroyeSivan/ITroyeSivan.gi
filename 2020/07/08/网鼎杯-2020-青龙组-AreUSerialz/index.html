@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">[RoarCTF 2019]Easy Java | Troye</title>
+  <title itemprop="name">[网鼎杯 2020 青龙组]AreUSerialz | Troye</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542249.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542249.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-556382.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-556382.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      [RoarCTF 2019]Easy Java</h1>
+      [网鼎杯 2020 青龙组]AreUSerialz</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2020-7-7<span class="bull">
+        2020-7-8<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,8 +376,7 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>进去以后如图所示：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200707122044.png" alt=""><br>尝试admin 123456提示密码错误。<br>打开下面的help出现：java.io.FileNotFoundException:{help.docx}<br>url：<a href="http://f72eefe1-b91c-4b64-af67-9bd43f96bf1c.node3.buuoj.cn/Download?filename=help.docx">http://f72eefe1-b91c-4b64-af67-9bd43f96bf1c.node3.buuoj.cn/Download?filename=help.docx</a><br>查看wp，知道可以尝试将请求方式由GET换为POST，POST后，得到help.docx，如图所示<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200228201203675.png" alt=""><br>再次查看wp，知道这是源码泄露题<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200707123821.png" alt=""><br>根据help里的java推测这里是WEB-INF/web.xml泄露<br>再次用post方式提交，果然得到源码：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200707124211.png" alt=""><br>虽然看不懂，但是发现了这个flagcontroller<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200707124414.png" alt=""><br>访问/Flag：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200707124835.png" alt=""><br>最后payload：filename=/WEB-INF/classes/com/wm/ctf/FlagController.class<br>base64解码文件中的代码即可</p>
-<p>参考链接：<a href="https://blog.csdn.net/wy_97/article/details/78165051">https://blog.csdn.net/wy_97/article/details/78165051</a><br><a href="https://blog.csdn.net/silencediors/article/details/102579567?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.edu_weight&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.edu_weight">https://blog.csdn.net/silencediors/article/details/102579567?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.edu_weight&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.edu_weight</a></p>
+          <p>前一阵子学了反序列化，好久没有练习了，正好拿这道题练练手。<br>先上源码：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200708204723.png" alt=""><br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200708204952.png" alt=""><br>get方式提交的str，会对其进行一个合法性的判断，每一个字符的ASCII范围在32到125之间，然后对其反序列化。<br>反序列化时首先会调用<strong>destruct()函数，</strong>destruct()会检测op值是否为’2’，如果为’2’就会令op=1，由于是===必须是类型和数值都等于’2’,所以可以让op等于数字2来绕过，然后__destruct()会调用process()，process()中如果op值为2将会执行read()函数，会读取fliename的文件，所以我们需要将op=2，filename=’php://filter/read=convert.base64-encode/resource=flag.php’（文件包含漏洞）进行序列化，序列化结果为str=O:11:”FileHandler”:3:{s:2:”op”;i:2;s:8:”filename”;s:57:”php://filter/read=convert.base64-encode/resource=flag.php”;s:7:”content”;N;}<br>最后base64解码即可</p>
 
         </div>
         <!-- .entry-content -->
@@ -409,15 +408,15 @@
           
             <div class="post-nepre half previous">
           
-            <a href="/2020/07/08/%E7%BD%91%E9%BC%8E%E6%9D%AF-2020-%E9%9D%92%E9%BE%99%E7%BB%84-AreUSerialz/" rel="prev">
+            <a href="/2020/07/08/0CTF-2016-piapiapia/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-556382.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-556382.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-789452.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-789452.jpg">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                [网鼎杯 2020 青龙组]AreUSerialz</h3>
+                [0CTF 2016]piapiapia</h3>
                 <hr>
               </div>
             </a>
@@ -427,15 +426,15 @@
           
             <div class="post-nepre half next">
           
-            <a href="/2020/07/04/%E7%BD%91%E9%BC%8E%E6%9D%AF-2018-Fakebook/" rel="next">
+            <a href="/2020/07/07/RoarCTF-2019-Easy-Java/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-196720.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-196720.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542249.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542249.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [网鼎杯 2018]Fakebook</h3>
+                [RoarCTF 2019]Easy Java</h3>
                 <hr>
               </div>
             </a>
@@ -468,7 +467,7 @@
           </div>
         </div>
         <hr>
-        <p><i class="iconfont icon-write"></i>一个好奇的人</p>
+        <p><i class="iconfont icon-write"></i></p>
       </section>
     </main><!-- #main -->
   </div><!-- #primary -->
