@@ -376,13 +376,21 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>一、web8<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200715152829.png" alt=""><br>ac=flags&amp;fn=flag.txt。</p>
+          <p>一、web8</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200715152829.png" alt=""></p>
+<p>ac=flags&amp;fn=flag.txt。</p>
 <p>二、细心<br>挂了。。</p>
 <p>三、求getshell<br>upload，后缀改为php5，content-type大小写绕过。</p>
-<p>四、INSERT INTO 注入<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200715175348.png" alt=""><br>根据源码可知这是X_FORWARDED_FOR注入，但是过滤了逗号，无法使用if语句。<br>在mysql中与if有相同功效的就是：<br>select case when (条件) then 代码1 else 代码 2 end;<br>而且由于逗号,被过滤，我们就不能使用substr、substring了，但我们可以使用：from 1 for 1，所以最终的payload如下：<br>127.0.0.1’+(select case when substr((select flag from flag) from 1 for 1)=’a’ then sleep(5) else 0 end))– +<br>脚本学习了这个大佬的：<br> //<a href="https://blog.csdn.net/xuchen16/article/details/82904488">https://blog.csdn.net/xuchen16/article/details/82904488</a><br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720200715230710.png" alt=""><br>L4：string模块里面的ascii_letters和digits代表大小写英文字母和数字。<br>L6：insert into value (‘’)这句话，可以执行()内的sql语句。所以先闭合，然后进行sql语句的执行。这里使用了 select case when（满足条件）then（语句1）else（语句2） end语句；语句中的 from 0 for 1 等价于 limit 0,1。<br>L13：添加xff头。<br>L14：timieout=3如果网站再3s内没有应答，就会抛出异常。<br>L15：因为在L7进行验证，如果True，就sleep(5)，这里就接受异常成功获取部分flag。<br>知识：case when then else end语句。from 0 for 1 和from -1(从后往前)姿势的学习。<br>这个代码的原理就是利用127.0.0.1+true/false去进行判断，如果是true，就与超时相违背，从而执行下面except的代码。</p>
+<p>四、INSERT INTO 注入</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200715175348.png" alt=""></p>
+<p>根据源码可知这是X_FORWARDED_FOR注入，但是过滤了逗号，无法使用if语句。<br>在mysql中与if有相同功效的就是：<br>select case when (条件) then 代码1 else 代码 2 end;<br>而且由于逗号,被过滤，我们就不能使用substr、substring了，但我们可以使用：from 1 for 1，所以最终的payload如下：<br>127.0.0.1’+(select case when substr((select flag from flag) from 1 for 1)=’a’ then sleep(5) else 0 end))– +<br>脚本学习了这个大佬的：<br> //<a href="https://blog.csdn.net/xuchen16/article/details/82904488">https://blog.csdn.net/xuchen16/article/details/82904488</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720200715230710.png" alt=""></p>
+<p>L4：string模块里面的ascii_letters和digits代表大小写英文字母和数字。<br>L6：insert into value (‘’)这句话，可以执行()内的sql语句。所以先闭合，然后进行sql语句的执行。这里使用了 select case when（满足条件）then（语句1）else（语句2） end语句；语句中的 from 0 for 1 等价于 limit 0,1。<br>L13：添加xff头。<br>L14：timieout=3如果网站再3s内没有应答，就会抛出异常。<br>L15：因为在L7进行验证，如果True，就sleep(5)，这里就接受异常成功获取部分flag。<br>知识：case when then else end语句。from 0 for 1 和from -1(从后往前)姿势的学习。<br>这个代码的原理就是利用127.0.0.1+true/false去进行判断，如果是true，就与超时相违背，从而执行下面except的代码。</p>
 <p>这道题还是不错的，了解了xff延时注入，写脚本也多了一种思路。</p>
 <p>五、这是一个神奇的登陆框<br>挂了。。</p>
-<p>六、多次<br>页面没有任何信息，url中有id，加上’报错，猜测是sql注入。<br>id=1’or 1=1–+ 也报错，可能存在过滤<br>用异或注入测一下过滤了啥，<br>例：?id=1’^(length(‘union’)!=0)–+,如果返回页面显示正常，那就证明length(‘union’)==0的，也就是union被过滤了。同理测试出被过滤的字符串有：and，or，union，select。<br>oorrder by测出来两个字段，接下来就是爆表爆字段了。<br>基本操作就不写了，直接说结果：<br>表flag1,hint，<br>字段flag1,address<br>flag1中的数据不是flag，在address里找到了下一关的链接：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200715234331.png" alt=""><br>感觉和上次whuctf的那个sql一样，都是输入什么回显什么。。。当时用的是盲注。<br>看了一下wp。<br>当双写绕过和大小写绕过都没用时，这时我们需要用到报错注入。<br>报错注入介绍：//<a href="https://blog.csdn.net/silence1_/article/details/90812612">https://blog.csdn.net/silence1_/article/details/90812612</a></p>
+<p>六、多次<br>页面没有任何信息，url中有id，加上’报错，猜测是sql注入。<br>id=1’or 1=1–+ 也报错，可能存在过滤<br>用异或注入测一下过滤了啥，<br>例：?id=1’^(length(‘union’)!=0)–+,如果返回页面显示正常，那就证明length(‘union’)==0的，也就是union被过滤了。同理测试出被过滤的字符串有：and，or，union，select。<br>oorrder by测出来两个字段，接下来就是爆表爆字段了。<br>基本操作就不写了，直接说结果：<br>表flag1,hint，<br>字段flag1,address<br>flag1中的数据不是flag，在address里找到了下一关的链接：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200715234331.png" alt=""></p>
+<p>感觉和上次whuctf的那个sql一样，都是输入什么回显什么。。。当时用的是盲注。<br>看了一下wp。<br>当双写绕过和大小写绕过都没用时，这时我们需要用到报错注入。<br>报错注入介绍：//<a href="https://blog.csdn.net/silence1_/article/details/90812612">https://blog.csdn.net/silence1_/article/details/90812612</a></p>
 <p>爆库<br>?id=1’ and<br>(extractvalue(1,concat(0x7e,database(),0x7e)))–+</p>
 <p>爆表<br>?id=1’ and<br>(extractvalue(1,concat(0x7e,<br>(select group_concat(table_name) from information_schema.tables<br>where table_schema=”web1002-2”),0x7e)))–+</p>
 <p>爆列<br>?id=1’ and<br>(extractvalue(1,concat(0x7e,<br>(select group_concat(column_name) from information_schema.columns<br>where table_schema=”web1002-2” and table_name=”flag2”),0x7e)))–+</p>
