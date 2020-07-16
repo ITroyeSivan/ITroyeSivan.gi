@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Troye</title>
+  <title itemprop="name">Bugku刷题记录（三） | Troye</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,459 +340,133 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
-<div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">学习学习学习学习学习学习</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="https://space.bilibili.com/129300391" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/1188649.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>博主的b站视频</p>
-        </div>
-      </a>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1088161.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1088161.jpg">
     </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      Bugku刷题记录（三）</h1>
+      <p class="entry-census">
+        <span>
+          <a href="">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="">Troy3e</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2020-7-16<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  
-</div>
+
+<div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>一、PHP_encrypt_1(ISCCCTF)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720200716191725.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200716191800.png" alt=""></p>
+<p>传入flag作为参数给data得到了题目中那一串字符。附件中的代码给出了加密函数，所以只要写出泄密脚本就可以得到flag。</p>
+<p>二、文件包含<br>挂了。</p>
+<p>三、flag.php<br>点login没有任何反应，提示是hint，一开始以为是打错了或者应该漏了些什么，没想到是在提示hint是个参数。。。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200716194141.png" alt=""></p>
+<p>得到源码。大致一看会觉得很简单，只要把ISecer:<a href="http://www.isecer.com序列化一下，然后bp提交cookie就行，其实仔细看下会发现，验证cookie的时候$KEY根本没有定义。。。。所以只要提交一个空字符串就行。cookie:ISecer=s:0:&quot;&quot;">www.isecer.com序列化一下，然后bp提交cookie就行，其实仔细看下会发现，验证cookie的时候$KEY根本没有定义。。。。所以只要提交一个空字符串就行。cookie:ISecer=s:0:&quot;&quot;</a>;</p>
+<p>四、sql注入2<br>这道题大概做了两个小时。。。。<br>确实过滤了很多东西。新学习了一个减号闭合。还白嫖了一个很棒的字典QAQ。<br>先来介绍一下减号闭合。<br>如果输入admin’-1-‘，那么原语句就是select ‘admin’-0-‘’;<br>会发生类型转换，字符串变成0，所以就是0-0-0=0<br>又因为select * from users where name=0 ,会输出所有语句。<br>（$sql = select * from users where username=$username;<br>在字符串username的值和数字0比较的时候，字符串变为了0<br>故此0=0）<br>所以可以利用这点进行注入。<br>substr、空格都被过滤了，但这里还可以用mid和括号来代替。<br>构造语句<br>ascii(substr((select database()),1,1))&gt;1<br>很多过滤了，这个语句没法使用<br>用到一个倒着截取<br>假设：<br>passwd=abc123<br>那么我们用以下方式<br>   mid((passwd)from(-1)):3<br>   mid((passwd)from(-2)):23<br>   mid((passwd)from(-3):123<br>倒着看的第一位都是3，显然不行，无法截取出来，于是想到反转<br>先反转<br>REVERSE(MID((passwd)from(-%d))<br>再取最后一位<br>mid(REVERSE(MID((passwd)from(%-d)))from(-1))<br>在比较ASCII<br>ascii(mid(REVERSE(MID((passwd)from(%-d)))from(-1)))&gt;1<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200716224339.png" alt=""></p>
+<p>后面得到了密码登陆进去就比较简单了，但这sql做的我心态大崩。。。</p>
+<p>bugku就先做到这里，看到后面一题是要用到渗透测试第一步信息收集。。<br>回去接着做buu</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/alipay.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/wechat.jpg"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2020/07/15/Bugku%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1087716.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1087716.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Bugku刷题记录（二）</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2020/07/07/RoarCTF-2019-Easy-Java/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542249.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-7 10:07</div>
-      <a href="/2020/07/07/RoarCTF-2019-Easy-Java/" class="post-title">
-        <h3>[RoarCTF 2019]Easy Java</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/07/RoarCTF-2019-Easy-Java/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/avatar.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="" itemprop="url" rel="author">Troy3e</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/04/%E7%BD%91%E9%BC%8E%E6%9D%AF-2018-Fakebook/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-196720.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-4 21:07</div>
-      <a href="/2020/07/04/%E7%BD%91%E9%BC%8E%E6%9D%AF-2018-Fakebook/" class="post-title">
-        <h3>[网鼎杯 2018]Fakebook</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/ssrf%E6%BC%8F%E6%B4%9E/">ssrf漏洞<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/04/%E7%BD%91%E9%BC%8E%E6%9D%AF-2018-Fakebook/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/04/%E5%BC%BA%E7%BD%91%E6%9D%AF-2019-%E9%AB%98%E6%98%8E%E7%9A%84%E9%BB%91%E5%AE%A2%EF%BC%88%E5%A4%B1%E8%B4%A5%EF%BC%89/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542508.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-4 10:07</div>
-      <a href="/2020/07/04/%E5%BC%BA%E7%BD%91%E6%9D%AF-2019-%E9%AB%98%E6%98%8E%E7%9A%84%E9%BB%91%E5%AE%A2%EF%BC%88%E5%A4%B1%E8%B4%A5%EF%BC%89/" class="post-title">
-        <h3>[强网杯 2019]高明的黑客</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/04/%E5%BC%BA%E7%BD%91%E6%9D%AF-2019-%E9%AB%98%E6%98%8E%E7%9A%84%E9%BB%91%E5%AE%A2%EF%BC%88%E5%A4%B1%E8%B4%A5%EF%BC%89/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/03/CISCN2019-%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA-Day2-Web1-Hack-World/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/earheaheah.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-3 14:07</div>
-      <a href="/2020/07/03/CISCN2019-%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA-Day2-Web1-Hack-World/" class="post-title">
-        <h3>[CISCN2019 华北赛区 Day2 Web1]Hack World</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/sql-%E5%BC%82%E6%88%96%E6%B3%A8%E5%85%A5/">sql 异或注入<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/03/CISCN2019-%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA-Day2-Web1-Hack-World/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/05/30/WHUCTF2020-Easy_sqli/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1056414.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-5-30 10:05</div>
-      <a href="/2020/05/30/WHUCTF2020-Easy_sqli/" class="post-title">
-        <h3>WHUCTF2020-Easy_sqli</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/CTF/">CTF<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/05/30/WHUCTF2020-Easy_sqli/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/05/29/SUCTF-2019-CheckIn/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/385bd477f37b3a5cfec21c9bf00f76129e67a0e8.jpg@1320w_742h.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-5-29 16:05</div>
-      <a href="/2020/05/29/SUCTF-2019-CheckIn/" class="post-title">
-        <h3>SUCTF 2019-CheckIn</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/upload/">upload<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/05/29/SUCTF-2019-CheckIn/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/05/27/HCTF-2018-admin/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/shjsrjtrj1.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-5-27 13:05</div>
-      <a href="/2020/05/27/HCTF-2018-admin/" class="post-title">
-        <h3>[HCTF 2018]admin</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/flask-session%E4%BC%AA%E9%80%A0/">flask session伪造<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/05/27/HCTF-2018-admin/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/05/20/%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/dsagseragera.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-5-20 21:05</div>
-      <a href="/2020/05/20/%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5/" class="post-title">
-        <h3>堆叠注入</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/05/20/%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/04/30/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1016626.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-4-30 14:04</div>
-      <a href="/2020/04/30/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="post-title">
-        <h3>PHP反序列化</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/04/30/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/04/13/2019%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/echo.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-4-13 22:04</div>
-      <a href="/2020/04/13/2019%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/" class="post-title">
-        <h3>2019极客大挑战</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/04/13/2019%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <a class="extend prev" rel="prev" href="/">&lt;i class=&quot;iconfont icon-back&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">&lt;i class=&quot;iconfont icon-right&quot;&gt;&lt;&#x2F;i&gt;</a>
-      </nav>
-     -->
-  </div>
-  
-    <div id="pagination"><a href="/page/3/" class="">Previous</a></div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>steamID：888007034</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">
