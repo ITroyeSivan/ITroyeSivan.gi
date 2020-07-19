@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Unicorn shop&amp;我有一个数据库 | Troye</title>
+  <title itemprop="name">[BJDCTF2020]Mark loves cat | Troye</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1088927.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1088927.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/geragggewrag.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/geragggewrag.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Unicorn shop&我有一个数据库</h1>
+      [BJDCTF2020]Mark loves cat</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2020-7-18<span class="bull">
+        2020-7-19<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,16 +376,11 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>两道比较简单的题目<br>一、[ASIS 2019]Unicorn shop</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200718215406.png" alt=""></p>
-<p>一个购买独角兽的商店，购买前三个都会提示商品错误，，估计是要购买第四个，但是买第四个会提示只能输入一位，应该是要找一个一位的大于1337的字符。<br>考点unicode，搜unicode大于1337的字符。<br>id=4&amp;price=%E2%86%82</p>
-<p>flag{4fc1bf7c-2b3c-4b3f-a418-bcab67ea145c} </p>
-<p>二、[GWCTF 2019]我有一个数据库</p>
-<p>dir扫到了phpmyadmin，直接访问，成功。<br>但是进去以后不知道咋办了。。。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200718221913.png" alt=""></p>
-<p>看了wp知道要查看版本信息去找对应的漏洞。<br>没想到这么简单粗暴。</p>
-<p><a href="https://www.jianshu.com/p/fb9c2ae16d09">https://www.jianshu.com/p/fb9c2ae16d09</a></p>
-<p>可以发现在index.php里：<br>include $_REQUEST[‘target’];<br>include这个函数,很可能存在本地文件包含<br>链接里已经给出了相关poc<br>我们直接利用即可<br>paylaod:<a href="http://c66c8c33-f4ec-4bb4-b351-3302f06c8bdc.node3.buuoj.cn/phpmyadmin/?target=db_datadict.php%253f/../../../../../../../../flag">http://c66c8c33-f4ec-4bb4-b351-3302f06c8bdc.node3.buuoj.cn/phpmyadmin/?target=db_datadict.php%253f/../../../../../../../../flag</a></p>
+          <p>今天第一次去练车，在驾校呆了一天，今天就少做一点题了。<br>手动找了一圈没找到线索。（本来以为最下面的提交界面是突破口）<br>于是dir启动：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200719213805.png" alt=""></p>
+<p>githack启动：<br>虚拟机又炸了，估计下次得重装了，这里就直接百度了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200719222215.png" alt=""></p>
+<p>首先post：$flag=flag<br>这样根据源码，$$flag=flag<br>然后get：yds=flag<br>这样就变成了：$yds=$flag<br>根据<br>if(!isset($_GET[‘flag’]) &amp;&amp; !isset($_POST[‘flag’]))<br>{<br>exit($yds);<br>}<br>就会执行exit($flag),即可输出flag。</p>
 
         </div>
         <!-- .entry-content -->
@@ -414,36 +409,19 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2020/07/19/BJDCTF2020-Mark-loves-cat/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/geragggewrag.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/geragggewrag.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                [BJDCTF2020]Mark loves cat</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2020/07/18/%E5%AE%89%E6%B4%B5%E6%9D%AF-2019-easy-web/" rel="next">
+            <a href="/2020/07/18/Unicorn-shop-%E6%88%91%E6%9C%89%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1089035.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1089035.png">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1088927.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1088927.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [安洵杯 2019]easy_web</h3>
+                Unicorn shop&amp;我有一个数据库</h3>
                 <hr>
               </div>
             </a>
