@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">[GKCTF2020]EZ三剑客-EzNode | Troye</title>
+  <title itemprop="name">[网鼎杯2018]Unfinish | Troye</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1097333.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1097333.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-748350.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-748350.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      [GKCTF2020]EZ三剑客-EzNode</h1>
+      [网鼎杯2018]Unfinish</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2020-8-22<span class="bull">
+        2020-8-25<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,17 +376,17 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>最近两个比赛的题都不会做。。。<br>太烦了，就是没思路。。。<br>不多说了，刷题。</p>
-<hr>
-<p>对node.js还不是很熟,所以记录一下。<br>关键代码</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/124314145.jpg" alt=""></p>
-<p>这一大段主要是在/eval这个路由下，首先他先设置delay的默认值，我们可以去到这个路由把delay的值传过去，<br>然后他会比较传过去的值和默认值，选较大的一方作为自己的值。然后就是设置超时，将秒数delay作为超时时限，超时了就进到下一个路由</p>
-<p>可是我们无论怎么发都不可能超过6秒<br>问题出在了SetTimeout这个函数<br>存在溢出</p>
-<p>浏览器内部使用32位带符号的整数来储存推迟执行的时间这意味着setTimeout最多延迟2147483647秒。只要大于2147483647,就会发生溢出,就可以绕过那个时间限制，进入下一个路由</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200822232137.png" alt=""></p>
-<p>他这里要我们post传参e,，就是要让我们沙盒逃逸<br>开头：const saferEval = require(‘safer-eval’); // 2019.7/WORKER1 找到一个很棒的库</p>
-<p>搜一波这个库的漏洞，搜到一个CVE，直接套用代码即可cat /flag。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200822232310.png" alt=""></p>
+          <p>进去是个login.php，提示用户名或密码错误。<br>猜测有register.php，成功访问。<br>登陆的时候用到的是邮箱和密码，而注册的时候还有一个用户名，而这个用户名却在登陆后显示了，所以我们考虑用户名这里可能存在 二次注入<br>所以构造 payload 如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/hbsbshbn.jpg" alt=""></p>
+<p>进行两次hex解码后得到数据库名为web</p>
+<p>至于为什么用两次hex：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/shsrhhg.jpg" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200825225814.png" alt=""></p>
+<p>使用的脚本：<a href="https://blog.csdn.net/bmth666/article/details/105499305">https://blog.csdn.net/bmth666/article/details/105499305</a><br>要我写肯定写不出这么。。复杂？的脚本。。</p>
+<p>但是自己的思路一直出问题，不知道是哪里有问题。。感觉理论上行得通啊：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200825230319.png" alt=""></p>
+<p>跑是跑出来了，但是感觉不完整，也有可能是多了。</p>
+<p>——————————————————————<br>后来研究了一下，我这个（其实也不是自己的）简单思路其实也是对的，只是输出的时候有点乱，当时可能少选了。</p>
 
         </div>
         <!-- .entry-content -->
@@ -415,36 +415,19 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2020/08/25/%E7%BD%91%E9%BC%8E%E6%9D%AF2018-Unfinish/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-748350.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-748350.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                [网鼎杯2018]Unfinish</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2020/08/18/Zer0pts2020-Can-you-guess-it/" rel="next">
+            <a href="/2020/08/22/GKCTF2020-EZ%E4%B8%89%E5%89%91%E5%AE%A2-EzNode/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1096637.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1096637.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1097333.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1097333.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [Zer0pts2020]Can you guess it?</h3>
+                [GKCTF2020]EZ三剑客-EzNode</h3>
                 <hr>
               </div>
             </a>
