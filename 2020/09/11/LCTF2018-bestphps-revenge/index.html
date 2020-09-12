@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Troye</title>
+  <title itemprop="name">LCTF2018-bestphp&#39;s revenge | Troye</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -340,449 +340,194 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
-<div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">太菜了 我是废物 我爬 必须好好学习</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="https://space.bilibili.com/129300391" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/1188649.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>博主的b站视频</p>
-        </div>
-      </a>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1099559.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1099559.jpg">
     </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      LCTF2018-bestphp's revenge</h1>
+      <p class="entry-census">
+        <span>
+          <a href="">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="">Troy3e</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2020-9-11<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  
-</div>
+
+<div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>这题差点做睡着了，太xx难了，想了好久不知道咋下手，看wp了。<br>源码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200911211023.png" alt=""></p>
+<p>还有一个flag.php（其实这flag.php我都不知道怎么找到的，难道比赛的时候有提示?）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200911211049.png" alt=""></p>
+<p>通过flag.php可以看出ssrf。<br>既然是SSRF，那么该如何满足以下条件呢？<br>访问127.0.0.1/flag.php<br>cookie可控，改成我们的php_session_id<br>那么势必得到一个php内置类，同时其具备SSRF的能力。</p>
+<p>1、php内置类SoapClient<br>SOAP是webService三要素（SOAP、WSDL(WebServicesDescriptionLanguage)、UDDI(UniversalDescriptionDiscovery andIntegration)）之一：WSDL 用来描述如何访问具体的接口， UDDI用来管理，分发，查询webService ，SOAP（简单对象访问协议）是连接或Web服务或客户端和Web服务之间的接口。</p>
+<p>其采用HTTP作为底层通讯协议，XML作为数据传送的格式。简单来讲，我们可以通过它来发送http/https请求。<br>SoapClient类可以创建soap数据报文，与wsdl接口进行交互。<br>简单的用法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200911231405.png" alt=""></p>
+<p>2、CRLF Injection漏洞<br>CRLF是”回车+换行”（\r\n）的简称。在HTTP协议中，HTTPHeader与HTTPBody是用两个CRLF分隔的，浏览器就是根据这两个CRLF来取出HTTP内容并显示出来。所以，一旦我们能够控制HTTP消息头中的字符，注入一些恶意的换行，这样我们就能注入一些会话Cookie或者HTML代码，所以CRLFInjection又叫HTTPResponseSplitting，简称HRS。<br>简单来说<br>http请求遇到两个\r\n即%0d%0a，会将前半部分当做头部解析，而将剩下的部分当做体，当我们可以控制User-Agent的值时，头部可控，就可以注入crlf实现修改http请求包。</p>
+<p>但是怎么触发反序列化呢?</p>
+<p>3：serialize_hander处理session方式不同导致session注入<br>看到</p>
+<p>if(isset($_GET[name])){<br>  $_SESSION[name] = $_GET[name];<br>}</p>
+<p>我们不难想到，可以将序列化内容通过$_GET[name]传入session。</p>
+<p>首先我们可以控制session.serialize_handler,通过</p>
+<p>/?f=session_start</p>
+<p>serialize_handler=php</p>
+<p>这样的方式，可以指定php序列化引擎,而不同引擎存储的方式也不同</p>
+<p>php_binary:存储方式是，键名的长度对应的ASCII字符+键名+经过serialize()函数序列化处理的值</p>
+<p>php:存储方式是，键名+竖线+经过serialize()函数序列处理的值</p>
+<p>php_serialize(php&gt;5.5.4):存储方式是，经过serialize()函数序列化处理的值</p>
+<p>同时根据文章内的内容，当session反序列化和序列化时候使用不同引擎的时候，即可触发漏洞</p>
+<p>假如我们使用php_serialize引擎时进行数据存储时的序列化，可以得到内容</p>
+<p>$_SESSION[‘name’] = ‘sky’;<br>a:1:{s:4:”name”;s:3:”sky”;}</p>
+<p>而在php引擎时进行数据存储时的序列化，可以得到另一个内容</p>
+<p>$_SESSION[‘name’] = ‘sky’;<br>name|s:3:”sky”</p>
+<p>那么如果我们用php引擎去解php_serialize得到的序列化，是不是就会有问题了呢？</p>
+<p>答案是肯定的，该文章中也介绍的很清楚</p>
+<p>php引擎会以|作为作为key和value的分隔符，我们再传入内容的时候，比如传入</p>
+<p>$_SESSION[‘name’] = ‘|sky‘</p>
+<p>那么使用php_serialize引擎时可以得到序列化内容</p>
+<p>a:1:{s:4:”name”;s:4:”|sky”;}</p>
+<p>然后用php引擎反序列化时，|被当做分隔符，于是</p>
+<p>a:1:{s:4:”name”;s:4:”</p>
+<p>被当作key</p>
+<p>sky</p>
+<p>被当做vaule进行反序列化</p>
+<p>于是，我们只要传入</p>
+<p>$_SESSION[‘name’] = |序列化内容</p>
+<p>为什么能反序列化？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200911234959.png" alt=""></p>
+<p>光进行反序列化肯定是不够的<br>我们看到soapclient想要触发__call()必须要调用不可访问的方法，那我们如何在题目有限的代码里调用不可访问方法呢？</p>
+<p>看到这段代码</p>
+<p>php $a = array(reset($_SESSION),’welcome_to_the_lctf2018’); call_user_func($b,$a);</p>
+<p>这里只要覆盖$b为call_user_func即可成功触发不可访问方法。</p>
+<p>最后总结一下思路：<br>根据flag.php想到ssrf，所以要想办法触发ssrf，利用回调函数覆盖session序列化引擎为php_serilaze，构造SSRF的Soap类的序列化字符串配合序列化注入写入session文件，然后利用变量覆盖漏洞，覆盖掉变量b为回调函数call_user_func，此时结合回调函数调用Soap类的未知方法，触发__call方法进行SSRF访问flag.php。把flag写入session，再把session打印出来即可。</p>
+<p>接下来开始解题。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200912104140.png" alt=""></p>
+<p>第一次发包：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/745637.jpg" alt=""></p>
+<p>记住这里面的cookie不能用自己的，否则会504，原因不明。</p>
+<p>第二次发包：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200912104853.png" alt=""></p>
+<p>第三次发包：<br>用虚构的cookie替换自己的cookie访问：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200912105120.png" alt=""></p>
+<p>第一次见到这种类型的，人傻了。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/alipay.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/wechat.jpg"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2020/09/12/bubuu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%BA%94/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/pppppp.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/pppppp.jpg">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                buu知识点复习(五)</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2020/09/08/%E4%B8%80%E5%A4%A9%E6%97%A5%E7%A9%BFsqli-labs/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/867985.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/867985.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                一天日穿sqli-labs（伪）</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2020/09/12/bubuu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%BA%94/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/pppppp.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-9-12 09:09</div>
-      <a href="/2020/09/12/bubuu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%BA%94/" class="post-title">
-        <h3>buu知识点复习(五)</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/09/12/bubuu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%BA%94/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/avatar.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="" itemprop="url" rel="author">Troy3e</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/09/11/LCTF2018-bestphps-revenge/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1099559.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-9-11 21:09</div>
-      <a href="/2020/09/11/LCTF2018-bestphps-revenge/" class="post-title">
-        <h3>LCTF2018-bestphp&#39;s revenge</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/09/11/LCTF2018-bestphps-revenge/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/09/08/%E4%B8%80%E5%A4%A9%E6%97%A5%E7%A9%BFsqli-labs/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/867985.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-9-8 20:09</div>
-      <a href="/2020/09/08/%E4%B8%80%E5%A4%A9%E6%97%A5%E7%A9%BFsqli-labs/" class="post-title">
-        <h3>一天日穿sqli-labs（伪）</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/09/08/%E4%B8%80%E5%A4%A9%E6%97%A5%E7%A9%BFsqli-labs/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/09/07/DASCTF%E5%85%AB%E6%9C%88%E8%B5%9B%E5%AD%A6%E4%B9%A0/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/987544.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-9-7 12:09</div>
-      <a href="/2020/09/07/DASCTF%E5%85%AB%E6%9C%88%E8%B5%9B%E5%AD%A6%E4%B9%A0/" class="post-title">
-        <h3>DASCTF八月赛学习</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/09/07/DASCTF%E5%85%AB%E6%9C%88%E8%B5%9B%E5%AD%A6%E4%B9%A0/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/09/05/%E5%BC%BA%E7%BD%91%E6%9D%AF2020web%E9%83%A8%E5%88%86%E9%A2%98%E8%A7%A3/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/46227.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-9-5 10:09</div>
-      <a href="/2020/09/05/%E5%BC%BA%E7%BD%91%E6%9D%AF2020web%E9%83%A8%E5%88%86%E9%A2%98%E8%A7%A3/" class="post-title">
-        <h3>强网杯2020web部分题解</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/09/05/%E5%BC%BA%E7%BD%91%E6%9D%AF2020web%E9%83%A8%E5%88%86%E9%A2%98%E8%A7%A3/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/09/02/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E5%9B%9B/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1097136.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-9-2 21:09</div>
-      <a href="/2020/09/02/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E5%9B%9B/" class="post-title">
-        <h3>buu知识点复习(四)</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/09/02/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E5%9B%9B/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/08/31/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%B8%89/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1098462.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-31 10:08</div>
-      <a href="/2020/08/31/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%B8%89/" class="post-title">
-        <h3>buu知识点复习(三)</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/08/31/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%B8%89/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/08/30/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%BA%8C/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1098426.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-30 10:08</div>
-      <a href="/2020/08/30/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%BA%8C/" class="post-title">
-        <h3>buu知识点复习(二)</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/08/30/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0-%E4%BA%8C/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/08/29/%E6%9A%91%E5%81%87%E6%80%BB%E7%BB%93/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1097629.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-29 20:08</div>
-      <a href="/2020/08/29/%E6%9A%91%E5%81%87%E6%80%BB%E7%BB%93/" class="post-title">
-        <h3>暑假总结</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/08/29/%E6%9A%91%E5%81%87%E6%80%BB%E7%BB%93/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/08/29/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1098162.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-29 13:08</div>
-      <a href="/2020/08/29/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0/" class="post-title">
-        <h3>buu知识点复习</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/08/29/buu%E7%9F%A5%E8%AF%86%E7%82%B9%E5%A4%8D%E4%B9%A0/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">&lt;i class=&quot;iconfont icon-right&quot;&gt;&lt;&#x2F;i&gt;</a>
-      </nav>
-     -->
-  </div>
-  
-    <div id="pagination"><a href="/page/2/" class="">Previous</a></div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>steamID：888007034</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">
