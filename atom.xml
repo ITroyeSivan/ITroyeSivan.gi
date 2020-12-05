@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Troy3e</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="/"/>
+  <updated>2020-11-29T13:47:20.129Z</updated>
+  <id>/</id>
+  
+  <author>
+    <name>Troye</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>[GWCTF 2019]你的名字</title>
+    <link href="/2020/11/29/GWCTF-2019-%E4%BD%A0%E7%9A%84%E5%90%8D%E5%AD%97/"/>
+    <id>/2020/11/29/GWCTF-2019-你的名字/</id>
+    <published>2020-11-29T13:02:31.000Z</published>
+    <updated>2020-11-29T13:47:20.129Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/52626.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>安洵杯2020-Bash&amp;Normal SSTI</title>
+    <link href="/2020/11/28/%E5%AE%89%E6%B4%B5%E6%9D%AF2020-Bash-Normal-SSTI/"/>
+    <id>/2020/11/28/安洵杯2020-Bash-Normal-SSTI/</id>
+    <published>2020-11-28T15:28:35.000Z</published>
+    <updated>2020-11-28T15:30:18.203Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;安洵杯2020-Bash&amp;amp;Normal
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[XDCTF 2015]filemanager</title>
+    <link href="/2020/11/27/XDCTF-2015-filemanager/"/>
+    <id>/2020/11/27/XDCTF-2015-filemanager/</id>
+    <published>2020-11-27T12:05:37.000Z</published>
+    <updated>2020-11-28T15:36:13.781Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201127201044.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.tar.gz泄露源码&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="二次注入" scheme="/tags/%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[GYCTF2020]Node Game-CRLF头部注入</title>
+    <link href="/2020/11/26/GYCTF2020-Node-Game-CRLF%E5%A4%B4%E9%83%A8%E6%B3%A8%E5%85%A5/"/>
+    <id>/2020/11/26/GYCTF2020-Node-Game-CRLF头部注入/</id>
+    <published>2020-11-26T04:51:44.000Z</published>
+    <updated>2020-11-26T06:28:55.596Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var express = require(&amp;#39;express&amp;#39;);
+var app = express();
+var fs = require(&amp;#39;fs&amp;#39;);
+var path =
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Python pickle 反序列化分析</title>
+    <link href="/2020/11/24/Python-pickle-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%88%86%E6%9E%90/"/>
+    <id>/2020/11/24/Python-pickle-反序列化分析/</id>
+    <published>2020-11-24T13:56:36.000Z</published>
+    <updated>2020-11-24T15:53:27.527Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;buu上遇到个python
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>HECTF2020-Web</title>
+    <link href="/2020/11/23/HECTF2020-Web/"/>
+    <id>/2020/11/23/HECTF2020-Web/</id>
+    <published>2020-11-23T13:31:22.000Z</published>
+    <updated>2020-11-23T13:46:25.592Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;HECTF比较简单，和隔壁NCTF简直天差地别。。。不过人家这是新生赛。&lt;br&gt;先说下成绩，最高18名，还有半天的时间，继续c的话肯定能进线下，前十都有可能。&lt;br&gt;但是想了想，进线下第一没时间第二没钱第三学校不认证书第四觉得自己硬实力不够。&lt;br&gt;然后就放了没打，最后也是
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>NCTF2020签到摸鱼</title>
+    <link href="/2020/11/23/NCTF2020%E7%AD%BE%E5%88%B0%E6%91%B8%E9%B1%BC/"/>
+    <id>/2020/11/23/NCTF2020签到摸鱼/</id>
+    <published>2020-11-23T13:04:41.000Z</published>
+    <updated>2020-11-23T13:29:18.975Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;NCTF的难度以现在的水平还是太勉强了，只有这个签到是个正常题，别的基本都是取自真实渗透过程，或许明年才能够打出成绩。&lt;/p&gt;
+&lt;p&gt;Web签到-你就是我的master吗&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[RCTF 2019]Nextphp</title>
+    <link href="/2020/11/20/RCTF-2019-Nextphp/"/>
+    <id>/2020/11/20/RCTF-2019-Nextphp/</id>
+    <published>2020-11-20T07:17:10.000Z</published>
+    <updated>2020-11-20T16:15:13.954Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201120154814.png&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[SUCTF 2018]MultiSQL</title>
+    <link href="/2020/11/18/SUCTF-2018-MultiSQL/"/>
+    <id>/2020/11/18/SUCTF-2018-MultiSQL/</id>
+    <published>2020-11-18T14:27:00.000Z</published>
+    <updated>2020-11-18T14:29:29.777Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;[SUCTF 2018]MultiSQL&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>UNCTF2020复现</title>
+    <link href="/2020/11/17/UNCTF2020%E5%A4%8D%E7%8E%B0/"/>
+    <id>/2020/11/17/UNCTF2020复现/</id>
+    <published>2020-11-17T14:48:48.000Z</published>
+    <updated>2020-11-17T14:54:51.525Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;这比赛没报上名，借的别人的号看了看觉得题挺不错的，结束以后正好官方给了复现环境，打打基础准备接下来的NCTF和HECTF。&lt;/p&gt;
+&lt;p&gt;一、easy_ssrf&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[HarekazeCTF2019]Easy Notes</title>
+    <link href="/2020/11/07/HarekazeCTF2019-Easy-Notes/"/>
+    <id>/2020/11/07/HarekazeCTF2019-Easy-Notes/</id>
+    <published>2020-11-07T13:15:21.000Z</published>
+    <updated>2020-11-07T16:11:32.212Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201107213120.png&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[安洵杯 2019]iamthinking</title>
+    <link href="/2020/11/06/%E5%AE%89%E6%B4%B5%E6%9D%AF-2019-iamthinking/"/>
+    <id>/2020/11/06/安洵杯-2019-iamthinking/</id>
+    <published>2020-11-06T13:17:56.000Z</published>
+    <updated>2020-11-06T16:03:13.953Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;a href=&quot;http://www.zip源码泄露&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;www.zip源码泄露&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;全局搜索serialize&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[NPUCTF2020]ezlogin</title>
+    <link href="/2020/11/04/NPUCTF2020-ezlogin/"/>
+    <id>/2020/11/04/NPUCTF2020-ezlogin/</id>
+    <published>2020-11-04T05:03:50.000Z</published>
+    <updated>2020-11-06T16:11:07.863Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/8738.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[HFCTF2020]BabyUpload</title>
+    <link href="/2020/10/30/HFCTF2020-BabyUpload/"/>
+    <id>/2020/10/30/HFCTF2020-BabyUpload/</id>
+    <published>2020-10-30T05:40:11.000Z</published>
+    <updated>2020-10-30T16:11:55.350Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;源码&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201030194832.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[EIS 2019]EzPOP</title>
+    <link href="/2020/10/27/EIS-2019-EzPOP/"/>
+    <id>/2020/10/27/EIS-2019-EzPOP/</id>
+    <published>2020-10-27T05:27:23.000Z</published>
+    <updated>2020-10-30T06:28:09.540Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;[EIS 2019]EzPOP&lt;br&gt;我必须承认这代码我看了一遍之后没啥头绪。。。&lt;br&gt;不过这种东西不知道它干啥的没关系
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[XNUCA2019Qualifier]EasyPHP</title>
+    <link href="/2020/10/25/XNUCA2019Qualifier-EasyPHP/"/>
+    <id>/2020/10/25/XNUCA2019Qualifier-EasyPHP/</id>
+    <published>2020-10-25T06:48:33.000Z</published>
+    <updated>2020-10-25T16:47:17.170Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201025144922.png&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[GoogleCTF2019 Quals]Bnv</title>
+    <link href="/2020/10/24/GoogleCTF2019-Quals-Bnv/"/>
+    <id>/2020/10/24/GoogleCTF2019-Quals-Bnv/</id>
+    <published>2020-10-24T13:34:35.000Z</published>
+    <updated>2020-10-24T13:35:25.292Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;[GoogleCTF2019 Quals]Bnv-xxe&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[CISCN2019 华东北赛区]Web2</title>
+    <link href="/2020/10/22/CISCN2019-%E5%8D%8E%E4%B8%9C%E5%8C%97%E8%B5%9B%E5%8C%BA-Web2/"/>
+    <id>/2020/10/22/CISCN2019-华东北赛区-Web2/</id>
+    <published>2020-10-22T05:36:28.000Z</published>
+    <updated>2020-10-22T08:41:08.934Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;前言&lt;br&gt;到现在似乎就从来没有见过xss的题目，以至于看到这题的时候才想起来自己对xss只是略知一二。&lt;br&gt;关于原理这里有一篇付费文章讲的非常不错：&lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="xss" scheme="/tags/xss/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>N1CTF WP</title>
+    <link href="/2020/10/19/N1CTF-WP/"/>
+    <id>/2020/10/19/N1CTF-WP/</id>
+    <published>2020-10-19T12:38:28.000Z</published>
+    <updated>2020-10-19T12:44:06.640Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;N1CTF WP&lt;br&gt;前言&lt;br&gt;差不多算是自己第一次认真的打比赛了，收获很大，见识了一堆巨佬。关于做题方面，终于不算是签到选手了。磨了七八个小时，欠了米神二十顿打才磨出了Web的SignIn。总体来说还是非常开心(?)的。&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>1015 buu刷题</title>
+    <link href="/2020/10/15/1015-buu%E5%88%B7%E9%A2%98/"/>
+    <id>/2020/10/15/1015-buu刷题/</id>
+    <published>2020-10-15T04:15:42.000Z</published>
+    <updated>2020-10-15T08:17:28.096Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;[RootersCTF2019]I_&amp;lt;3_Flask&lt;/p&gt;
+&lt;p&gt;进去啥都无，dir没扫出东西，网页源码也啥都无。&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+</feed>
