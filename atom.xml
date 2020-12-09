@@ -41,6 +41,30 @@
   </entry>
   
   <entry>
+    <title>[watevrCTF-2019]Supercalc</title>
+    <link href="/2020/12/09/watevrCTF-2019-Supercalc/"/>
+    <id>/2020/12/09/watevrCTF-2019-Supercalc/</id>
+    <published>2020-12-09T11:40:11.000Z</published>
+    <updated>2020-12-09T12:02:44.751Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201209194142.png&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>博客优化</title>
     <link href="/2020/12/06/%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96/"/>
     <id>/2020/12/06/博客优化/</id>
@@ -491,32 +515,6 @@ var path =
     
       <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>[CISCN2019 华东北赛区]Web2</title>
-    <link href="/2020/10/22/CISCN2019-%E5%8D%8E%E4%B8%9C%E5%8C%97%E8%B5%9B%E5%8C%BA-Web2/"/>
-    <id>/2020/10/22/CISCN2019-华东北赛区-Web2/</id>
-    <published>2020-10-22T05:36:28.000Z</published>
-    <updated>2020-10-22T08:41:08.934Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;前言&lt;br&gt;到现在似乎就从来没有见过xss的题目，以至于看到这题的时候才想起来自己对xss只是略知一二。&lt;br&gt;关于原理这里有一篇付费文章讲的非常不错：&lt;a
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="xss" scheme="/tags/xss/"/>
     
   </entry>
   
