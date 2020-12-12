@@ -41,6 +41,30 @@
   </entry>
   
   <entry>
+    <title>[CSAWQual 2016]i_got_id</title>
+    <link href="/2020/12/12/CSAWQual-2016-i-got-id/"/>
+    <id>/2020/12/12/CSAWQual-2016-i-got-id/</id>
+    <published>2020-12-12T14:03:27.000Z</published>
+    <updated>2020-12-12T16:19:59.055Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近有点划水 补了好多番 今天正好考完六级
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>[watevrCTF-2019]Supercalc</title>
     <link href="/2020/12/09/watevrCTF-2019-Supercalc/"/>
     <id>/2020/12/09/watevrCTF-2019-Supercalc/</id>
@@ -483,31 +507,6 @@ var path =
         
         
           &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201025144922.png&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>[GoogleCTF2019 Quals]Bnv</title>
-    <link href="/2020/10/24/GoogleCTF2019-Quals-Bnv/"/>
-    <id>/2020/10/24/GoogleCTF2019-Quals-Bnv/</id>
-    <published>2020-10-24T13:34:35.000Z</published>
-    <updated>2020-10-24T13:35:25.292Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;[GoogleCTF2019 Quals]Bnv-xxe&lt;/p&gt;
-&lt;p&gt;&lt;img
         
       
     
