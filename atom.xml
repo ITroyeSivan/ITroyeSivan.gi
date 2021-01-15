@@ -41,6 +41,31 @@
   </entry>
   
   <entry>
+    <title>[pasecactf_2019]flask_ssti</title>
+    <link href="/2021/01/15/pasecactf-2019-flask-ssti/"/>
+    <id>/2021/01/15/pasecactf-2019-flask-ssti/</id>
+    <published>2021-01-15T03:30:45.000Z</published>
+    <updated>2021-01-15T08:21:53.722Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;一道没什么过滤的ssti。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{{()[&quot;\x5f\x5fclass\x5f\x5f&quot;][&quot;\x5f\x5fmro\x5f\x5f&quot;][1][&quot;\x5f\x5fsubclasses\x5f\x5f&quot;]()[127][&quot;\x5f\x5finit\x
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>2020-2021寒假计划</title>
     <link href="/2021/01/13/2020-2021%E5%AF%92%E5%81%87%E8%AE%A1%E5%88%92/"/>
     <id>/2021/01/13/2020-2021寒假计划/</id>
@@ -484,32 +509,6 @@ var path =
         
         
           &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/8738.jpg&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>[HFCTF2020]BabyUpload</title>
-    <link href="/2020/10/30/HFCTF2020-BabyUpload/"/>
-    <id>/2020/10/30/HFCTF2020-BabyUpload/</id>
-    <published>2020-10-30T05:40:11.000Z</published>
-    <updated>2020-10-30T16:11:55.350Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;源码&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201030194832.png&quot; alt&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img
         
       
     
