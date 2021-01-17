@@ -41,6 +41,34 @@
   </entry>
   
   <entry>
+    <title>redis安全学习笔记&amp;[网鼎杯 2020 玄武组]SSRFMe</title>
+    <link href="/2021/01/17/%E7%BD%91%E9%BC%8E%E6%9D%AF-2020-%E7%8E%84%E6%AD%A6%E7%BB%84-SSRFMe/"/>
+    <id>/2021/01/17/网鼎杯-2020-玄武组-SSRFMe/</id>
+    <published>2021-01-17T05:13:11.000Z</published>
+    <updated>2021-01-17T15:15:13.822Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;前几个月有个比赛有类似的一道题，当时百度了一个payload没来得及去深究，今天正好又遇到了，简单分析一下。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?php
+function check_inner_ip($url)
+{
+   
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>[pasecactf_2019]flask_ssti</title>
     <link href="/2021/01/15/pasecactf-2019-flask-ssti/"/>
     <id>/2021/01/15/pasecactf-2019-flask-ssti/</id>
@@ -485,30 +513,6 @@ var path =
           &lt;p&gt;&lt;a href=&quot;http://www.zip源码泄露&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;www.zip源码泄露&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;全局搜索serialize&lt;/p&gt;
 &lt;p&gt;&lt;img
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>[NPUCTF2020]ezlogin</title>
-    <link href="/2020/11/04/NPUCTF2020-ezlogin/"/>
-    <id>/2020/11/04/NPUCTF2020-ezlogin/</id>
-    <published>2020-11-04T05:03:50.000Z</published>
-    <updated>2020-11-06T16:11:07.863Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/8738.jpg&quot;
         
       
     
