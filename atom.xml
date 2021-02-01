@@ -41,6 +41,31 @@
   </entry>
   
   <entry>
+    <title>October 2019 Twice SQL Injection</title>
+    <link href="/2021/01/31/October-2019-Twice-SQL-Injection/"/>
+    <id>/2021/01/31/October-2019-Twice-SQL-Injection/</id>
+    <published>2021-01-31T13:16:29.000Z</published>
+    <updated>2021-02-01T15:46:12.712Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;水了一题，本来以为这题挺难的想写篇博客，没想到是个送的二次注入。。&lt;/p&gt;
+&lt;p&gt;0’ union select flag from
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>[FBCTF2019]Event</title>
     <link href="/2021/01/29/FBCTF2019-Event/"/>
     <id>/2021/01/29/FBCTF2019-Event/</id>
@@ -485,31 +510,6 @@ var path =
         
         
           &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201120154814.png&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>[SUCTF 2018]MultiSQL</title>
-    <link href="/2020/11/18/SUCTF-2018-MultiSQL/"/>
-    <id>/2020/11/18/SUCTF-2018-MultiSQL/</id>
-    <published>2020-11-18T14:27:00.000Z</published>
-    <updated>2020-11-18T14:29:29.777Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;[SUCTF 2018]MultiSQL&lt;/p&gt;
-&lt;p&gt;&lt;img
         
       
     
