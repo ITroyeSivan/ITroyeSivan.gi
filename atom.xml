@@ -41,6 +41,31 @@
   </entry>
   
   <entry>
+    <title>[MRCTF2020]Ezpop_Revenge</title>
+    <link href="/2021/02/02/MRCTF2020-Ezpop-Revenge/"/>
+    <id>/2021/02/02/MRCTF2020-Ezpop-Revenge/</id>
+    <published>2021-02-02T06:10:03.000Z</published>
+    <updated>2021-02-03T12:53:15.355Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;看题目可知pop链，这种题目一般是逻辑漏洞，所以必定是会给源码，直接&lt;a href=&quot;http://www.zip拿到源码。&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;www.zip拿到源码。&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>October 2019 Twice SQL Injection</title>
     <link href="/2021/01/31/October-2019-Twice-SQL-Injection/"/>
     <id>/2021/01/31/October-2019-Twice-SQL-Injection/</id>
@@ -486,30 +511,6 @@ var path =
           &lt;p&gt;NCTF的难度以现在的水平还是太勉强了，只有这个签到是个正常题，别的基本都是取自真实渗透过程，或许明年才能够打出成绩。&lt;/p&gt;
 &lt;p&gt;Web签到-你就是我的master吗&lt;/p&gt;
 &lt;p&gt;&lt;img
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>[RCTF 2019]Nextphp</title>
-    <link href="/2020/11/20/RCTF-2019-Nextphp/"/>
-    <id>/2020/11/20/RCTF-2019-Nextphp/</id>
-    <published>2020-11-20T07:17:10.000Z</published>
-    <updated>2020-11-20T16:15:13.954Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201120154814.png&quot;
         
       
     
