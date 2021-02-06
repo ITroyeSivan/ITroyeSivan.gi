@@ -41,6 +41,59 @@
   </entry>
   
   <entry>
+    <title>[PwnThyBytes 2019]Baby_SQL</title>
+    <link href="/2021/02/06/PwnThyBytes-2019-Baby-SQL/"/>
+    <id>/2021/02/06/PwnThyBytes-2019-Baby-SQL/</id>
+    <published>2021-02-06T12:01:00.000Z</published>
+    <updated>2021-02-06T09:03:37.842Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;注释里提示source.zip源码泄露。&lt;/p&gt;
+&lt;p&gt;首先在index.php看到filter函数对每一个变量都进行了转义，所以不存在注入点。&lt;/p&gt;
+&lt;p&gt;register.php&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>HGAME-Web-Week1WP</title>
+    <link href="/2021/02/06/HGAME-Web-Week1WP/"/>
+    <id>/2021/02/06/HGAME-Web-Week1WP/</id>
+    <published>2021-02-06T12:00:00.000Z</published>
+    <updated>2021-02-06T08:08:18.928Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;一、Hitchhiking_in_the_Galaxy&lt;/p&gt;
+&lt;p&gt;抓包我要搭顺风车&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>[MRCTF2020]Ezpop_Revenge</title>
     <link href="/2021/02/02/MRCTF2020-Ezpop-Revenge/"/>
     <id>/2021/02/02/MRCTF2020-Ezpop-Revenge/</id>
@@ -461,56 +514,6 @@ var path =
         
         
           &lt;p&gt;buu上遇到个python
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>HECTF2020-Web</title>
-    <link href="/2020/11/23/HECTF2020-Web/"/>
-    <id>/2020/11/23/HECTF2020-Web/</id>
-    <published>2020-11-23T13:31:22.000Z</published>
-    <updated>2020-11-23T13:46:25.592Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;HECTF比较简单，和隔壁NCTF简直天差地别。。。不过人家这是新生赛。&lt;br&gt;先说下成绩，最高18名，还有半天的时间，继续c的话肯定能进线下，前十都有可能。&lt;br&gt;但是想了想，进线下第一没时间第二没钱第三学校不认证书第四觉得自己硬实力不够。&lt;br&gt;然后就放了没打，最后也是
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>NCTF2020签到摸鱼</title>
-    <link href="/2020/11/23/NCTF2020%E7%AD%BE%E5%88%B0%E6%91%B8%E9%B1%BC/"/>
-    <id>/2020/11/23/NCTF2020签到摸鱼/</id>
-    <published>2020-11-23T13:04:41.000Z</published>
-    <updated>2020-11-23T13:29:18.975Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;NCTF的难度以现在的水平还是太勉强了，只有这个签到是个正常题，别的基本都是取自真实渗透过程，或许明年才能够打出成绩。&lt;/p&gt;
-&lt;p&gt;Web签到-你就是我的master吗&lt;/p&gt;
-&lt;p&gt;&lt;img
         
       
     
