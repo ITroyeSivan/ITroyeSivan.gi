@@ -41,6 +41,31 @@
   </entry>
   
   <entry>
+    <title>HGAME-Web-Week3WP</title>
+    <link href="/2021/02/20/HGAME-Web-Week3WP/"/>
+    <id>/2021/02/20/HGAME-Web-Week3WP/</id>
+    <published>2021-02-20T15:05:32.000Z</published>
+    <updated>2021-02-17T06:36:47.282Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;一、Liki-Jail&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210215192601.png&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>HGAME-Web-Week2WP</title>
     <link href="/2021/02/13/HGAME-Web-Week2WP/"/>
     <id>/2021/02/13/HGAME-Web-Week2WP/</id>
@@ -494,34 +519,6 @@ function check_inner_ip($url)
     
     
       <category term="二次注入" scheme="/tags/%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[GYCTF2020]Node Game-CRLF头部注入</title>
-    <link href="/2020/11/26/GYCTF2020-Node-Game-CRLF%E5%A4%B4%E9%83%A8%E6%B3%A8%E5%85%A5/"/>
-    <id>/2020/11/26/GYCTF2020-Node-Game-CRLF头部注入/</id>
-    <published>2020-11-26T04:51:44.000Z</published>
-    <updated>2020-11-26T06:28:55.596Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;源码：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;var express = require(&amp;#39;express&amp;#39;);
-var app = express();
-var fs = require(&amp;#39;fs&amp;#39;);
-var path =
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
     
   </entry>
   

