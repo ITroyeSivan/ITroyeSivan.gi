@@ -41,6 +41,32 @@
   </entry>
   
   <entry>
+    <title>henuctf2021-Web WP</title>
+    <link href="/2021/03/07/henuctf2021-Web-WP/"/>
+    <id>/2021/03/07/henuctf2021-Web-WP/</id>
+    <published>2021-03-07T13:42:48.000Z</published>
+    <updated>2021-03-07T14:21:42.540Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;实验室内部比赛，四个Web，都没什么难度，但可能没有考虑到20的学习情况，所以相对而言出得确实稍微难了一点。&lt;/p&gt;
+&lt;p&gt;一、Find&lt;br&gt;看了大家WP都是直接传flag.php的。。。&lt;/p&gt;
+&lt;p&gt;这题的本意其实完全不是这样的，当时出的快没细看，想着总得出一个php
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>HGAME-Web-Week3WP</title>
     <link href="/2021/02/20/HGAME-Web-Week3WP/"/>
     <id>/2021/02/20/HGAME-Web-Week3WP/</id>
@@ -492,33 +518,6 @@ function check_inner_ip($url)
     
       <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>[XDCTF 2015]filemanager</title>
-    <link href="/2020/11/27/XDCTF-2015-filemanager/"/>
-    <id>/2020/11/27/XDCTF-2015-filemanager/</id>
-    <published>2020-11-27T12:05:37.000Z</published>
-    <updated>2020-11-28T15:36:13.781Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201127201044.png&quot; alt&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.tar.gz泄露源码&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="二次注入" scheme="/tags/%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/"/>
     
   </entry>
   
