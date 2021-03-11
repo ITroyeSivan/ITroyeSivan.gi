@@ -270,8 +270,8 @@ for i in range(50):
 <p>showmess类里有一个反序列化</p>
 <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311131339.png" alt></p>
 <p>他看上去会因为sql注入引发反序列化漏洞。<br>所以我们可以注入</p>
-<pre><code>a`, {serialize object});#
-</code></pre><p>到库中<br>然后他会在你访问<br>index.php?action=index 的时候触发</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311163944.png" alt></p>
+<p>到库中<br>然后他会在你访问<br>index.php?action=index 的时候触发</p>
 <p>接下来看soapclient类<br>这个类的用法如下</p>
 <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210311132909.png" alt></p>
 <p>通过传入两个参数，第一个是 $url, 既目标url, 第二个参数是一个数组，里面是soap请求的一些参数和属性。</p>
