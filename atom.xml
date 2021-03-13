@@ -41,6 +41,31 @@
   </entry>
   
   <entry>
+    <title>渗透测试之信息收集（一）</title>
+    <link href="/2021/03/13/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%EF%BC%88%E4%B8%80%EF%BC%89/"/>
+    <id>/2021/03/13/渗透测试之信息收集（一）/</id>
+    <published>2021-03-13T05:42:09.000Z</published>
+    <updated>2021-03-13T07:21:30.599Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;#信息收集&lt;/p&gt;
+&lt;p&gt;信息收集的方式可以分为两种：主动和被动。&lt;br&gt;主动信息收集：通过直接访问、扫描网站，这种流量将流经网站&lt;br&gt;被动信息收集：利用第三方的服务对目标进行访问了解，比例：Google搜索、Shodan搜索等.&lt;br&gt;Google
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>[BSidesCF 2020]Cards</title>
     <link href="/2021/03/13/BSidesCF-2020-Cards/"/>
     <id>/2021/03/13/BSidesCF-2020-Cards/</id>
@@ -486,35 +511,6 @@ function check_inner_ip($url)
         
         
           &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20201209194142.png&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>博客优化</title>
-    <link href="/2020/12/06/%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96/"/>
-    <id>/2020/12/06/博客优化/</id>
-    <published>2020-12-05T16:49:15.000Z</published>
-    <updated>2020-12-05T16:57:28.852Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;懒狗时隔一年终于想起来翻修下博客。&lt;br&gt;今日更新如下&lt;/p&gt;
-&lt;p&gt;一、开放评论功能&lt;br&gt;现在可以愉快地交流了哦~&lt;/p&gt;
-&lt;p&gt;二、歌单更新&lt;br&gt;网易云歌单换成我自己的了。&lt;/p&gt;
-&lt;p&gt;三、首页视频更新&lt;br&gt;QAQ&lt;/p&gt;
-&lt;p&gt;四、文章置顶&lt;/p&gt;
-&lt;p&gt;五、
         
       
     

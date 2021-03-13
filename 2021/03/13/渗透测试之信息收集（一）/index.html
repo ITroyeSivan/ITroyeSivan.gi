@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Self-Introduction（置顶） | Troy3e</title>
+  <title itemprop="name">渗透测试之信息收集（一） | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,15 +185,15 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1134782.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1134782.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Self-Introduction（置顶）</h1>
+      渗透测试之信息收集（一）</h1>
       <p class="entry-census">
         <span>
           <a href="">
-            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/avatar.jpg">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg">
           </a>
         </span>
         <span>
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2077-12-10<span class="bull">
+        2021-3-13<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,7 +215,82 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>19级菜鸡CTF选手，专精Web但是还是个fw<br>喜欢运动，打游戏，二次元<br>不喜欢数学<br>老婆是樱岛麻衣<br>可以一起交流打比赛的师傅带带：qq 1220101668<br>（持续更新<br><div style="position: relative; width: 100%; height: 0; padding-bottom: 75%;"><iframe src="//player.bilibili.com/player.html?aid=457703354&page=" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position: absolute; width: 100%; height: 100%; left: 0; top: 0;"></iframe></div></p>
+          <p>#信息收集</p>
+<p>信息收集的方式可以分为两种：主动和被动。<br>主动信息收集：通过直接访问、扫描网站，这种流量将流经网站<br>被动信息收集：利用第三方的服务对目标进行访问了解，比例：Google搜索、Shodan搜索等.<br>Google Hacking的用法:<a href="https://blog.csdn.net/qq_36119192/article/details/84029809" target="_blank" rel="noopener">https://blog.csdn.net/qq_36119192/article/details/84029809</a><br>Shodan的基本使用:<a href="https://blog.csdn.net/qq_36119192/article/details/84031765" target="_blank" rel="noopener">https://blog.csdn.net/qq_36119192/article/details/84031765</a></p>
+<p>#域名信息的收集</p>
+<p>当我们确定了要渗透的目标，也就是知道了其域名，接下来我们需要收集域名对应的 ip，域名的whois信息、子域名等等一系列与域名相关的信息。</p>
+<p>判断域名对应的IP：首先，我们要判断该域名是否存在CDN的情况，我们可以去在线CDN查询网站：<a href="http://ping.chinaz.com/" target="_blank" rel="noopener">http://ping.chinaz.com/</a>   。如果查询出的ip数量大于一个的话，则说明该ip地址不是真实的服务器地址。以我的经验来看，如果是2个或者3个，并且这几个地址是同一地区的不同运营商的话，则很有可能这几个地址是服务器的出口地址，该服务器在内网中，通过不同运营商NAT映射供互联网访问，同时采用几个不同的运营商可以负载均衡和热备份。如果是多个ip地址，并且这些ip地址分布在不同地区的话，则基本上可以断定就是采用了CDN了。那么如何绕过CDN查找网站真实的ip地址呢？</p>
+<p>在渗透测试过程中，经常会碰到网站有CDN的情况。CDN即内容分发网络，主要解决因传输距离和不同运营商节点造成的网络速度性能低下的问题。说的简单点，就是一组在不同运营商之间的对接点上的高速缓存服务器，把用户经常访问的静态数据资源直接缓存到节点服务器上，当用户再次请求时，会直接分发到离用户近的节点服务器上响应给用户，当用户有实际数据交互时才会从远程Web服务器上响应，这样可以大大提高网站的响应速度及用户体验。</p>
+<p>如何判断网站是否有CDN？</p>
+<p>很简单，使用不同地方的 ping 服务，查看对应 IP 地址是否唯一，如果不唯一则极有可能是使用了CDN</p>
+<p>#绕过CDN查找网站真实ip</p>
+<p>(1)查询子域名：毕竟 CDN 还是不便宜的，所以很多站长可能只会对主站或者流量大的子站点做了 CDN，而很多小站子站点又跟主站在同一台服务器或者同一个C段内，此时就可以通过查询子域名对应的 IP 来辅助查找网站的真实IP。<br>   查询子域名有三种方法：</p>
+<p>   1、通过爆破子域名进行查询，如 Layer子域名爆破机、subDomainBrute，在线子域名查询网站：<a href="https://phpinfo.me/domain/" target="_blank" rel="noopener">https://phpinfo.me/domain/</a><br>   2、通过查询DNS服务器，查询该域下的解析记录<br>   3、通过HTTPS证书来查询(只适用于https网站) ，如：<a href="https://crt.sh/" target="_blank" rel="noopener">https://crt.sh/</a>   就是通过https证书查询子域名<br>   4、通过google查询</p>
+<p>   （1）Layer子域名爆破机</p>
+<p>   Layer是windows下的一款子域名探测工具，其工作原理是利用子域名字典进行爆破，使用简单容易上手。</p>
+<p>   （2）subDomainBrute</p>
+<p>   subDomainBrute的特点是可以用小字典递归的发现三级域名、四级域名、甚至五级域名等不容易被探测到的域名。</p>
+<p>   字典较为丰富，小字典就包括1万5千条，大字典多达6万3千条<br>   默认使用114DNS、百度DNS、阿里DNS这几个快速又可靠的Public DNS查询，可修改配置文件添加DNS服务器（在dict里面可以进行添加）<br>   自动去重泛解析的域名，当前规则： 超过2个域名指向同一IP，则此后发现的其他指向该IP的域名将被丢弃</p>
+<p>   我这里就是使用的subDomainBrute：</p>
+<p>   因为字典很大，所以速度有点慢</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210313142554.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210313142812.png" alt></p>
+<p>   （3）利用google查询</p>
+<p>   指定站点，然后-就是不包含这个，来查询</p>
+<p>   site:baidu.com -www</p>
+<p>(2)查询主域名：以前用CDN的时候有个习惯，只让WWW域名使用cdn，秃域名不适用，为的是在维护网站时更方便，不用等cdn缓存。所以试着把目标网站的www去掉，ping一下看ip是不是变了。</p>
+<p>(3)邮件服务器：一般的邮件系统都在内部，没有经过CDN的解析，通过目标网站用户注册或者RSS订阅功能，查看邮件，寻找邮件头中的邮件服务器域名IP，ping这个邮件服务器的域名，就可以获得目标的真实IP(必须是目标自己的邮件服务器，第三方或者公共邮件服务器是没有用的)。</p>
+<p>(4)查看域名历史解析记录：也许目标很久之前没有使用CDN，所以可能会存在使用 CDN 前的记录。所以可以通过网站<a href="https://www.netcraft.com" target="_blank" rel="noopener">https://www.netcraft.com</a> 来观察域名的IP历史记录。</p>
+<p>(5)国外访问：国内的CDN往往只对国内用户的访问加速，而国外的CDN就不一定了。因此，通过国外在线代理网站<a href="https://asm.ca.com/en/ping.php" target="_blank" rel="noopener">https://asm.ca.com/en/ping.php</a> 访问 ，可能会得到真实的ip地址。</p>
+<p>(6)Nslookup查询：查询域名的NS记录、MX记录、TXT记录等很有可能指向的是真实ip或同C段服务器。传送门：各种解析记录</p>
+<p>(7)网站漏洞：利用网站自身存在的漏洞，很多情况下会泄露服务器的真实IP地址</p>
+<p>(8)Censys查询SSL证书找到真实IP：利用“Censys网络空间搜索引擎”搜索网站的SSL证书及HASH，在<a href="https://crt.sh上查找目标网站SSL证书的HASH，然后再用Censys搜索该HASH即可得到真实IP地址。" target="_blank" rel="noopener">https://crt.sh上查找目标网站SSL证书的HASH，然后再用Censys搜索该HASH即可得到真实IP地址。</a></p>
+<p>绕过CDN查找网站真实ip部分结束</p>
+<p>域名的whois信息：whois是用来查询域名注册所有者等信息的传输协议。简单说，whois就是一个用来查询域名是否已经被注册，以及注册域名的详细信息的数据库（如域名所有人、域名注册商）。通过whois来实现对域名信息的查询。早期的whois查询多以命令行接口存在，但是现在出现了一些网页接口简化的线上查询工具，可以一次向不同的数据库查询。网页接口的查询工具仍然依赖whois协议向服务器发送查询请求，命令行接口的工具仍然被系统管理员广泛使用。whois通常使用TCP协议43端口。每个域名/IP的whois信息由对应的管理机构保存。</p>
+<p>通常，我们进行whois查询是去： 站长之家whois查询  。然后查出来信息之后，可以根据查询出来的邮箱、注册人、公司、电话等进行反查。<br><a href="http://whois.chinaz.com" target="_blank" rel="noopener">http://whois.chinaz.com</a></p>
+<p>#公司敏感信息网上搜集</p>
+<p>当确定了公司后，我们可以去互联网上查询与该公司有关的任何信息。比如，公司的邮箱格式，公司的员工姓名，以及与该公司有关的任何信息。并且，我们还可以去Github、码云等代码托管平台上查找与此有关的敏感信息，有些粗心的程序员在将代码上传至代码托管平台后，并没有对代码进行脱敏处理。导致上传的代码中有包含如数据库连接信息、邮箱密码、还有可能有泄露的源代码等。<br>Github搜索语法：<a href="https://blog.csdn.net/qq_36119192/article/details/99690742" target="_blank" rel="noopener">https://blog.csdn.net/qq_36119192/article/details/99690742</a></p>
+<p>#网站指纹识别</p>
+<p>在渗透测试中，对目标服务器进行指纹识别是相当有必要的，因为只有识别出相应的Web容器或者CMS，才能查找与其相关的漏洞，然后才能进行相应的渗透操作。CMS又称整站系统。常见的CMS有：WordPress、Dedecms、Discuz、PhpWeb、PhpWind、Dvbbs、PhpCMS、ECShop、、SiteWeaver、AspCMS、帝国、Z-Blog等。</p>
+<p>常见的网站指纹识别工具有：whatweb等。</p>
+<p>在线指纹识别网站：</p>
+<p>BugScaner：<a href="http://whatweb.bugscaner.com/look/" target="_blank" rel="noopener">http://whatweb.bugscaner.com/look/</a><br>云悉指纹：<a href="http://www.yunsee.cn/finger.html" target="_blank" rel="noopener">http://www.yunsee.cn/finger.html</a><br>WhatWeb：<a href="https://whatweb.net/" target="_blank" rel="noopener">https://whatweb.net/</a></p>
+<p>#整站分析</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210313150534.png" alt></p>
+<p>服务器类型(Linux/Windows)</p>
+<p>服务器信息包括服务器用的操作系统：Linux 还是 Windows 。现在企业网站服务器的操作系统有百分之九十以上用的是Linux操作系统。知道了服务器的操作系统之后，还需要知道操作系统使用的具体版本。因为很多低版本的操作系统都存在已知的漏洞。</p>
+<p>判断是Linux还是Windows最简单就是通过ping来探测，Windows的TTL值都是一般是128，Linux则是64。所以大于100的肯定是Windows，而几十的肯定是Linux。但是，通过TTL值来判断服务器类型也不是百分之百准确的，有些windows服务器的TTL值也是几十，而且有的服务器禁止ping。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210313150656.png" alt><br>ping一下自己的网站试试，结果正确。</p>
+<p>tips：看到个评论不知道对不对，暂且先记着：分享一个操作系统的简单区别方式，Linux系统对大小写敏感，Windows不敏感。所以我们在访问的时候可以尝试把路径部分改成大写，然后去访问，看能否请求成功。Linux系统会找不到文件的，Windows可以找到，因为对大小写不敏感.</p>
+<p>而判断目标网站服务器的具体的版本的话，可以采用 nmap 进行扫描， -O 和 -A 参数都能扫描出来</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210313151114.png" alt></p>
+<p>网站容器(Apache/Nginx/Tomcat/IIS)</p>
+<p>知道了这些信息之后，我们就需要知道网站用的web服务器是什么类型的：Apache、Nginx、Tomcat 还是 IIS。知道了web服务器是哪种类型后，我们还要探测web服务器具体的版本。比如Ngnix版本&lt;0.83会有解析漏洞 ，IIS6.0会有文件名解析漏洞、IIS7.0会有畸形解析漏洞等。不同的web服务器版本，存在着不同漏洞。</p>
+<p>脚本类型(php/jsp/asp/aspx)</p>
+<p>我们需要知道网站用的脚本类型：php 、Jsp 、Asp 、Aspx 。<br>1：可以根据网站URL来判断<br>2：site:xxx  filetype:php<br>3：可以根据Firefox的插件来判断</p>
+<p>数据库类型(Mysql/Oracle/Accees/Mqlserver)</p>
+<p>我们需要知道网站用的是哪种类型的数据库：Mysql、Oracle、SqlServer 还是 Access 。虽然这几种数据库的语法大体上相同，但是还是有区别的。所以我们还是要知道目标网站用的是哪种数据库，并且数据库是哪个版本的</p>
+<p>几种数据库的区别：</p>
+<p>   Access 全名是Microsoft Office Access，是由微软发布的关联式数据库管理系统。小型数据库，当数据库达到100M左右的时候性能就会下降。数据库后缀名： .mdb   一般是asp的网页文件用access数据库<br>   SQL Server是由Microsoft开发和推广的关系数据库管理系统（DBMS），是一个比较大型的数据库。端口号为1433。数据库后缀名 .mdf<br>   MySQL 是一个关系型数据库管理系统，由瑞典MySQL AB 公司开发，目前属于 Oracle 旗下产品。MySQL是最流行的关系型数据库管理系统，在 WEB 应用方面MySQL是最好的应用软件之一，MySQL数据库大部分是php的页面。默认端口是3306<br>   Oracle又名Oracle RDBMS，或简称Oracle。是甲骨文公司的一款关系数据库管理系统。常用于比较大的网站。默认端口是1521</p>
+<p>首先，成本上的差距，access是不要钱的，mysql也是开源的，sql server 是收费的一般也就几千，Oracle的费用则数万。其次，处理能力，access支持千以内的访问量，sql server支持几千到上万的访问，而Oracle则支持海量的访 问。再次，从数据库的规模来看，access是小型数据库，，mysql 是中小型数据库，sql server是中型数据库，Oracle是大型数据库。</p>
+<p>常见搭配：</p>
+<p>   ASP 和 ASPX：ACCESS、SQL Server<br>   PHP：MySQL、PostgreSQL<br>   JSP：Oracle、MySQL</p>
+<p>#主机扫描(Nessus)</p>
+<p>对目标主机进行扫描，而不仅仅是对网站进行扫描，扫描目标主机开放了哪些端口，扫描端口运行的服务，目标主机上有哪些漏洞。</p>
+<p>主机扫描的工具也有很多，比如：Nessus </p>
+<p>#端口扫描(nmap)</p>
+<p>上面演示过了，这里就跳过了。<br>Nmap使用详解：<a href="https://blog.csdn.net/qq_36119192/article/details/82079150" target="_blank" rel="noopener">https://blog.csdn.net/qq_36119192/article/details/82079150</a><br>常见危险端口及漏洞利用：<a href="https://blog.csdn.net/qq_36119192/article/details/84781477?ops_request_misc=%7B%22request_id%22%3A%22158176934719725219927367%22%2C%22scm%22%3A%2220140713.130056874..%22%7D&amp;request_id=158176934719725219927367&amp;biz_id=0&amp;utm_source=distribute.pc_search_result.none-task" target="_blank" rel="noopener">https://blog.csdn.net/qq_36119192/article/details/84781477?ops_request_misc=%7B%22request_id%22%3A%22158176934719725219927367%22%2C%22scm%22%3A%2220140713.130056874..%22%7D&amp;request_id=158176934719725219927367&amp;biz_id=0&amp;utm_source=distribute.pc_search_result.none-task</a></p>
+<p>#网站敏感目录和文件<br>不知道平时打CTF的dirsearch能不能用。。。</p>
+<p>#旁站和C段扫描</p>
+<p>旁站指的是同一服务器上的其他网站，很多时候，有些网站可能不是那么容易入侵。那么，可以查看该网站所在的服务器上是否还有其他网站。如果有其他网站的话，可以先拿下其他网站的webshell，然后再提权拿到服务器的权限，最后就自然可以拿下该网站了！</p>
+<p>对于红蓝对抗和护网，C段扫描比较有意义。对于单独网站的渗透测试，C段扫描意义不大。C段指的是同一内网段内的其他服务器，每个IP有ABCD四个段，举个例子，192.168.0.1，A段就是192，B段是168，C段是0，D段是1，而C段嗅探的意思就是拿下它同一C段中的其中一台服务器，也就是说是D段1-255中的一台服务器，然后利用工具嗅探拿下该服务器。</p>
+<p>旁站和C段在线查询地址：</p>
+<p><a href="http://www.webscan.cc/" target="_blank" rel="noopener">http://www.webscan.cc/</a><br><a href="https://phpinfo.me/bing.php" target="_blank" rel="noopener">https://phpinfo.me/bing.php</a></p>
+<p>网站漏洞扫描</p>
+<p>网站漏洞扫描就是直接对网站进行漏洞探测了。网站漏洞扫描也有很多工具。比如 AWVS、AppScan、OWASP-ZAP、nessuss等等。但是需要注意的是，使用漏扫工具直接对网站进行扫描，因为一下子流量过大，有些网站可能会崩溃。所以一般最好不要使用漏洞扫描工具对网站进行扫描。并且如果未经授权就用漏扫对网站进行扫描还是违法的！</p>
+<p>AWVS:<a href="https://blog.csdn.net/qq_36119192/article/details/83187475" target="_blank" rel="noopener">https://blog.csdn.net/qq_36119192/article/details/83187475</a><br>AppScan:<a href="https://blog.csdn.net/qq_36119192/article/details/83187475" target="_blank" rel="noopener">https://blog.csdn.net/qq_36119192/article/details/83187475</a></p>
+<p>下一篇博客找个小网站实战一下上述的内容。</p>
+<p>参考链接：<a href="https://blog.csdn.net/qq_36119192/article/details/84674109" target="_blank" rel="noopener">https://blog.csdn.net/qq_36119192/article/details/84674109</a></p>
 
         </div>
         <!-- .entry-content -->
@@ -244,19 +319,36 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2077/12/10/Self-Introduction/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994291.png">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                Self-Introduction（置顶）</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
         
           
-            <div class="post-nepre full next">
+            <div class="post-nepre half next">
           
-            <a href="/2021/03/13/渗透测试之信息收集（一）/" rel="next">
+            <a href="/2021/03/13/BSidesCF-2020-Cards/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1134782.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1134782.png">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1136461.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1136461.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                渗透测试之信息收集（一）</h3>
+                [BSidesCF 2020]Cards</h3>
                 <hr>
               </div>
             </a>
@@ -280,7 +372,7 @@
 
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/avatar.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
           <div class="meta">
             <span class="title">Author</span>
             <h3 itemprop="name">
@@ -289,7 +381,7 @@
           </div>
         </div>
         <hr>
-        <p><i class="iconfont icon-write"></i>steamID：888007034</p>
+        <p><i class="iconfont icon-write"></i>SteamID：888007034</p>
       </section>
     </main><!-- #main -->
   </div><!-- #primary -->
