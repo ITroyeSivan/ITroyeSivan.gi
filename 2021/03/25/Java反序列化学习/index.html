@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">博客暂时停更 | Troy3e</title>
+  <title itemprop="name">Java反序列化学习 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,11 +185,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1135928.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1135928.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1138790.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1138790.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      博客暂时停更</h1>
+      Java反序列化学习</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-3-16<span class="bull">
+        2021-3-25<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,7 +215,36 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>接下来很长一段时间开始爆肝学习模式。<br>由于刷题较多和更新博客比较耗费时间的问题 WP改为本地记录。<br>等什么时候能拿出成绩了恢复更新。<br>Troy3e 2021/3/16</p>
+          <p>这几天做了很多题 经验总结一句话就是：要多分析源码。<br>Java一直没去深入研究 比赛的时候自己根本没法做 还是连续两场都碰上 非常后悔 从今往后分析平台源码也得加入每日学习内容了。<br>进入正文<br>——————————————————————————————————</p>
+<h2 id="Java反序列化有啥用"><a href="#Java反序列化有啥用" class="headerlink" title="Java反序列化有啥用?"></a>Java反序列化有啥用?</h2><p>1)把对象的字节序列永久地保存到硬盘上，通常存放在一个文件中；<br>2)在网络上传送对象的字节序列</p>
+<h2 id="Java中的API实现"><a href="#Java中的API实现" class="headerlink" title="Java中的API实现"></a>Java中的API实现</h2><p> Java.io.ObjectOutputStream&amp;&amp;Java.io.ObjectInputStream<br> ObjectOutputStream类 –&gt; writeObject()<br>该方法对参数指定的obj对象进行序列化，把字节序列写到一个目标输出流中，按Java的标准约定是给文件一个.ser扩展名。<br>想起来前几天补考Java才刚学过hhh<br>打开eclipse试一下：</p>
+<pre><code>package example;
+
+import java.io.*;
+
+public class example3_1{
+    public static void main(String args[]) throws Exception{
+         String obj = &quot;emt&quot;;
+            // 将序列化对象写入文件object.txt中
+            FileOutputStream fos = new FileOutputStream(&quot;troy3e.ser&quot;);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(obj);
+            os.close();
+
+            // 从文件object.txt中读取数据
+            FileInputStream fis = new FileInputStream(&quot;troy3e.ser&quot;);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            // 通过反序列化恢复对象obj
+            String obj2 = (String)ois.readObject();
+            System.out.println(obj2);
+            ois.close();
+    }
+}
+</code></pre><p>先通过输入流创建一个文件，再调用ObjectOutputStream类的 writeObject方法把序列化的数据写入该文件;然后调用ObjectInputStream类的readObject方法反序列化数据并打印数据内容。<br>对于类的话 实现Serializable和Externalizable接口的类的对象才能被序列化。（class Troy3e implements Serializable）</p>
+<h2 id="漏洞产生原因"><a href="#漏洞产生原因" class="headerlink" title="漏洞产生原因"></a>漏洞产生原因</h2><p>与PHP反序列化是一个道理，如果Java应用对用户输入，即不可信数据做了反序列化处理，那么攻击者可以通过构造恶意输入，让反序列化产生非预期的对象，非预期的对象在产生过程中就有可能带来任意代码执行。</p>
+<h2 id="实战分析"><a href="#实战分析" class="headerlink" title="实战分析"></a>实战分析</h2><p>一、[V&amp;N2020 公开赛]EasySpringMVC<br>WP本地记录。<br>二、NepCTF<br>WP本地记录。</p>
+<p>持续更新。<br>PS：WP以后会做一个合集，不再单发水博客。</p>
 
         </div>
         <!-- .entry-content -->
@@ -265,15 +294,15 @@
           
             <div class="post-nepre half next">
           
-            <a href="/2021/03/13/渗透测试之信息收集/" rel="next">
+            <a href="/2021/03/16/WP暂时停更/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1134782.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1134782.png">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1135928.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1135928.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                渗透测试之信息收集</h3>
+                博客暂时停更</h3>
                 <hr>
               </div>
             </a>

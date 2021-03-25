@@ -41,11 +41,11 @@
   </entry>
   
   <entry>
-    <title>博客暂时停更</title>
-    <link href="/2021/03/16/%E5%8D%9A%E5%AE%A2%E6%9A%82%E6%97%B6%E5%81%9C%E6%9B%B4/"/>
-    <id>/2021/03/16/博客暂时停更/</id>
-    <published>2021-03-16T03:17:25.000Z</published>
-    <updated>2021-03-16T03:19:52.304Z</updated>
+    <title>Java反序列化学习</title>
+    <link href="/2021/03/25/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
+    <id>/2021/03/25/Java反序列化学习/</id>
+    <published>2021-03-25T08:03:39.000Z</published>
+    <updated>2021-03-25T08:05:24.020Z</updated>
     
     <summary type="html">
     
@@ -53,7 +53,31 @@
       
         
         
-          &lt;p&gt;接下来很长一段时间开始爆肝学习模式。&lt;br&gt;由于刷题较多和更新博客比较耗费时间的问题 WP改为本地记录。&lt;br&gt;等什么时候能拿出成绩了恢复更新。&lt;br&gt;Troy3e
+          &lt;p&gt;这几天做了很多题 经验总结一句话就是：要多分析源码。&lt;br&gt;Java一直没去深入研究 比赛的时候自己根本没法做 还是连续两场都碰上 非常后悔
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>博客暂时停更</title>
+    <link href="/2021/03/16/WP%E6%9A%82%E6%97%B6%E5%81%9C%E6%9B%B4/"/>
+    <id>/2021/03/16/WP暂时停更/</id>
+    <published>2021-03-16T03:17:25.000Z</published>
+    <updated>2021-03-17T12:27:25.617Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;接下来很长一段时间开始爆肝学习模式。&lt;br&gt;由于刷题较多和更新博客比较耗费时间的问题 WP改为本地记录。&lt;br&gt;等什么时候能拿出成绩了恢复更新。（不影响技术博客&lt;br&gt;Troy3e
         
       
     
@@ -487,30 +511,6 @@ function check_inner_ip($url)
         
         
           &lt;p&gt;忘了是啥时候的比赛了，好像有一阵子了。&lt;br&gt;本次比赛光荣地0解了。&lt;br&gt;花了很长时间做了一道赛后0解的题。。。&lt;br&gt;这次Web确实很难，必须好好学习一下。由于时间隔得比较久环境已经关了，所以就靠印象复现几道简单的题。&lt;br&gt;官方WP：&lt;a
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>[CSAWQual 2016]i_got_id</title>
-    <link href="/2020/12/12/CSAWQual-2016-i-got-id/"/>
-    <id>/2020/12/12/CSAWQual-2016-i-got-id/</id>
-    <published>2020-12-12T14:03:27.000Z</published>
-    <updated>2020-12-12T16:19:59.055Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;最近有点划水 补了好多番 今天正好考完六级
         
       
     
