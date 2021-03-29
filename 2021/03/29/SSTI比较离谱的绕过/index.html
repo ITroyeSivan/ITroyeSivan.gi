@@ -249,7 +249,7 @@ blacklist&lt;/br&gt;
 <pre><code>{% set num=dict(f=a)|join%}{{(lipsum|string|list).index(num)}}
 </code></pre><p>成功取到1</p>
 <p>lipsum中已有下划线，所以我们还需要方括号和点。</p>
-<pre><code>方括号：{{(lipsum|string|list).pop(18)}
+<pre><code>方括号：{{(lipsum|string|list).pop(18)}}
 点：attr代替
 </code></pre><p>接下来就很简单了，拼接调用完事<br>直接放别的师傅的payload：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329225928.png" alt></p>
