@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-03-28T16:47:11.526Z</updated>
+  <updated>2021-03-29T14:54:35.817Z</updated>
   <id>/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>SSTI比较离谱的绕过</title>
+    <link href="/2021/03/29/SSTI%E6%AF%94%E8%BE%83%E7%A6%BB%E8%B0%B1%E7%9A%84%E7%BB%95%E8%BF%87/"/>
+    <id>/2021/03/29/SSTI比较离谱的绕过/</id>
+    <published>2021-03-29T11:14:58.000Z</published>
+    <updated>2021-03-29T14:54:35.817Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;MAR DASCTF放出来的第一道就是个SSTI。过滤很多，试了几个就没耐心做下去了。记得y1ng师傅之前写过一道这种绕过的WP，但是cnblog挂了，所以干脆就等结束了再来学习一下吧。&lt;/p&gt;
+&lt;p&gt;首先 必须要准备一个环境 这里我推荐vulhub github开源
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>ThinkPHP X 源码分析</title>
     <link href="/2021/03/28/ThinkPHP5-5-1-29-RCE/"/>
     <id>/2021/03/28/ThinkPHP5-5-1-29-RCE/</id>
     <published>2021-03-28T12:59:07.000Z</published>
-    <updated>2021-03-28T16:47:11.526Z</updated>
+    <updated>2021-03-29T06:03:51.338Z</updated>
     
     <summary type="html">
     
