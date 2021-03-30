@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-03-29T15:01:12.769Z</updated>
+  <updated>2021-03-30T04:57:55.274Z</updated>
   <id>/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>PHP原生类的利用总结</title>
+    <link href="/2021/03/29/PHP%E5%8E%9F%E7%94%9F%E7%B1%BB%E7%9A%84%E5%88%A9%E7%94%A8%E6%80%BB%E7%BB%93/"/>
+    <id>/2021/03/29/PHP原生类的利用总结/</id>
+    <published>2021-03-29T15:02:46.000Z</published>
+    <updated>2021-03-30T04:57:55.274Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;如题。&lt;/p&gt;
+&lt;h2 id=&quot;使用-Error-Exception-内置类进行-XSS&quot;&gt;&lt;a href=&quot;#使用-Error-Exception-内置类进行-XSS&quot; class=&quot;headerlink&quot; title=&quot;使用 Error/Exception 内置类进行
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="PHP" scheme="/tags/PHP/"/>
+    
+  </entry>
   
   <entry>
     <title>SSTI比较离谱的绕过</title>
