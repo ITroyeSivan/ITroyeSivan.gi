@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-04-17T13:28:23.151Z</updated>
+  <updated>2021-04-20T17:07:40.888Z</updated>
   <id>/</id>
   
   <author>
@@ -18,12 +18,21 @@
   
   <entry>
     <title>[护网杯 2018]easy_laravel</title>
-    <link href="/2021/04/17/%E6%8A%A4%E7%BD%91%E6%9D%AF-2018-easy-laravel/"/>
-    <id>/2021/04/17/护网杯-2018-easy-laravel/</id>
-    <published>2021-04-17T13:24:26.000Z</published>
-    <updated>2021-04-17T13:28:23.151Z</updated>
+    <link href="/2021/04/20/%E6%8A%A4%E7%BD%91%E6%9D%AF-2018-easy-laravel/"/>
+    <id>/2021/04/20/护网杯-2018-easy-laravel/</id>
+    <published>2021-04-20T13:24:26.000Z</published>
+    <updated>2021-04-20T17:07:40.888Z</updated>
     
     <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;题目注释里的链接已经挂了，BUU直接给了源码，拉下来composer install生成vendor目录。（没换源的话可能会连接超时）&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
     
     </summary>
     
