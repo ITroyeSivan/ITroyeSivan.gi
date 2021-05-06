@@ -193,7 +193,7 @@
       <p class="entry-census">
         <span>
           <a href="">
-            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg">
           </a>
         </span>
         <span>
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-4-23<span class="bull">
+        2021-5-6<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,25 +215,7 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>挖不出xx大学的洞，干脆先学点别的。<br>摘自知识盒子。<br>持续更新ing。。。</p>
-<h2 id="Java基础"><a href="#Java基础" class="headerlink" title="Java基础"></a>Java基础</h2><p>Java平台共分为三个主要版本Java SE（Java Platform, Standard Edition，Java平台标准版）、Java EE（Java Platform Enterprise Edition，Java平台企业版）、和Java ME（Java Platform, Micro Edition，Java平台微型版）。</p>
-<h2 id="ClassLoader-类加载机制"><a href="#ClassLoader-类加载机制" class="headerlink" title="ClassLoader(类加载机制)"></a>ClassLoader(类加载机制)</h2><p>一、ClassLoader(类加载机制)<br>Java是一个依赖于JVM(Java虚拟机)实现的跨平台的开发语言。Java程序在运行前需要先编译成class文件，Java类初始化的时候会调用java.lang.ClassLoader加载类字节码，ClassLoader会调用JVM的native方法(defineClass0/1/2)来定义一个java.lang.Class实例。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210423214217.png" alt></p>
-<p>二、ClassLoader类加载流程<br>1、ClassLoader会调用public Class&lt;?&gt; loadClass(String name)方法加载com.anbai.sec.classloader.TestHelloWorld类。<br>2、调用findLoadedClass方法检查TestHelloWorld类是否已经初始化，如果JVM已初始化过该类则直接返回类对象。<br>3、如果创建当前ClassLoader时传入了父类加载器(new ClassLoader(父类加载器))就使用父类加载器加载TestHelloWorld类，否则使用JVM的Bootstrap ClassLoader加载。<br>4、如果上一步无法加载TestHelloWorld类，那么调用自身的findClass方法尝试加载TestHelloWorld类。<br>5、如果当前的ClassLoader没有重写了findClass方法，那么直接返回类加载失败异常。如果当前类重写了findClass方法并通过传入的com.anbai.sec.classloader.TestHelloWorld类名找到了对应的类字节码，那么应该调用defineClass方法去JVM中注册该类。<br>6、如果调用loadClass的时候传入的resolve参数为true，那么还需要调用resolveClass方法链接类,默认为false。<br>7、返回一个被JVM加载后的java.lang.Class类对象。</p>
-<p>三、ClassLoader总结<br>ClassLoader是JVM中一个非常重要的组成部分，ClassLoader可以为我们加载任意的java类，通过自定义ClassLoader更能够实现自定义类加载行为，在后面的几个章节我们也将讲解ClassLoader的实际利用场景。</p>
-<h2 id="Java反射机制"><a href="#Java反射机制" class="headerlink" title="Java反射机制"></a>Java反射机制</h2><p>一、Java反射机制<br>Java反射(Reflection)是Java非常重要的动态特性，通过使用反射我们不仅可以获取到任何类的成员方法(Methods)、成员变量(Fields)、构造方法(Constructors)等信息，还可以动态创建Java类实例、调用任意的类方法、修改任意的类成员变量值等。Java反射机制是Java语言的动态性的重要体现，也是Java的各种框架底层实现的灵魂。</p>
-<p>二、获取Class对象<br>Java反射操作的是java.lang.Class对象，所以我们需要先想办法获取到Class对象，通常我们有如下几种方式获取一个类的Class对象：</p>
-<p>1、类名.class，如:com.anbai.sec.classloader.TestHelloWorld.class。<br>2、Class.forName(“com.anbai.sec.classloader.TestHelloWorld”)。<br>3、classLoader.loadClass(“com.anbai.sec.classloader.TestHelloWorld”);</p>
-<p>获取数组类型的Class对象需要特殊注意,需要使用Java类型的描述符方式，如下：</p>
-<pre><code>Class&lt;?&gt; doubleArray = Class.forName(&quot;[D&quot;);//相当于double[].class
-Class&lt;?&gt; cStringArray = Class.forName(&quot;[[Ljava.lang.String;&quot;);// 相当于String[][].class
-</code></pre><p>获取Runtime类Class对象代码片段：</p>
-<pre><code>String className     = &quot;java.lang.Runtime&quot;;
-Class  runtimeClass1 = Class.forName(className);
-Class  runtimeClass2 = java.lang.Runtime.class;
-Class  runtimeClass3 = ClassLoader.getSystemClassLoader().loadClass(className);
-</code></pre><p>通过以上任意一种方式就可以获取java.lang.Runtime类的Class对象了，反射调用内部类的时候需要使用$来代替.,如com.anbai.Test类有一个叫做Hello的内部类，那么调用的时候就应该将类名写成：com.anbai.Test$Hello。</p>
-<p>三、Java反射机制总结<br>Java反射机制是Java动态性中最为重要的体现，利用反射机制我们可以轻松的实现Java类的动态调用。Java的大部分框架都是采用了反射机制来实现的(如:Spring MVC、ORM框架等)，Java反射在编写漏洞利用代码、代码审计、绕过RASP方法限制等中起到了至关重要的作用。</p>
+          <p>重写中。。还在学习基础</p>
 
         </div>
         <!-- .entry-content -->
@@ -265,15 +247,15 @@ Class  runtimeClass3 = ClassLoader.getSystemClassLoader().loadClass(className);
           
             <div class="post-nepre half previous">
           
-            <a href="/2021/04/26/ThinkPHP X 源码分析/" rel="prev">
+            <a href="/2021/05/06/蓝帽杯-2021-One-Pointer-PHP/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143425.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143425.jpg">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                ThinkPHP X 源码分析</h3>
+                [蓝帽杯 2021]One Pointer PHP</h3>
                 <hr>
               </div>
             </a>
@@ -283,15 +265,15 @@ Class  runtimeClass3 = ClassLoader.getSystemClassLoader().loadClass(className);
           
             <div class="post-nepre half next">
           
-            <a href="/2021/04/20/护网杯-2018-easy-laravel/" rel="next">
+            <a href="/2021/04/27/红明谷CTF-2021-EasyTP/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141980.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141980.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143941.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143941.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [护网杯 2018]easy_laravel</h3>
+                [红明谷CTF 2021]EasyTP</h3>
                 <hr>
               </div>
             </a>
@@ -315,7 +297,7 @@ Class  runtimeClass3 = ClassLoader.getSystemClassLoader().loadClass(className);
 
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
           <div class="meta">
             <span class="title">Author</span>
             <h3 itemprop="name">

