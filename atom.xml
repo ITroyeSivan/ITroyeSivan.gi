@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-05-24T06:31:35.814Z</updated>
+  <updated>2021-06-03T08:26:01.267Z</updated>
   <id>/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>vulnstack内网靶场(一)保姆级教程</title>
+    <link href="/2021/06/03/vulnstack%E7%BA%A2%E9%98%9F%E5%AE%9E%E6%88%98-%E4%B8%80/"/>
+    <id>/2021/06/03/vulnstack红队实战-一/</id>
+    <published>2021-06-03T06:03:51.000Z</published>
+    <updated>2021-06-03T08:26:01.267Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;断断续续挖了几周的洞了，有一说一要比CTF简单得多，虽然交上去有效的不多。&lt;br&gt;然后我发现一个问题，那就是我根本不会内网。CTF里面极少出现内网渗透，基本都是绕过读flag或者绕过getshell这种。所以在去实习前还需要学一下内网的知识。今天在安全客逛街的时候看到了这个
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>决定</title>
+    <link href="/2021/06/03/%E5%86%B3%E5%AE%9A/"/>
+    <id>/2021/06/03/决定/</id>
+    <published>2021-06-03T03:34:40.000Z</published>
+    <updated>2021-06-03T03:39:05.466Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;说说题外话，这两天做了一个拖了很久的决定：放弃CTF。原因大概有两点：&lt;br&gt;一是下决心要考研了。在进大学之初，我就是打算考研的。高中因为一些其他的事分心了，在重点班的我最后考了班级倒一，进入了现在这所普通的本一学校。过了一段时间，接触到了CTF，一句话概括就是又觉得自己行
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>初识CobaltStrike</title>
