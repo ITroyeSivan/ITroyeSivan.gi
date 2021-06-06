@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-06-03T08:26:01.267Z</updated>
+  <updated>2021-06-06T08:26:27.789Z</updated>
   <id>/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>NEWSCTF_2021.6-Web复现</title>
+    <link href="/2021/06/05/NEWSCTF-Web%E5%A4%8D%E7%8E%B0/"/>
+    <id>/2021/06/05/NEWSCTF-Web复现/</id>
+    <published>2021-06-05T09:46:54.000Z</published>
+    <updated>2021-06-06T08:26:27.789Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;虽然已经不打CTF了，但是还是要学习。比赛当天看了一遍题觉得还行，昨天wp出了来复现一下。&lt;br&gt;看了wp，题目难度中等，虽然都是见过的知识点，但是出的也很不错。&lt;/p&gt;
+&lt;p&gt;一、easy_web&lt;br&gt;这个就不说了，简单题。&lt;/p&gt;
+&lt;p&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>vulnstack内网靶场(一)保姆级教程</title>
     <link href="/2021/06/03/vulnstack%E7%BA%A2%E9%98%9F%E5%AE%9E%E6%88%98-%E4%B8%80/"/>
     <id>/2021/06/03/vulnstack红队实战-一/</id>
     <published>2021-06-03T06:03:51.000Z</published>
-    <updated>2021-06-03T08:26:01.267Z</updated>
+    <updated>2021-06-04T13:01:33.954Z</updated>
     
     <summary type="html">
     

