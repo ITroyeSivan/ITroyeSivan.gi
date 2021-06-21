@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-06-06T08:26:27.789Z</updated>
+  <updated>2021-06-21T14:45:39.676Z</updated>
   <id>/</id>
   
   <author>
@@ -15,6 +15,78 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>faka</title>
+    <link href="/2021/06/21/faka/"/>
+    <id>/2021/06/21/faka/</id>
+    <published>2021-06-21T14:40:56.000Z</published>
+    <updated>2021-06-21T14:45:39.676Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近正好在学习代码审计，但是因为期末的原因，一些大的cms都没有耐心仔细钻研。今天偶然在安全客上看到个很久之前做过的发卡系统，当时因为没有仔细研究导致印象不深，今天就以审计的角度再来看看这道题。&lt;br&gt;链接：&lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>极致CMS漏洞整合与分析</title>
+    <link href="/2021/06/08/%E6%9E%81%E8%87%B4CMS%E6%BC%8F%E6%B4%9E%E6%95%B4%E5%90%88%E4%B8%8E%E5%88%86%E6%9E%90/"/>
+    <id>/2021/06/08/极致CMS漏洞整合与分析/</id>
+    <published>2021-06-08T12:27:49.000Z</published>
+    <updated>2021-06-13T14:30:33.569Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;链接：&lt;a href=&quot;https://www.jizhicms.cn/forum.php?mod=forumdisplay&amp;amp;fid=2&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>vulnstack内网靶场(二)</title>
+    <link href="/2021/06/06/vulnstack%E5%86%85%E7%BD%91%E9%9D%B6%E5%9C%BA-%E4%BA%8C/"/>
+    <id>/2021/06/06/vulnstack内网靶场-二/</id>
+    <published>2021-06-06T08:32:04.000Z</published>
+    <updated>2021-06-08T12:14:26.455Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;这次就不写保姆级教程了，太累了。&lt;br&gt;链接：&lt;a href=&quot;http://vulnstack.qiyuanxuetang.net/vuln/detail/3/&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>NEWSCTF_2021.6-Web复现</title>
@@ -435,55 +507,6 @@ class
         
         
           &lt;p&gt;这几天做了很多题 经验总结一句话就是：要多分析源码。&lt;br&gt;Java一直没去深入研究 比赛的时候自己根本没法做 还是连续两场都碰上 非常后悔
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>博客暂时停更</title>
-    <link href="/2021/03/16/WP%E6%9A%82%E6%97%B6%E5%81%9C%E6%9B%B4/"/>
-    <id>/2021/03/16/WP暂时停更/</id>
-    <published>2021-03-16T03:17:25.000Z</published>
-    <updated>2021-03-17T12:27:25.617Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;接下来很长一段时间开始爆肝学习模式。&lt;br&gt;由于刷题较多和更新博客比较耗费时间的问题 WP改为本地记录。&lt;br&gt;等什么时候能拿出成绩了恢复更新。（不影响技术博客&lt;br&gt;Troy3e
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>渗透测试之信息收集</title>
-    <link href="/2021/03/13/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
-    <id>/2021/03/13/渗透测试之信息收集/</id>
-    <published>2021-03-13T05:42:09.000Z</published>
-    <updated>2021-03-13T07:24:59.278Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;#信息收集&lt;/p&gt;
-&lt;p&gt;信息收集的方式可以分为两种：主动和被动。&lt;br&gt;主动信息收集：通过直接访问、扫描网站，这种流量将流经网站&lt;br&gt;被动信息收集：利用第三方的服务对目标进行访问了解，比例：Google搜索、Shodan搜索等.&lt;br&gt;Google
         
       
     
