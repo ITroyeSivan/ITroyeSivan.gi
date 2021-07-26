@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-06-21T14:45:39.676Z</updated>
+  <updated>2021-07-26T08:26:06.107Z</updated>
   <id>/</id>
   
   <author>
@@ -15,6 +15,105 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Web78-117文件包含</title>
+    <link href="/2021/07/26/Web78-117%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/"/>
+    <id>/2021/07/26/Web78-117文件包含/</id>
+    <published>2021-07-26T08:19:06.000Z</published>
+    <updated>2021-07-26T08:26:06.107Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;Web78&quot;&gt;&lt;a href=&quot;#Web78&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Web29-124命令执行</title>
+    <link href="/2021/07/26/Web29-124%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/"/>
+    <id>/2021/07/26/Web29-124命令执行/</id>
+    <published>2021-07-26T08:18:52.000Z</published>
+    <updated>2021-07-26T08:51:24.756Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;命令执行就很有意思了~&lt;br&gt;简单的就不赘述了，可能对新手不太友好。&lt;/p&gt;
+&lt;h2 id=&quot;Web29&quot;&gt;&lt;a href=&quot;#Web29&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Web21-28爆破</title>
+    <link href="/2021/07/26/Web21-28%E7%88%86%E7%A0%B4/"/>
+    <id>/2021/07/26/Web21-28爆破/</id>
+    <published>2021-07-26T08:18:40.000Z</published>
+    <updated>2021-07-26T08:30:39.339Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;Web21&quot;&gt;&lt;a href=&quot;#Web21&quot; class=&quot;headerlink&quot; title=&quot;Web21&quot;&gt;&lt;/a&gt;Web21&lt;/h2&gt;&lt;p&gt;爆破位置为admin:{}&lt;/p&gt;
+&lt;p&gt; &lt;img
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Web1-20信息收集</title>
+    <link href="/2021/07/26/Web1-20%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
+    <id>/2021/07/26/Web1-20信息收集/</id>
+    <published>2021-07-26T08:18:33.000Z</published>
+    <updated>2021-07-26T08:28:42.109Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;##前言&lt;br&gt;坏事儿了，期末定的计划到现在没一天完成的。&lt;br&gt;无奈适应新环境太累，只能从今天开始慢慢补起来。&lt;/p&gt;
+&lt;h2 id=&quot;Web1&quot;&gt;&lt;a href=&quot;#Web1&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>faka</title>
@@ -128,30 +227,6 @@
         
         
           &lt;p&gt;断断续续挖了几周的洞了，有一说一要比CTF简单得多，虽然交上去有效的不多。&lt;br&gt;然后我发现一个问题，那就是我根本不会内网。CTF里面极少出现内网渗透，基本都是绕过读flag或者绕过getshell这种。所以在去实习前还需要学一下内网的知识。今天在安全客逛街的时候看到了这个
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>决定</title>
-    <link href="/2021/06/03/%E5%86%B3%E5%AE%9A/"/>
-    <id>/2021/06/03/决定/</id>
-    <published>2021-06-03T03:34:40.000Z</published>
-    <updated>2021-06-03T03:39:05.466Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;说说题外话，这两天做了一个拖了很久的决定：放弃CTF。原因大概有两点：&lt;br&gt;一是下决心要考研了。在进大学之初，我就是打算考研的。高中因为一些其他的事分心了，在重点班的我最后考了班级倒一，进入了现在这所普通的本一学校。过了一段时间，接触到了CTF，一句话概括就是又觉得自己行
         
       
     
@@ -433,80 +508,6 @@ class
         
           &lt;p&gt;MAR DASCTF放出来的第一道就是个SSTI。过滤很多，试了几个就没耐心做下去了。记得y1ng师傅之前写过一道这种绕过的WP，但是cnblog挂了，所以干脆就等结束了再来学习一下吧。&lt;/p&gt;
 &lt;p&gt;首先 必须要准备一个环境 这里我推荐vulhub github开源
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>BUU近期刷题记录</title>
-    <link href="/2021/03/28/BUU%E8%BF%91%E6%9C%9F%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
-    <id>/2021/03/28/BUU近期刷题记录/</id>
-    <published>2021-03-28T12:44:20.000Z</published>
-    <updated>2021-03-28T13:02:18.469Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;Black-Watch-入群题-Web2&quot;&gt;&lt;a href=&quot;#Black-Watch-入群题-Web2&quot; class=&quot;headerlink&quot; title=&quot;[Black Watch 入群题]Web2&quot;&gt;&lt;/a&gt;[Black Watch
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>BUU WebWP</title>
-    <link href="/2021/03/28/BUU-WebWP/"/>
-    <id>/2021/03/28/BUU-WebWP/</id>
-    <published>2021-03-28T12:41:50.000Z</published>
-    <updated>2021-03-28T12:43:59.595Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;BUU以前做的Web合集：&lt;a href=&quot;https://github.com/ITroyeSivan/BUUWebWP&quot; target=&quot;_blank&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="BUU" scheme="/tags/BUU/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java反序列化学习</title>
-    <link href="/2021/03/25/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
-    <id>/2021/03/25/Java反序列化学习/</id>
-    <published>2021-03-25T08:03:39.000Z</published>
-    <updated>2021-03-25T08:05:24.020Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;这几天做了很多题 经验总结一句话就是：要多分析源码。&lt;br&gt;Java一直没去深入研究 比赛的时候自己根本没法做 还是连续两场都碰上 非常后悔
         
       
     

