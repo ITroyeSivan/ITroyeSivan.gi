@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-10-08T03:44:59.450Z</updated>
+  <updated>2021-10-11T15:12:25.771Z</updated>
   <id>/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>nodejs随笔</title>
+    <link href="/2021/10/11/nodejs%E9%9A%8F%E7%AC%94/"/>
+    <id>/2021/10/11/nodejs随笔/</id>
+    <published>2021-10-11T15:09:28.000Z</published>
+    <updated>2021-10-11T15:12:25.771Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;Node.js常见漏洞学习与总结&lt;br&gt;&lt;a href=&quot;https://xz.aliyun.com/t/7184&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>xss基础</title>
@@ -482,30 +506,6 @@ class
 &lt;p&gt;WP本来不想发的，但是这道题BUU的环境有一些小变动。希望能帮到一些卡住的人。并且这道题也有很多值得学习的地方。&lt;/p&gt;
 &lt;p&gt;github把源码down下来：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;catchmin
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Node.js</title>
-    <link href="/2021/04/06/Node-js/"/>
-    <id>/2021/04/06/Node-js/</id>
-    <published>2021-04-06T06:26:32.000Z</published>
-    <updated>2021-04-06T06:28:11.478Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;从官方文档开始学习：https-nodejs-dev-learn&quot;&gt;&lt;a href=&quot;#从官方文档开始学习：https-nodejs-dev-learn&quot; class=&quot;headerlink&quot;
         
       
     
