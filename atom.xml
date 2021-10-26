@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-10-22T15:26:08.876Z</updated>
+  <updated>2021-10-26T15:44:41.637Z</updated>
   <id>/</id>
   
   <author>
@@ -17,11 +17,35 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>GKCTF 2021</title>
+    <link href="/2021/10/26/GKCTF%202021/"/>
+    <id>/2021/10/26/GKCTF 2021/</id>
+    <published>2021-10-26T13:20:28.000Z</published>
+    <updated>2021-10-26T15:44:41.637Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;GKCTF-2021-babycat&quot;&gt;&lt;a href=&quot;#GKCTF-2021-babycat&quot; class=&quot;headerlink&quot; title=&quot;[GKCTF 2021]babycat&quot;&gt;&lt;/a&gt;[GKCTF
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>极致CMS漏洞整合与分析</title>
     <link href="/2021/10/22/%E6%9E%81%E8%87%B4CMS%E6%BC%8F%E6%B4%9E%E6%95%B4%E5%90%88%E4%B8%8E%E5%88%86%E6%9E%90/"/>
     <id>/2021/10/22/极致CMS漏洞整合与分析/</id>
     <published>2021-10-22T12:27:49.000Z</published>
-    <updated>2021-10-22T15:26:08.876Z</updated>
+    <updated>2021-10-23T08:46:50.395Z</updated>
     
     <summary type="html">
     
@@ -479,31 +503,6 @@ class
         
         
           &lt;p&gt;BUU上有点问题的题目还是写一篇博客吧，网上找了找都没人写。&lt;br&gt;tp3这个链的分析在我的另一篇博客里，不过更推荐看这个：&lt;br&gt;&lt;a
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>[护网杯 2018]easy_laravel</title>
-    <link href="/2021/04/20/%E6%8A%A4%E7%BD%91%E6%9D%AF-2018-easy-laravel/"/>
-    <id>/2021/04/20/护网杯-2018-easy-laravel/</id>
-    <published>2021-04-20T13:24:26.000Z</published>
-    <updated>2021-04-20T17:13:22.632Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;题目注释里的链接已经挂了，BUU直接给了源码，拉下来composer install生成vendor目录。（没换源的话可能会连接超时）&lt;/p&gt;
-&lt;p&gt;&lt;img
         
       
     

