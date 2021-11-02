@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="/"/>
-  <updated>2021-10-31T03:34:30.597Z</updated>
+  <updated>2021-11-02T04:03:57.744Z</updated>
   <id>/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>src随笔</title>
+    <link href="/2021/11/01/src%E9%9A%8F%E7%AC%94/"/>
+    <id>/2021/11/01/src随笔/</id>
+    <published>2021-11-01T08:11:41.000Z</published>
+    <updated>2021-11-02T04:03:57.744Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;上课摸鱼的时候翻了翻社区，了解了几个好用的工具和技巧。&lt;/p&gt;
+&lt;h1 id=&quot;挖洞目标&quot;&gt;&lt;a href=&quot;#挖洞目标&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>基于nonebot2和go-cqhttp的原神机器人实现及开发</title>
     <link href="/2021/10/31/%E5%9F%BA%E4%BA%8Enonebot2%E5%92%8Cgo-cqhttp%E7%9A%84%E5%8E%9F%E7%A5%9E%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BC%80%E5%8F%91/"/>
     <id>/2021/10/31/基于nonebot2和go-cqhttp的原神机器人实现及开发/</id>
     <published>2021-10-31T02:08:46.000Z</published>
-    <updated>2021-10-31T03:34:30.597Z</updated>
+    <updated>2021-11-01T03:16:14.357Z</updated>
     
     <summary type="html">
     
@@ -476,33 +501,6 @@
         
           &lt;p&gt;又给自己挖了个大坑。。。&lt;/p&gt;
 &lt;h2 id=&quot;通过phpStudy搭建Laravel&quot;&gt;&lt;a href=&quot;#通过phpStudy搭建Laravel&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>[蓝帽杯 2021]One Pointer PHP</title>
-    <link href="/2021/05/06/%E8%93%9D%E5%B8%BD%E6%9D%AF-2021-One-Pointer-PHP/"/>
-    <id>/2021/05/06/蓝帽杯-2021-One-Pointer-PHP/</id>
-    <published>2021-05-06T06:46:02.000Z</published>
-    <updated>2021-05-06T06:55:14.029Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;这题没做出来需要反思&lt;br&gt;给了源码&lt;/p&gt;
-&lt;h2 id=&quot;第一层&quot;&gt;&lt;a href=&quot;#第一层&quot; class=&quot;headerlink&quot; title=&quot;第一层&quot;&gt;&lt;/a&gt;第一层&lt;/h2&gt;&lt;p&gt;user.php&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;?php
-class
         
       
     
