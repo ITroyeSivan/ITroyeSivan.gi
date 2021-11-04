@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">src随笔 | Troy3e</title>
+  <title itemprop="name">xhcms审计 | Troy3e</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -185,11 +185,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1107810.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1107810.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1186561.jpg);" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1186561.jpg">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      src随笔</h1>
+      xhcms审计</h1>
       <p class="entry-census">
         <span>
           <a href="">
@@ -201,7 +201,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2021-11-1<span class="bull">
+        2021-11-2<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -215,21 +215,53 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>上课摸鱼的时候翻了翻社区，了解了几个好用的工具和技巧。</p>
-<h1 id="挖洞目标"><a href="#挖洞目标" class="headerlink" title="挖洞目标"></a>挖洞目标</h1><p>除了自己常打的SRC应急平台外，可以通过微信、百度等方式搜索src活动</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211101201743.png" alt></p>
-<h1 id="利用爱企查搜集信息"><a href="#利用爱企查搜集信息" class="headerlink" title="利用爱企查搜集信息"></a>利用爱企查搜集信息</h1><p>这个目前用不到，记录一下。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211101203027.png" alt></p>
-<h1 id="系统指纹探测"><a href="#系统指纹探测" class="headerlink" title="系统指纹探测"></a>系统指纹探测</h1><p>这个是以前没用过的，但是很实用。</p>
-<h2 id="Glass"><a href="#Glass" class="headerlink" title="Glass"></a>Glass</h2><p><a href="https://github.com/s7ckTeam/Glass" target="_blank" rel="noopener">https://github.com/s7ckTeam/Glass</a></p>
-<p>红队中易被攻击的一些重点系统漏洞整理：<a href="https://forum.ywhack.com/bountytips.php?Vulnerability" target="_blank" rel="noopener">https://forum.ywhack.com/bountytips.php?Vulnerability</a></p>
-<h1 id="密码字典"><a href="#密码字典" class="headerlink" title="密码字典"></a>密码字典</h1><p><a href="https://github.com/fuzz-security/SuperWordlist" target="_blank" rel="noopener">https://github.com/fuzz-security/SuperWordlist</a></p>
-<p>根据关键字生成字典：<a href="https://mp.weixin.qq.com/s/HOlPaJ4EMY7PfHh7p2d95A" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/HOlPaJ4EMY7PfHh7p2d95A</a></p>
-<h1 id="xray"><a href="#xray" class="headerlink" title="xray"></a>xray</h1><p>github：<a href="https://github.com/chaitin/xray" target="_blank" rel="noopener">https://github.com/chaitin/xray</a><br>官方文档：<a href="https://docs.xray.cool/#/" target="_blank" rel="noopener">https://docs.xray.cool/#/</a></p>
-<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211101225836.png" alt></p>
-<h1 id="JS信息收集"><a href="#JS信息收集" class="headerlink" title="JS信息收集"></a>JS信息收集</h1><p><a href="https://github.com/Threezh1/JSFinder" target="_blank" rel="noopener">https://github.com/Threezh1/JSFinder</a></p>
-<p>bypass 前端验证 + 后端缺陷:<a href="https://forum.butian.net/share/198" target="_blank" rel="noopener">https://forum.butian.net/share/198</a></p>
-<h1 id="后渗透信息收集"><a href="#后渗透信息收集" class="headerlink" title="后渗透信息收集"></a>后渗透信息收集</h1><p><a href="https://xz.aliyun.com/t/10384" target="_blank" rel="noopener">https://xz.aliyun.com/t/10384</a></p>
+          <p>一个只要扫一眼就能看出洞的cms。</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>php版本不能过高，经测试5.6.9可以，7.4.3不行。<br>访问<a href="http://www.xhcms.com:1236/install进行配置（需要手动创建数据库）" target="_blank" rel="noopener">http://www.xhcms.com:1236/install进行配置（需要手动创建数据库）</a></p>
+<h1 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h1><p>seay扫一遍</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103143616.png" alt></p>
+<h2 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h2><h3 id="index-php"><a href="#index-php" class="headerlink" title="/index.php"></a>/index.php</h3><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103145607.png" alt></p>
+<p>虽然加了addslashes，但是只能处理单双引号并不影响文件包含。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103150738.png" alt></p>
+<h3 id="admin-index-php"><a href="#admin-index-php" class="headerlink" title="/admin/index.php"></a>/admin/index.php</h3><p>同上</p>
+<h2 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h2><h3 id="误报-admin-files-adset-php"><a href="#误报-admin-files-adset-php" class="headerlink" title="误报 /admin/files/adset.php"></a>误报 /admin/files/adset.php</h3><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103210540.png" alt></p>
+<p>seay报的是update那里，但是这上面加了addslashes，所以这里不存在sq注入。</p>
+<p>注：并不是加了addslashes就一定无解了。如果后台语句中本来就没有引号，那么加addslashes也是没用的，因为它的本意就是去处理单双引号等。还有一种情况是宽字节注入。见：<a href="https://www.freebuf.com/vuls/271416.html" target="_blank" rel="noopener">https://www.freebuf.com/vuls/271416.html</a></p>
+<h3 id="admin-editcolumn-php"><a href="#admin-editcolumn-php" class="headerlink" title="/admin/editcolumn.php"></a>/admin/editcolumn.php</h3><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103214709.png" alt></p>
+<p>无过滤<br>payload</p>
+<pre><code>?r=editcolumn&amp;id=1%27and%20sleep(3)--+&amp;type=1
+</code></pre><p>后面的update注入点也是在id</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103221155.png" alt></p>
+<h3 id="admin-editlink-php"><a href="#admin-editlink-php" class="headerlink" title="/admin/editlink.php"></a>/admin/editlink.php</h3><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103221450.png" alt></p>
+<p>同3</p>
+<h3 id="admin-editsoft-php"><a href="#admin-editsoft-php" class="headerlink" title="/admin/editsoft.php"></a>/admin/editsoft.php</h3><p>同3。</p>
+<p>看到有上传点，跟一下看看能不能getshell</p>
+<p>白名单后缀</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103224051.png" alt></p>
+<p>并且不返回路径，以及更改文件名</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103224144.png" alt></p>
+<p>这里是没戏了。</p>
+<h3 id="admin-editwz-php"><a href="#admin-editwz-php" class="headerlink" title="/admin/editwz.php"></a>/admin/editwz.php</h3><p>同3</p>
+<h3 id="admin-imageset-php"><a href="#admin-imageset-php" class="headerlink" title="/admin/imageset.php"></a>/admin/imageset.php</h3><p>无过滤</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103234000.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211103233925.png" alt></p>
+<p>注意mysql_query只能执行一条语句，所以往后面拼接（堆叠注入）是不行的。</p>
+<h3 id="admin-manageinfo-php"><a href="#admin-manageinfo-php" class="headerlink" title="/admin/manageinfo.php"></a>/admin/manageinfo.php</h3><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211104125656.png" alt></p>
+<p>update同上。</p>
+<h3 id="admin-newlink-php"><a href="#admin-newlink-php" class="headerlink" title="/admin/newlink.php"></a>/admin/newlink.php</h3><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211104132214.png" alt></p>
+<p>报错注入+1</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211104132437.png" alt></p>
+<h3 id="admin-reply-php"><a href="#admin-reply-php" class="headerlink" title="/admin/reply.php"></a>/admin/reply.php</h3><p>和上面几个差不多<br>sql感觉问题都一样，相似的就不继续看=写了。</p>
+<h2 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h2><h3 id="admin-manageinfo-php-1"><a href="#admin-manageinfo-php-1" class="headerlink" title="/admin/manageinfo.php"></a>/admin/manageinfo.php</h3><p>个人资料的修改<br>上传没有限制，并且每次访问会读取数据库中数据并显示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211104131354.png" alt></p>
+<p>存储型：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211104131611.png" alt></p>
+<p>不过这个没什么利用价值。</p>
+<h3 id="file-contact-php"><a href="#file-contact-php" class="headerlink" title="/file/contact.php"></a>/file/contact.php</h3><p>这里留言是存在存储型xss的，因为昵称邮箱网址没过滤。</p>
+<h2 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h2><p><img src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/20211104134049.png" alt></p>
+<p>只要cookie传入admin就可以登入admin。</p>
+<h2 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h2><p>由于这个cms对上传有处理，所以无法通过上传直接getshell。但是可以通过sql注入写入，前提是secure_file_priv为null。</p>
+<pre><code>?r=reply&amp;type=1&amp;id=1&#39;and select &#39;&lt;?php @eval($_POST[1]) ?&gt;&#39; into outfile &#39;/var/www/html/shell.php&#39;;
+</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>看的困死了，还有很多不想看了，这个太简单了。</p>
 
         </div>
         <!-- .entry-content -->
@@ -258,36 +290,19 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2021/11/02/xhcms审计/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1186561.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1186561.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                xhcms审计</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
         
           
-            <div class="post-nepre half next">
+            <div class="post-nepre full next">
           
-            <a href="/2021/10/31/基于nonebot2和go-cqhttp的原神机器人实现及开发/" rel="next">
+            <a href="/2021/11/01/src随笔/" rel="next">
               <div class="background">
-                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184913.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1184913.jpg">
+                <img class="lazyload" src="/blogpictures/20160708223941_YQncj.jpeg" data-src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1107810.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/ITroyeSivan/picture/blogpictures/thumb-1920-1107810.jpg">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                基于nonebot2和go-cqhttp的原神机器人实现及开发</h3>
+                src随笔</h3>
                 <hr>
               </div>
             </a>
